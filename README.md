@@ -4,7 +4,7 @@
 
 ## My role
 
-**Healthcare AI Solutions Consultant + Solution Architect**
+**Healthcare AI Solutions Consultant & Solution Architect**
 
 I take Harbor Health from client problem through solution architecture, hands-on technical build, implementation, adoption, and measurable results.
 
