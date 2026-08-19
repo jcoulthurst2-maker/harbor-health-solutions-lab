@@ -1,14 +1,10 @@
-# Current Mission — Appointment Access
+# Current Work — Appointment Access
 
-## The situation
+**Stage: Assess**
 
 Harbor Health believes patients are waiting too long for appointments. Leadership does not trust the existing dashboard enough to know why.
 
-## What I inherit
-
-A synthetic appointment extract containing appointment, clinic, provider, scheduling, status, and visit-type fields.
-
-## What I need to figure out
+## What I am figuring out now
 
 - Which appointments waited the longest?
 - Do certain clinics or appointment types appear more often in the problem?
@@ -16,38 +12,29 @@ A synthetic appointment extract containing appointment, clinic, provider, schedu
 - Is there bad data that could make the conclusion misleading?
 - What important information is still missing?
 
-## Why this comes first
+## Why this stage comes first
 
 If Harbor Health cannot trust its basic operational data, then adding automation, APIs, AI, or cloud infrastructure simply makes the wrong answer move faster.
 
-## What this mission will produce
+## Delivery cycle
 
-When complete, the technical side should include:
-- working SQL analysis;
-- validation against source data;
-- one deliberate data-quality test;
-- a short findings brief.
+Assess → Design → Build → Validate → Go Live → Adopt → Measure
 
-The implementation side should include:
-- who would own the access problem;
-- what the future workflow should change;
-- a small set of user acceptance testing scenarios;
-- a recommended pilot or phased rollout;
-- the training or guidance staff would need;
-- at least one adoption risk;
-- operational and adoption measures leadership should watch.
+Appointment Access moves through the full cycle before it is considered solved.
+
+## What the completed work will leave behind
+
+The final package will include the supported diagnosis, recommended workflow change, architecture or technical build where needed, UAT, rollout and adoption plan, measures of success, and the key implementation artifacts needed to move the change into real use.
 
 ## Executive briefing
 
-Every completed mission also closes with two leadership-facing artifacts:
+When Appointment Access is solved, it closes with:
 
-- **90-second one-page brief** — problem, evidence, recommendation, impact, implementation, key risk, and next step.
-- **Short slide deck** — a concise leadership story covering the situation, evidence, solution, implementation/adoption, results, and recommendation.
+- **90-second one-page brief** — problem, evidence, decision, impact, implementation, key risk, and next step.
+- **Short leadership deck** — the full executive story from problem through adoption and results.
 
-**Status:** In progress. These are published only after the mission is complete and the evidence is real.
+**Status:** In progress. The briefing is published only after the full problem has been worked through and the evidence is complete.
 
-[View the Executive Briefings index →](EXECUTIVE-BRIEFINGS.md)
+[View Executive Briefings →](EXECUTIVE-BRIEFINGS.md)
 
-The mission is complete only when the recommendation explains both **what Harbor Health should change** and **how that change could realistically move into use**.
-
-Results will be added only after the work is actually completed.
+Results are added only after the work is actually completed.
