@@ -10,13 +10,11 @@ I take Harbor Health from client problem through solution architecture, hands-on
 
 ## The three parts of the job
 
-Client solutions — discovery, workflow analysis, requirements, stakeholder alignment, solution recommendation, value, demos, and delivery handoff.
+Client solutions — understand the problem and shape the right solution.
 
-Technical architecture + build — SQL, Python, APIs, FHIR/HL7, AI, AWS, security, reliability, integrations, prototypes, and end-to-end solution design.
+Architecture + build — design and build the technology.
 
-Implementation + adoption — UAT, pilots, rollout, training, operational readiness, ownership, change risk, KPIs, and post-launch improvement.
-
-The goal is to be able to take a healthcare problem from unclear and messy to designed, built, implemented, adopted, and measured.
+Implementation + adoption — launch it, get people using it, and prove it worked.
 
 ## Current mission
 
