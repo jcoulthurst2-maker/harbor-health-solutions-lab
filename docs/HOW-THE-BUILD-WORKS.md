@@ -1,45 +1,41 @@
 # Technical Architecture & Build
 
-## What this proves
+## What this page is for
 
-I can design and build the technical side of a healthcare solution—not just describe what the system should do.
+This page shows **how I turn a Harbor Health problem into something technically real**.
 
-## Why it matters
+The roadmap explains when capabilities are introduced. The AI page explains AI-specific judgment. This page stays focused on architecture, build quality, integration, testing, and technical evidence.
 
-Healthcare solutions have to work across messy data, existing systems, workflow constraints, security requirements, failures, and scale. The technical design has to make those pieces work together without adding unnecessary complexity.
+## What I am responsible for technically
 
-Harbor Health gives me one persistent environment where each technical decision has consequences for the next one.
+**Data foundation** — validate source data, define trustworthy measures, and make sure the solution is built on evidence that can be defended.
 
-## The technical layers I am building
+**Application logic** — turn requirements into repeatable logic, scripts, services, or prototypes that another person can inspect and test.
 
-**Data & evidence** — use SQL to validate what is happening, find bad data, define trustworthy measures, and give the rest of the solution a reliable foundation.
+**System integration** — define how information moves between systems, what each system owns, what happens at handoffs, and how failures are handled.
 
-**Logic & automation** — use Python to turn analysis into repeatable tools, automate manual work, and build reusable business logic.
+**Healthcare interoperability** — preserve the meaning of healthcare information when FHIR or HL7 is required, rather than treating integration as simple data movement.
 
-**Integration & interoperability** — use APIs, FHIR, and HL7 to move information between systems while preserving the meaning of healthcare data.
+**Architecture & reliability** — define boundaries, hosting, security, permissions, monitoring, recovery, dependencies, and scale appropriate to the solution.
 
-**Cloud & reliability** — use AWS and solution-architecture principles to decide how services are hosted, secured, monitored, connected, recovered, and scaled.
+## How I prove the build
 
-**AI when justified** — introduce AI only when it improves the solution beyond normal rules or software, then define human control, fallback behavior, monitoring, and failure handling.
+A diagram or recommendation alone does not count as technical proof. Where the problem requires it, I create working evidence such as queries, scripts, prototypes, API flows, tests, architecture decisions, and failure scenarios.
 
-## How I prove the architecture
+The record should make it possible to answer:
 
-A diagram alone is not enough. Where the problem calls for it, I produce working queries, scripts, prototypes, API flows, tests, architecture decisions, and failure scenarios.
-
-I should be able to show:
-
-- what the system is supposed to do;
-- what I actually built;
-- how the parts connect;
-- what assumptions I tested;
-- what happens when something fails;
-- what technical tradeoffs I made;
-- what would still be required before production use.
+- What was actually built?
+- What does each component own?
+- How do the components communicate?
+- What assumptions were tested?
+- What happens when a dependency or input fails?
+- What tradeoffs were made and why?
+- What remains before production use?
 
 ## Evidence this produces
 
-The public record can include code, technical validation results, prototypes, integration flows, architecture diagrams, data-quality findings, security or reliability decisions, and concise technical documentation.
+The public portfolio can show code, validation results, data-quality findings, prototypes, integration flows, architecture diagrams, technical decision records, test output, and reliability or security decisions.
 
 ## What good looks like
 
-The technical work is strong when the solution is understandable, testable, appropriately simple, resilient to realistic failure, and supported by evidence someone else can inspect.
+The technical work is strong when another technical or implementation lead can inspect the evidence, understand why the design looks the way it does, see how it behaves under failure, and identify exactly what would still be required before production.
