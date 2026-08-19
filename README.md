@@ -2,6 +2,12 @@
 
 > **A fictional healthcare system with real-world problems.**
 
+## My role in the system
+
+**Healthcare AI Solutions Consultant** — I act as the person responsible for taking Harbor Health from problem discovery through solution design, technical proof, implementation, adoption, and measurable improvement.
+
+That means I am expected to understand the operation, work with the data, decide what technology belongs, build enough to prove the solution, connect the right systems, align stakeholders, plan testing and rollout, support adoption, and explain the recommendation to both executives and technical teams.
+
 Harbor Health is a 32-week healthcare solutions build. I am rebuilding the same fictional hospital over time so the work shows how I diagnose operational problems, decide what technology actually belongs, build enough of the solution to prove it, connect it to the larger system, and then work through implementation, adoption, rollout, measurement, and improvement.
 
 ## 60-second scan
