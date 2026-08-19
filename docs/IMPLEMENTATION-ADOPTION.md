@@ -4,9 +4,23 @@ Harbor Health is not finished when the technology works.
 
 The project is designed to practice the full job of a Healthcare AI Solutions Consultant: understand the client problem, shape the solution, prove the technical approach, prepare the organization for change, and help the solution reach real use.
 
+## How implementation matures with the build
+
+Implementation starts on Day 1, but the work gets more advanced as the technical solution matures.
+
+- **Weeks 1–4 · SQL · Assess** — discovery, stakeholders, current-state workflow, ownership, baseline measures, and early requirements.
+- **Weeks 5–10 · Python · Design + Build** — future-state workflow, prototype, acceptance criteria, value hypothesis, and initial user acceptance testing scenarios.
+- **Weeks 11–14 · APIs · Build + Integrate** — dependencies, system ownership, handoffs, end-to-end testing, delivery handoff, and pilot design.
+- **Weeks 15–20 · FHIR / HL7 · Validate** — realistic user acceptance testing, clinical and workflow validation, training plan, adoption risks, operational readiness, and rollout decision.
+- **Weeks 21–32 · AWS + architecture · Go Live + Adopt + Measure** — security/readiness, monitoring, launch, support model, training, adoption, KPI tracking, post-launch review, and scale decisions.
+
+The delivery cycle is **Assess → Design → Build → Validate → Go Live → Adopt → Measure**.
+
+That cycle is not a box-checking exercise. A Harbor Health problem only moves as far as the real solution requires. If analysis or an operational change solves the problem, I do not invent a fake technical deployment just to complete every stage.
+
 ## Before implementation: solution consulting
 
-For serious missions, I also work through:
+For serious problems, I also work through:
 
 - **Discovery** — what the organization is trying to improve and what is failing today.
 - **Stakeholders** — who uses, owns, approves, supports, or could block the change.
@@ -40,4 +54,4 @@ The consulting side asks: **Can I understand the customer, explain the value, an
 
 The implementation side asks: **Can I help the organization test it, launch it, adopt it, support it, and prove that it worked?**
 
-A complete Harbor Health mission should be able to answer all three.
+A complete Harbor Health problem should be able to answer all three.
