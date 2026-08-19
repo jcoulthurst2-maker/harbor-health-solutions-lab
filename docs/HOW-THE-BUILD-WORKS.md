@@ -1,42 +1,45 @@
-# How the Build Works
+# Architecture & Technical Build
 
-Harbor Health uses one persistent fictional hospital instead of separate tutorials.
+## What this proves
 
-Every serious mission has two sides: **building the solution** and **getting the solution into real use**.
+I can move from a healthcare operating problem to a technical solution that is understandable, testable, and ready to support real delivery.
 
-For every mission:
+## Why it matters
 
-1. Understand what is going wrong.
-2. Inspect the available evidence.
-3. Separate what can be proven from what is still unknown.
-4. Decide what should change in the workflow or system.
-5. Use the simplest useful technology.
-6. Test both normal use and failure cases.
-7. Identify the people who own, use, approve, or support the change.
-8. Define what users need to test before launch.
-9. Decide whether the solution should start with a pilot or phased rollout.
-10. Plan training, support, and adoption.
-11. Decide how operational results, technical performance, and usage will be measured.
-12. Review what should improve after launch.
+Healthcare technology rarely fails because one line of code is wrong. Problems usually cross data, workflow, integrations, users, security, and operations. The architecture has to fit the work people are actually doing.
 
-## Technology in plain language
+Harbor Health gives me one persistent system where those decisions build on each other instead of disappearing after a tutorial.
 
-**SQL** — ask questions of stored data.
+## How the work moves
 
-**Python** — automate repeated work and create logic.
+**Diagnose** — understand the problem, inspect the evidence, and separate what is known from what still needs to be proven.
 
-**APIs** — let two pieces of software exchange information.
+**Design** — define the future workflow, requirements, system boundaries, ownership, and the simplest technical approach that can solve the problem.
 
-**FHIR / HL7** — help healthcare systems exchange healthcare information in a consistent form.
+**Build & integrate** — use SQL, Python, APIs, FHIR/HL7, cloud services, and AI only when the problem requires them.
 
-**AWS / architecture** — decide how the whole system is organized, secured, hosted, monitored, and scaled.
+**Validate** — test normal use, edge cases, failures, security assumptions, and whether the solution actually fits the workflow.
 
-**AI** — use machine intelligence only when it creates value that simpler software does not.
+**Prepare for delivery** — document the architecture, dependencies, monitoring, support needs, and what must be true before go-live.
 
-## Implementation in plain language
+## Technical capabilities
 
-A working prototype is not the finish line.
+**SQL** — investigate and validate operational data.
 
-Implementation means deciding how the solution becomes part of the organization: who owns it, what the future workflow looks like, what requirements matter, who tests it, how it is piloted, how staff learn it, what could block adoption, how support works, and how leadership knows whether the change succeeded.
+**Python** — automate work and turn analysis into repeatable logic.
 
-That is what turns Harbor Health from a technical lab into a full solutions-consulting simulation.
+**APIs** — connect systems and move information between them.
+
+**FHIR / HL7** — exchange healthcare information in a form other healthcare systems can understand.
+
+**AWS & solution architecture** — design how the system is hosted, secured, monitored, connected, and scaled.
+
+**AI** — add machine intelligence only when it creates value that simpler software or rules cannot.
+
+## Evidence this produces
+
+Depending on the problem, the public record can include working queries or scripts, prototypes, integration flows, architecture diagrams, technical decisions, validation results, failure handling, and implementation-ready technical documentation.
+
+## What good looks like
+
+The technology is not impressive because it is complicated. It is successful when I can explain why it belongs, show that it works, show how it can fail, and hand it into implementation with clear technical ownership.
