@@ -1,72 +1,57 @@
 # Harbor Health Command System
 
-> **A fictional healthcare system with real-world problems.**
+> A fictional healthcare system with real-world problems.
 
 ## My role
 
-**Healthcare AI Solutions Consultant**
+**Healthcare AI Solutions Consultant + Solution Architect**
 
-In Harbor Health, I own the path from **client problem → solution → implementation → measurable result**.
+I own the work from client discovery through architecture, technical build, implementation, adoption, and measurable results.
 
-I have to understand the operation, work with the data, gather requirements, decide what technology belongs, build enough to prove the solution, explain its value, align stakeholders, plan testing and rollout, support adoption, and communicate with both executives and technical teams.
+That means I am not only recommending what Harbor Health should do. I am expected to understand the operation, gather requirements, design the target solution, work with the data, build and test prototypes, connect systems, make architecture decisions, plan implementation, support rollout and adoption, and explain the tradeoffs to both executives and technical teams.
 
-Harbor Health is a **32-week healthcare solutions lab** built around one evolving fictional hospital. Instead of completing disconnected coding exercises, I keep returning to the same organization as new operational and technical problems appear.
+Harbor Health is a 32-week solutions lab built around one evolving fictional hospital. The hospital keeps changing, and each new problem forces a new combination of consulting, architecture, engineering, and implementation work.
 
-## What I am training
+## The three parts of the job
 
-Every serious mission has three sides.
+Client solutions — discovery, workflow analysis, requirements, stakeholder alignment, solution recommendation, value, demos, and delivery handoff.
 
-**Client solutions** — discovery, workflow analysis, requirements, stakeholder alignment, solution recommendation, business value, demos, and delivery handoff.
+Technical architecture + build — SQL, Python, APIs, FHIR/HL7, AI, AWS, security, reliability, integrations, prototypes, and end-to-end solution design.
 
-**Technical solutions** — SQL, Python, APIs, FHIR/HL7, AI judgment, AWS, security, reliability, and solution architecture.
+Implementation + adoption — UAT, pilots, rollout, training, operational readiness, ownership, change risk, KPIs, and post-launch improvement.
 
-**Implementation & adoption** — UAT, pilot design, rollout, training, operational readiness, ownership, change risk, KPIs, and post-launch improvement.
+The goal is to be able to take a healthcare problem from unclear and messy to designed, built, implemented, adopted, and measured.
 
-The goal is not just to make technology work. It is to practice taking a healthcare problem from **unclear and messy to understood, designed, proven, implemented, adopted, and measured**.
-
-## Current mission — Appointment Access
+## Current mission
 
 Harbor Health believes patients are waiting too long for appointments, but leadership does not trust the current dashboard enough to know why.
 
-I inherit synthetic appointment data and have to determine what the evidence actually supports before recommending a change.
+I inherit synthetic appointment data, determine what the evidence actually supports, identify data-quality risks, and then turn the finding into a solution and implementation recommendation.
 
-The mission starts with SQL and data quality, but it does not end there. The final recommendation also has to address who owns the change, what the future workflow should look like, how it would be tested, how staff would be prepared, and what leadership should measure afterward.
+[Open Mission 001 →](docs/CURRENT-MISSION.md)
 
-**Why start here?** If the hospital cannot trust its basic operational data, adding automation, integrations, or AI only makes the wrong answer move faster.
+## Go deeper
 
-[Open the current mission](docs/CURRENT-MISSION.md)
+[Architecture + technical build →](docs/HOW-THE-BUILD-WORKS.md)  
+How the hospital problem turns into data work, prototypes, integrations, AI decisions, and system architecture.
 
-## How the technology enters
+[Client solutions, implementation + adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
+Discovery, requirements, stakeholder work, UAT, rollout, readiness, adoption, and value realization.
 
-The hospital problem decides what I need to learn and use.
+[32-week technical roadmap →](docs/ROADMAP.md)  
+How SQL, Python, APIs, FHIR/HL7, AWS, architecture, AI, and implementation build over time.
 
-- **SQL** — understand and validate hospital data.
-- **Python** — automate repeated work and build reusable logic.
-- **APIs** — connect systems that operate separately.
-- **FHIR / HL7** — exchange healthcare information correctly between systems.
-- **AI** — decide when AI adds real value, when normal rules are safer, and how human control and monitoring should work.
-- **AWS + architecture** — design how the full system runs securely, reliably, and at scale.
+[Why these healthcare problems →](docs/WHY-THESE-PROBLEMS.md)  
+Why the lab focuses on access, data trust, referrals, prior authorization, interoperability, AI, security, and scale.
 
-Client discovery, architecture, implementation, adoption, and AI judgment run throughout the full build rather than appearing only at the end.
+[AI approach →](docs/AI-APPROACH.md)  
+How I decide when AI belongs, when simpler rules are safer, and how human control and fallback should work.
 
-## What Harbor Health will encounter
-
-The hospital gradually faces problems involving **appointment access, unreliable data, referral leakage, prior authorization, manual work, disconnected systems, interoperability, AI errors, security, outages, staff adoption, and multi-clinic scale**.
-
-Each problem has to produce evidence: a query, prototype, integration, workflow, architecture decision, test, implementation artifact, or recommendation I can explain and defend.
-
-## Explore the build
-
-- [How the build works](docs/HOW-THE-BUILD-WORKS.md)
-- [Client solutions, implementation & adoption](docs/IMPLEMENTATION-ADOPTION.md)
-- [Why these problems](docs/WHY-THESE-PROBLEMS.md)
-- [AI approach](docs/AI-APPROACH.md)
-- [32-week roadmap](docs/ROADMAP.md)
-- [Future mission bank](docs/MISSION-BACKLOG.md)
-- [Synthetic appointment sample](data/appointments_sample.csv)
+[Future mission bank →](docs/MISSION-BACKLOG.md)  
+The operational and technical failures Harbor Health is designed to encounter next.
 
 ## End state
 
-By the end, Harbor Health should read like **one complete healthcare transformation case**: discovery, evidence, workflow redesign, technical build, integrations, healthcare data standards, AI decisions, cloud architecture, implementation, adoption, security, tradeoffs, and measurable outcomes.
+By the end, Harbor Health should read like one complete healthcare transformation case: discovery, evidence, workflow redesign, architecture, technical build, integrations, healthcare data standards, AI decisions, cloud design, implementation, adoption, security, tradeoffs, and measurable outcomes.
 
-**Project status:** active build. Completed evidence is added only after the work is actually completed.
+Project status: active build. Completed evidence is added only after the work is actually completed.
