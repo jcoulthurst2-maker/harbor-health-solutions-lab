@@ -1,33 +1,29 @@
 # Future Work
 
-## What this proves
+## What this page is for
 
-Harbor Health is designed to become more difficult as the system and my capability grow.
+This page shows **how Harbor Health becomes harder after the current work**.
 
-## Why it matters
+The problem-context page explains why the healthcare issues matter. The roadmap explains when capabilities are introduced. This page is only about the next level of complexity the lab will have to handle.
 
-The project should not repeat the same kind of problem with different tools. Each future problem should introduce a new operating risk, technical dependency, implementation challenge, or leadership decision that forces broader solutions judgment.
+## How the difficulty increases
 
-## What comes next
+**From one answer to conflicting evidence** — later problems introduce bad data, competing metrics, referral leakage, and capacity tradeoffs so the first explanation is not always the right one.
 
-**Access & data** — conflicting no-show rates, referral leakage, and capacity imbalance test whether the evidence is trustworthy before action is taken.
+**From one workflow to connected workflows** — solutions begin crossing teams, vendor tools, downstream systems, and write-back paths, creating ownership and failure questions that do not exist in a single-system exercise.
 
-**Automation & prior authorization** — manual referral queues, prior-authorization work, and repeatable clinic action lists test when workflow logic should be automated and where human judgment still belongs.
+**From a working integration to healthcare-grade exchange** — the lab adds FHIR, HL7, SMART context, and mixed-system environments where data has to keep the correct meaning across boundaries.
 
-**System connections** — vendor synchronization failures, downstream triggers, and safe write-back test whether multiple systems can exchange information reliably without creating new operational risk.
+**From automation to judgment under uncertainty** — later work introduces AI use cases, unsupported outputs, clinician distrust, outages, human overrides, and cases where the correct decision is to use simpler rules instead.
 
-**Healthcare interoperability** — FHIR intake, FHIR/HL7 coexistence, and SMART app context test whether healthcare data keeps the right meaning as it moves between systems.
+**From normal operation to failure** — security, credential exposure, ransomware, downtime, excessive access, recovery, and continuity force the system to keep working safely when conditions are bad.
 
-**AI & human control** — referral prioritization, wrong-patient flags, unsupported summaries, clinician distrust, outages, and override monitoring test whether AI can be useful without becoming uncontrolled.
-
-**Security & continuity** — credential exposure, ransomware, outages, and excessive access test whether Harbor Health can protect information and keep critical workflows running during failure.
-
-**Enterprise scale & go-live** — multi-clinic rollout, reliability problems, cost redesign, pilot rejection, training breakdowns, feedback gaps, and phased launch test whether a solution can survive real organizational complexity.
+**From a pilot to enterprise scale** — multi-clinic rollout, reliability, cost, training breakdowns, feedback gaps, pilot rejection, phased launch, and support burden test whether a solution can survive organizational complexity.
 
 ## Final integrated case
 
-The final Harbor Health case brings the work together for a mixed executive and technical audience: the original operating problems, evidence, architecture, technical build, integrations, healthcare standards, justified AI, security decisions, implementation, go-live, adoption, measurement, and recommendations.
+The final Harbor Health case should bring the work together for a mixed executive and technical audience: what the organization was facing, what evidence supported the decisions, what was built, how the architecture evolved, what was validated, what would be required for go-live, what risks remain, and what leadership should do next.
 
 ## What good looks like
 
-By the end, the difficulty should come from having to make good decisions across the entire system—not from simply writing harder code.
+By the end, Harbor Health should be difficult because the decisions are interconnected—not because the code is artificially complicated.
