@@ -37,21 +37,21 @@ Each solved Harbor Health problem closes with a 90-second one-page brief and a s
 ## Go deeper
 
 [Architecture & technical build →](docs/HOW-THE-BUILD-WORKS.md)  
-How the hospital problem turns into data work, prototypes, integrations, AI decisions, and system architecture.
+How I move from a healthcare operating problem to a technical solution that can be validated and prepared for delivery.
 
-[Client solutions, implementation & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
-Discovery, requirements, stakeholder work, UAT, rollout, go-live readiness, adoption, and value realization.
+[Implementation, go-live & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
+How I take a sound solution through readiness, UAT, launch, support, adoption, and value realization.
 
-[32-week technical roadmap →](docs/ROADMAP.md)  
-How SQL, Python, APIs, FHIR/HL7, AWS, architecture, AI, implementation, and go-live capability build over time.
+[32-week capability roadmap →](docs/ROADMAP.md)  
+How technical depth and delivery responsibility grow together from SQL through cloud architecture and go-live.
 
 [Why these healthcare problems →](docs/WHY-THESE-PROBLEMS.md)  
-The current U.S. healthcare pressures behind Harbor Health's access, data, interoperability, prior authorization, AI, security, and implementation problems.
+The 2026 U.S. healthcare pressures that make Harbor Health's access, prior authorization, interoperability, security, and implementation problems worth solving.
 
-[AI approach →](docs/AI-APPROACH.md)  
-How I decide when AI belongs, when simpler rules are safer, and how human control and fallback should work.
+[AI decision framework →](docs/AI-APPROACH.md)  
+How I decide when AI belongs, keep humans in control, plan for failure, and measure whether it creates value.
 
 [Future work →](docs/MISSION-BACKLOG.md)  
-The operational and technical failures Harbor Health is designed to encounter next.
+How Harbor Health becomes more difficult across integrations, AI, security, enterprise scale, and go-live.
 
 Project status: active build. Completed evidence is added only after the work is actually completed.
