@@ -6,6 +6,22 @@ Harbor Health is a 32-week healthcare solutions build. Instead of doing disconne
 
 Each mission starts with a realistic healthcare problem. I investigate what is wrong, decide what needs to change, use the right technology, test the result, and explain what should happen next.
 
+## Explore the build
+
+If you are scanning this as a hiring manager, consultant, operator, or technologist, start here:
+
+- **[Current mission](docs/CURRENT-MISSION.md)** — see the problem I am actively working through and what evidence the mission is expected to produce.
+- **[Why these problems](docs/WHY-THESE-PROBLEMS.md)** — see why the project focuses on access, data trust, prior authorization, interoperability, AI, security, and adoption.
+- **[How the build works](docs/HOW-THE-BUILD-WORKS.md)** — see the method I use to move from an operational problem to a tested solution.
+- **[AI approach](docs/AI-APPROACH.md)** — see how I decide when AI belongs in a healthcare workflow and when it does not.
+- **[32-week roadmap](docs/ROADMAP.md)** — see how SQL, Python, APIs, FHIR/HL7, AWS, and architecture build on one another.
+- **[Future mission bank](docs/MISSION-BACKLOG.md)** — see the healthcare problems the system is designed to encounter next.
+- **[Synthetic appointment sample](data/appointments_sample.csv)** — inspect a small sample of the fictional data behind Mission 001.
+
+### What this project is meant to demonstrate
+
+Not just coding. The build is designed to show how I approach **problem framing, operational diagnosis, data quality, workflow design, technical implementation, system integration, AI judgment, architecture, adoption, and executive communication** as parts of one healthcare solution.
+
 ## Why these problems
 
 The problems are not random. They were chosen because they sit where healthcare operations and technology often fail together.
@@ -75,15 +91,6 @@ I inherit a synthetic appointment dataset. My first job is to figure out what ca
 We start here for a reason: **before the hospital automates anything, connects more systems, or adds AI, it needs a trustworthy understanding of the problem.**
 
 [Open the current mission](docs/CURRENT-MISSION.md)
-
-## Explore the build
-
-- [Why these problems](docs/WHY-THESE-PROBLEMS.md)
-- [How the build works](docs/HOW-THE-BUILD-WORKS.md)
-- [AI approach](docs/AI-APPROACH.md)
-- [32-week roadmap](docs/ROADMAP.md)
-- [Future mission bank](docs/MISSION-BACKLOG.md)
-- [Synthetic appointment sample](data/appointments_sample.csv)
 
 ## Project status
 
