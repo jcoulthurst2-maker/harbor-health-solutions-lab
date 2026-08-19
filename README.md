@@ -16,15 +16,17 @@ Architecture + build — design and build the technology.
 
 Implementation + adoption — launch it, get people using it, and prove it worked.
 
-## Current mission
+## Current work
 
-SQL — validate Harbor Health’s appointment data, identify what is driving long waits, and determine what should change next.
+**Appointment Access · Stage: Assess**
 
-[Open Mission 001 →](docs/CURRENT-MISSION.md)
+SQL — validate the appointment data, identify what is driving long waits, and determine what should change next.
+
+[View current work →](docs/CURRENT-MISSION.md)
 
 ## Executive briefings
 
-Every completed mission publishes a 90-second one-page brief and a short leadership deck.
+Each solved Harbor Health problem closes with a 90-second one-page brief and a short leadership deck.
 
 [View completed briefings →](docs/EXECUTIVE-BRIEFINGS.md)
 
@@ -45,7 +47,7 @@ Why the lab focuses on access, data trust, referrals, prior authorization, inter
 [AI approach →](docs/AI-APPROACH.md)  
 How I decide when AI belongs, when simpler rules are safer, and how human control and fallback should work.
 
-[Future mission bank →](docs/MISSION-BACKLOG.md)  
+[Future work →](docs/MISSION-BACKLOG.md)  
 The operational and technical failures Harbor Health is designed to encounter next.
 
 ## End state
