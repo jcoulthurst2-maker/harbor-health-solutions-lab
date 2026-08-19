@@ -6,19 +6,19 @@
 
 **Healthcare AI Solutions Consultant & Solution Architect**
 
-I take Harbor Health from client problem through solution architecture, hands-on technical build, implementation, adoption, and measurable results.
+I take Harbor Health from discovery and solution design through hands-on technical build, implementation, go-live, adoption, and measurable results.
 
-## The three parts of the job
+## Core responsibilities
 
-**Client solutions** — lead discovery, define requirements, align stakeholders, and translate business needs into a clear solution.
+**Discovery & solution design** — lead client discovery, define requirements, map workflows, align stakeholders, and translate business needs into a clear solution.
 
-**Solution architecture + build** — design and build data, integration, AI, and cloud solutions that are secure, reliable, and fit the workflow.
+**Solution architecture & technical delivery** — design and build data, integration, AI, and cloud solutions; validate the technical approach and prepare the solution for production use.
 
-**Implementation + adoption** — lead testing, rollout, training, operational readiness, adoption, and measurement of results.
+**Implementation, go-live & adoption** — lead UAT, launch readiness, rollout, training, go-live support, adoption, and post-launch measurement.
 
 ## End state
 
-By the end, Harbor Health should read like one complete healthcare transformation case: discovery, evidence, workflow redesign, architecture, technical build, integrations, healthcare data standards, AI decisions, cloud design, implementation, adoption, security, tradeoffs, and measurable outcomes.
+By the end, Harbor Health should read like one complete healthcare transformation case: discovery, evidence, workflow redesign, architecture, technical build, integrations, healthcare data standards, AI decisions, cloud design, implementation, go-live, adoption, security, tradeoffs, and measurable outcomes.
 
 ## Current work
 
@@ -36,14 +36,14 @@ Each solved Harbor Health problem closes with a 90-second one-page brief and a s
 
 ## Go deeper
 
-[Architecture + technical build →](docs/HOW-THE-BUILD-WORKS.md)  
+[Architecture & technical build →](docs/HOW-THE-BUILD-WORKS.md)  
 How the hospital problem turns into data work, prototypes, integrations, AI decisions, and system architecture.
 
-[Client solutions, implementation + adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
-Discovery, requirements, stakeholder work, UAT, rollout, readiness, adoption, and value realization.
+[Client solutions, implementation & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
+Discovery, requirements, stakeholder work, UAT, rollout, go-live readiness, adoption, and value realization.
 
 [32-week technical roadmap →](docs/ROADMAP.md)  
-How SQL, Python, APIs, FHIR/HL7, AWS, architecture, AI, and implementation build over time.
+How SQL, Python, APIs, FHIR/HL7, AWS, architecture, AI, implementation, and go-live capability build over time.
 
 [Why these healthcare problems →](docs/WHY-THESE-PROBLEMS.md)  
 The current U.S. healthcare pressures behind Harbor Health's access, data, interoperability, prior authorization, AI, security, and implementation problems.
