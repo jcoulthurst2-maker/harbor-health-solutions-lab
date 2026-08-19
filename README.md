@@ -10,11 +10,11 @@ I take Harbor Health from client problem through solution architecture, hands-on
 
 ## The three parts of the job
 
-Client solutions — understand the problem and shape the right solution.
+**Client solutions** — lead discovery, define requirements, align stakeholders, and translate business needs into a clear solution.
 
-Architecture + build — design and build the technology.
+**Solution architecture + build** — design and build data, integration, AI, and cloud solutions that are secure, reliable, and fit the workflow.
 
-Implementation + adoption — launch it, get people using it, and prove it worked.
+**Implementation + adoption** — lead testing, rollout, training, operational readiness, adoption, and measurement of results.
 
 ## End state
 
