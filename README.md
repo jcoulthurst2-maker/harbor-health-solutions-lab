@@ -1,16 +1,12 @@
 # Harbor Health Command System
 
-> A fictional healthcare system with real-world problems.
+> A 32-week healthcare solutions lab built around one evolving fictional hospital.
 
 ## My role
 
 **Healthcare AI Solutions Consultant + Solution Architect**
 
-I own the work from client discovery through architecture, technical build, implementation, adoption, and measurable results.
-
-That means I am not only recommending what Harbor Health should do. I am expected to understand the operation, gather requirements, design the target solution, work with the data, build and test prototypes, connect systems, make architecture decisions, plan implementation, support rollout and adoption, and explain the tradeoffs to both executives and technical teams.
-
-Harbor Health is a 32-week solutions lab built around one evolving fictional hospital. The hospital keeps changing, and each new problem forces a new combination of consulting, architecture, engineering, and implementation work.
+I take Harbor Health from client problem through solution architecture, hands-on technical build, implementation, adoption, and measurable results.
 
 ## The three parts of the job
 
