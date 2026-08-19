@@ -1,45 +1,45 @@
-# Architecture & Technical Build
+# Technical Architecture & Build
 
 ## What this proves
 
-I can move from a healthcare operating problem to a technical solution that is understandable, testable, and ready to support real delivery.
+I can design and build the technical side of a healthcare solution—not just describe what the system should do.
 
 ## Why it matters
 
-Healthcare technology rarely fails because one line of code is wrong. Problems usually cross data, workflow, integrations, users, security, and operations. The architecture has to fit the work people are actually doing.
+Healthcare solutions have to work across messy data, existing systems, workflow constraints, security requirements, failures, and scale. The technical design has to make those pieces work together without adding unnecessary complexity.
 
-Harbor Health gives me one persistent system where those decisions build on each other instead of disappearing after a tutorial.
+Harbor Health gives me one persistent environment where each technical decision has consequences for the next one.
 
-## How the work moves
+## The technical layers I am building
 
-**Diagnose** — understand the problem, inspect the evidence, and separate what is known from what still needs to be proven.
+**Data & evidence** — use SQL to validate what is happening, find bad data, define trustworthy measures, and give the rest of the solution a reliable foundation.
 
-**Design** — define the future workflow, requirements, system boundaries, ownership, and the simplest technical approach that can solve the problem.
+**Logic & automation** — use Python to turn analysis into repeatable tools, automate manual work, and build reusable business logic.
 
-**Build & integrate** — use SQL, Python, APIs, FHIR/HL7, cloud services, and AI only when the problem requires them.
+**Integration & interoperability** — use APIs, FHIR, and HL7 to move information between systems while preserving the meaning of healthcare data.
 
-**Validate** — test normal use, edge cases, failures, security assumptions, and whether the solution actually fits the workflow.
+**Cloud & reliability** — use AWS and solution-architecture principles to decide how services are hosted, secured, monitored, connected, recovered, and scaled.
 
-**Prepare for delivery** — document the architecture, dependencies, monitoring, support needs, and what must be true before go-live.
+**AI when justified** — introduce AI only when it improves the solution beyond normal rules or software, then define human control, fallback behavior, monitoring, and failure handling.
 
-## Technical capabilities
+## How I prove the architecture
 
-**SQL** — investigate and validate operational data.
+A diagram alone is not enough. Where the problem calls for it, I produce working queries, scripts, prototypes, API flows, tests, architecture decisions, and failure scenarios.
 
-**Python** — automate work and turn analysis into repeatable logic.
+I should be able to show:
 
-**APIs** — connect systems and move information between them.
-
-**FHIR / HL7** — exchange healthcare information in a form other healthcare systems can understand.
-
-**AWS & solution architecture** — design how the system is hosted, secured, monitored, connected, and scaled.
-
-**AI** — add machine intelligence only when it creates value that simpler software or rules cannot.
+- what the system is supposed to do;
+- what I actually built;
+- how the parts connect;
+- what assumptions I tested;
+- what happens when something fails;
+- what technical tradeoffs I made;
+- what would still be required before production use.
 
 ## Evidence this produces
 
-Depending on the problem, the public record can include working queries or scripts, prototypes, integration flows, architecture diagrams, technical decisions, validation results, failure handling, and implementation-ready technical documentation.
+The public record can include code, technical validation results, prototypes, integration flows, architecture diagrams, data-quality findings, security or reliability decisions, and concise technical documentation.
 
 ## What good looks like
 
-The technology is not impressive because it is complicated. It is successful when I can explain why it belongs, show that it works, show how it can fail, and hand it into implementation with clear technical ownership.
+The technical work is strong when the solution is understandable, testable, appropriately simple, resilient to realistic failure, and supported by evidence someone else can inspect.
