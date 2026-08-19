@@ -1,6 +1,6 @@
 # Harbor Health Command System
 
-> A 32-week healthcare solutions lab built around one evolving fictional hospital.
+> A 32-week healthcare solutions lab built around one evolving fictional hospital based on real-world U.S. healthcare problems.
 
 ## My role
 
@@ -46,7 +46,7 @@ Discovery, requirements, stakeholder work, UAT, rollout, readiness, adoption, an
 How SQL, Python, APIs, FHIR/HL7, AWS, architecture, AI, and implementation build over time.
 
 [Why these healthcare problems →](docs/WHY-THESE-PROBLEMS.md)  
-The national pressures behind Harbor Health's access, data, interoperability, prior authorization, AI, security, and implementation problems.
+The current U.S. healthcare pressures behind Harbor Health's access, data, interoperability, prior authorization, AI, security, and implementation problems.
 
 [AI approach →](docs/AI-APPROACH.md)  
 How I decide when AI belongs, when simpler rules are safer, and how human control and fallback should work.
