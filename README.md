@@ -36,12 +36,6 @@ Each solved Harbor Health problem closes with a 90-second one-page brief and a s
 
 ## Go deeper
 
-[Architecture & technical build →](docs/HOW-THE-BUILD-WORKS.md)  
-How I move from a healthcare operating problem to a technical solution that can be validated and prepared for delivery.
-
-[Implementation, go-live & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
-How I take a sound solution through readiness, UAT, launch, support, adoption, and value realization.
-
 [32-week capability roadmap →](docs/ROADMAP.md)  
 How technical depth and delivery responsibility grow together from SQL through cloud architecture and go-live.
 
@@ -50,6 +44,12 @@ The 2026 U.S. healthcare pressures that make Harbor Health's access, prior autho
 
 [AI decision framework →](docs/AI-APPROACH.md)  
 How I decide when AI belongs, keep humans in control, plan for failure, and measure whether it creates value.
+
+[Technical architecture & build →](docs/HOW-THE-BUILD-WORKS.md)  
+How I design and prove the technical side of the solution across data, automation, integrations, cloud architecture, reliability, and AI.
+
+[Client delivery, go-live & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
+How I model the real decision environment around stakeholders, readiness, simulated UAT, launch criteria, support, adoption, and value—without inventing fake approvals or stakeholder feedback.
 
 [Future work →](docs/MISSION-BACKLOG.md)  
 How Harbor Health becomes more difficult across integrations, AI, security, enterprise scale, and go-live.
