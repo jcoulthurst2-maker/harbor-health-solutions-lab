@@ -1,61 +1,59 @@
-# Client Solutions, Implementation, Go-Live & Adoption
+# Client Delivery, Go-Live & Adoption
 
 ## What this proves
 
-I can take a technically sound healthcare solution and work through what would be required to move it toward real organizational use.
+I can structure the delivery side of a healthcare solution: who needs to be involved, what has to be validated, what could block launch, and how the organization would know whether the change worked.
 
 ## Why it matters
 
-A working product can still fail if the problem was misunderstood, requirements were weak, users were not prepared, ownership is unclear, or the organization cannot tell whether the change created value.
+A technically correct solution can still fail because the workflow is wrong, requirements are incomplete, users are not ready, ownership is unclear, or the organization launches without knowing what success looks like.
 
-Harbor Health treats implementation as part of the solution itself, not as work that begins after the technical build is finished.
+Harbor Health treats delivery as part of the solution itself.
 
-## How implementation is practiced here
+## How a fictional hospital can still test real delivery thinking
 
-Harbor Health is a fictional hospital, so I do not pretend that real stakeholders reviewed, approved, or launched the work.
+Harbor Health does **not** invent stakeholder quotes, fake approvals, or pretend that a fictional executive said something they did not.
 
-Instead, I model the **decision environment** that a real implementation would have to survive.
+The hospital is synthetic, but the implementation work is structured around the kinds of roles, decisions, workflow constraints, failure scenarios, readiness questions, and go-live responsibilities that a real healthcare implementation has to address.
 
-**Stakeholder model** — identify the executive, operational, clinical, technical, security/compliance, and frontline roles that would matter; define what each role needs, what could block the change, and what evidence they would need before launch.
+That means I model the **decision environment**, not fake the people inside it.
 
-**Scenario-based validation** — pressure-test the solution against realistic operational, clinical, technical, and security concerns rather than inventing fictional feedback.
+For example, instead of writing “the clinic manager approved the workflow,” I identify what a clinic manager would need to evaluate, what evidence should answer that concern, and what should block the solution from moving forward if the evidence is weak.
 
-**Simulated UAT** — run normal, edge, bad-data, and failure scenarios through the actual solution and save real technical evidence from those tests.
+The point is not role-play. It is to demonstrate how I would make implementation decisions when the technical evidence is real.
 
-**Go-live planning** — define pilot scope, readiness criteria, training, support, escalation, monitoring, fallback, adoption measures, and the conditions that should block launch.
+## What I practice
 
-Public artifacts are labeled accordingly: proposed requirements, simulated UAT, recommended pilot design, anticipated adoption risks, and proposed go-live criteria.
+**Stakeholder & requirements model** — identify the executive, operational, clinical, technical, security/compliance, and frontline roles that matter; define what each role needs from the solution and what could block progress.
 
-## How the work moves
+**Workflow & readiness design** — define the current state, future state, ownership, acceptance criteria, dependencies, training needs, support path, monitoring, and fallback expectations.
 
-**Discover & align** — define the problem, stakeholder roles, current workflow, requirements, expected value, and decision owners.
+**Simulated UAT & failure testing** — run realistic normal, edge, bad-data, and failure scenarios through the actual solution and save the technical evidence from those tests.
 
-**Prepare & validate** — design the future workflow, define acceptance criteria, run simulated UAT, test failure scenarios, and decide whether the solution is ready for a pilot or launch recommendation.
+**Pilot & go-live decision** — define pilot scope, launch criteria, stop conditions, rollback or fallback expectations, escalation, and what has to be true before recommending go-live.
 
-**Launch & support** — plan rollout, training, communications, support paths, escalation, monitoring, and go-live readiness.
+**Adoption & value realization** — define how usage, operational results, quality, reliability, staff experience, and business value would be measured after launch.
 
-**Adopt & improve** — define how usage, operational results, quality, reliability, staff experience, and the original value promise would be measured after launch.
+Public artifacts are labeled clearly as proposed requirements, simulated UAT, recommended pilot design, anticipated adoption risks, proposed go-live criteria, and measurement frameworks.
 
-## How this matures across the 32 weeks
+## How this grows across the 32 weeks
 
-**SQL / Assess** — stakeholder roles, current-state workflow, ownership, baselines, and early requirements.
+**SQL / Assess** — stakeholder roles, current workflow, ownership, baselines, and early requirements.
 
 **Python / Design & Build** — future-state workflow, prototypes, acceptance criteria, value hypothesis, and early UAT scenarios.
 
-**APIs / Build & Integrate** — dependencies, system ownership, handoffs, end-to-end testing, delivery handoff, and pilot design.
+**APIs / Build & Integrate** — dependencies, system ownership, end-to-end testing, handoff, and pilot design.
 
-**FHIR / HL7 / Validate** — realistic UAT, healthcare workflow validation, training, adoption risks, operational readiness, and rollout decisions.
+**FHIR / HL7 / Validate** — healthcare workflow validation, simulated UAT, training, readiness, adoption risks, and rollout decisions.
 
-**AWS & architecture / Go Live, Adopt & Measure** — security and readiness, monitoring, launch planning, support model, adoption, KPI tracking, post-launch review, and scale decisions.
+**AWS & architecture / Go Live, Adopt & Measure** — security/readiness, monitoring, launch planning, support model, adoption measures, KPI tracking, post-launch review, and scale decisions.
 
 ## Evidence this produces
 
-Depending on the problem, the public record can include stakeholder-role maps, proposed requirements, workflow designs, simulated UAT plans and results, pilot recommendations, launch-readiness criteria, training plans, support models, adoption measures, KPI plans, and post-launch measurement frameworks.
+The public record can include stakeholder-role maps, proposed requirements, workflow designs, simulated UAT results, pilot recommendations, launch-readiness criteria, training and support plans, adoption measures, KPI plans, and post-launch measurement frameworks.
 
-The lab saves **real technical evidence** from what was actually built and tested, while clearly separating that evidence from modeled implementation recommendations.
+The distinction stays explicit: **technical tests and build evidence are real; stakeholder decisions and organizational outcomes are modeled unless real external participation exists.**
 
 ## What good looks like
 
-The solution is strong when I can explain who needs it, what changes, how it was technically validated, what could fail, what has to be true before go-live, how users would be supported, how adoption would be measured, and what leadership should decide next.
-
-The implementation layer stays inside the same 32-week build rather than becoming a separate course after the technical work ends.
+The implementation work is strong when I can show what evidence a real decision-maker would need, what should stop a launch, how users would be supported, how adoption would be measured, and what leadership should decide next—without pretending a fictional hospital gave me real-world approvals.
