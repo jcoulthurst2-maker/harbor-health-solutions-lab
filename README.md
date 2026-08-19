@@ -16,6 +16,10 @@ Architecture + build — design and build the technology.
 
 Implementation + adoption — launch it, get people using it, and prove it worked.
 
+## End state
+
+By the end, Harbor Health should read like one complete healthcare transformation case: discovery, evidence, workflow redesign, architecture, technical build, integrations, healthcare data standards, AI decisions, cloud design, implementation, adoption, security, tradeoffs, and measurable outcomes.
+
 ## Current work
 
 **Appointment Access · Stage: Assess**
@@ -42,16 +46,12 @@ Discovery, requirements, stakeholder work, UAT, rollout, readiness, adoption, an
 How SQL, Python, APIs, FHIR/HL7, AWS, architecture, AI, and implementation build over time.
 
 [Why these healthcare problems →](docs/WHY-THESE-PROBLEMS.md)  
-Why the lab focuses on access, data trust, referrals, prior authorization, interoperability, AI, security, and scale.
+The national pressures behind Harbor Health's access, data, interoperability, prior authorization, AI, security, and implementation problems.
 
 [AI approach →](docs/AI-APPROACH.md)  
 How I decide when AI belongs, when simpler rules are safer, and how human control and fallback should work.
 
 [Future work →](docs/MISSION-BACKLOG.md)  
 The operational and technical failures Harbor Health is designed to encounter next.
-
-## End state
-
-By the end, Harbor Health should read like one complete healthcare transformation case: discovery, evidence, workflow redesign, architecture, technical build, integrations, healthcare data standards, AI decisions, cloud design, implementation, adoption, security, tradeoffs, and measurable outcomes.
 
 Project status: active build. Completed evidence is added only after the work is actually completed.
