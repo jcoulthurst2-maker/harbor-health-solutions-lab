@@ -22,11 +22,21 @@ If Harbor Health cannot trust its basic operational data, then adding automation
 
 ## What this mission will produce
 
-When complete:
+When complete, the technical side should include:
 - working SQL analysis;
 - validation against source data;
 - one deliberate data-quality test;
-- a short findings brief;
-- a recommendation for the next capability.
+- a short findings brief.
+
+The implementation side should include:
+- who would own the access problem;
+- what the future workflow should change;
+- a small set of user acceptance testing scenarios;
+- a recommended pilot or phased rollout;
+- the training or guidance staff would need;
+- at least one adoption risk;
+- operational and adoption measures leadership should watch.
+
+The mission is complete only when the recommendation explains both **what Harbor Health should change** and **how that change could realistically move into use**.
 
 Results will be added only after the work is actually completed.
