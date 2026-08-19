@@ -37,6 +37,17 @@ The implementation side should include:
 - at least one adoption risk;
 - operational and adoption measures leadership should watch.
 
+## Executive briefing
+
+Every completed mission also closes with two leadership-facing artifacts:
+
+- **90-second one-page brief** — problem, evidence, recommendation, impact, implementation, key risk, and next step.
+- **Short slide deck** — a concise leadership story covering the situation, evidence, solution, implementation/adoption, results, and recommendation.
+
+**Status:** In progress. These are published only after the mission is complete and the evidence is real.
+
+[View the Executive Briefings index →](EXECUTIVE-BRIEFINGS.md)
+
 The mission is complete only when the recommendation explains both **what Harbor Health should change** and **how that change could realistically move into use**.
 
 Results will be added only after the work is actually completed.
