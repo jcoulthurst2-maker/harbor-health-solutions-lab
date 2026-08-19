@@ -4,11 +4,11 @@
 
 ## My role in the system
 
-**Healthcare AI Solutions Consultant** — I act as the person responsible for taking Harbor Health from problem discovery through solution design, technical proof, implementation, adoption, and measurable improvement.
+**Healthcare AI Solutions Consultant** — I act as the person responsible for taking Harbor Health from client discovery through solution design, technical proof, implementation, adoption, and measurable improvement.
 
-That means I am expected to understand the operation, work with the data, decide what technology belongs, build enough to prove the solution, connect the right systems, align stakeholders, plan testing and rollout, support adoption, and explain the recommendation to both executives and technical teams.
+That means I am expected to understand the operation, uncover the real problem, work with the data, gather requirements, decide what technology belongs, build enough to prove the solution, explain its value, connect the right systems, align stakeholders, hand clear decisions into delivery, plan testing and rollout, support adoption, and explain the recommendation to both executives and technical teams.
 
-Harbor Health is a 32-week healthcare solutions build. I am rebuilding the same fictional hospital over time so the work shows how I diagnose operational problems, decide what technology actually belongs, build enough of the solution to prove it, connect it to the larger system, and then work through implementation, adoption, rollout, measurement, and improvement.
+Harbor Health is a 32-week healthcare solutions build. I am rebuilding the same fictional hospital over time so the work shows how I move from a messy client problem to a solution that can be explained, demonstrated, implemented, adopted, supported, and measured.
 
 ## 60-second scan
 
@@ -16,11 +16,11 @@ Harbor Health is a 32-week healthcare solutions build. I am rebuilding the same 
 
 **What it covers:** appointment access, data quality, referral flow, prior authorization, system integration, FHIR/HL7, AI, security, implementation, adoption, outages, and scale.
 
-**What I am demonstrating:** operational diagnosis, workflow redesign, SQL/Python implementation, API and healthcare-data integration, AI judgment, solution architecture, stakeholder alignment, UAT, pilot and rollout planning, change management, adoption, validation, and executive communication.
+**What I am demonstrating:** client discovery, operational diagnosis, workflow redesign, requirements, SQL/Python implementation, API and healthcare-data integration, AI judgment, solution architecture, solution storytelling and value, stakeholder alignment, UAT, pilot and rollout planning, operational readiness, change management, adoption, validation, and executive communication.
 
-**How the system works:** each mission begins with a believable hospital failure. I investigate the evidence, decide whether the problem needs a workflow change, data fix, automation, integration, AI, or architecture change, build the smallest useful solution, test how it can fail, then plan how people would actually use it: who owns it, who tests it, how it launches, how staff are trained, what could block adoption, and how success is measured.
+**How the system works:** each mission begins with a believable hospital failure. I investigate the evidence, clarify what the client actually needs, decide whether the problem needs a workflow change, data fix, automation, integration, AI, or architecture change, build the smallest useful solution, test how it can fail, explain why the approach creates value, then plan how it would move into real use: who owns it, what gets handed into delivery, who tests it, how it launches, how staff are trained, what could block adoption, and how success is measured.
 
-**Current mission:** Harbor Health believes patients are waiting too long for appointments, but leadership does not trust the current dashboard enough to know why. I am starting by establishing what the data can actually prove, then turning the finding into a realistic implementation recommendation.
+**Current mission:** Harbor Health believes patients are waiting too long for appointments, but leadership does not trust the current dashboard enough to know why. I am starting by establishing what the data can actually prove, then turning the finding into a realistic solution and implementation recommendation.
 
 **Why that comes first:** if the hospital cannot trust its basic operational data, then adding automation, integrations, or AI simply makes the wrong answer move faster.
 
@@ -35,15 +35,15 @@ The technical skills are introduced because the hospital problem requires them:
 - **AWS + solution architecture** — decide how the full system should run securely, reliably, and at scale.
 - **AI** — decide where AI genuinely adds value, where fixed rules are safer, and how human control, fallback behavior, logging, and monitoring should work.
 
-Every serious mission also has an **implementation and adoption side**. That can include stakeholder mapping, current-state and future-state workflows, requirements, user acceptance testing, pilot design, training, rollout, adoption risks, ownership, KPIs, and post-launch review.
+Every serious mission also has a **client solutions and implementation side**. That can include discovery, stakeholder mapping, current-state and future-state workflows, requirements, solution value, a demo or prototype, delivery handoff, user acceptance testing, pilot design, training, operational readiness, rollout, adoption risks, ownership, KPIs, and post-launch review.
 
-The point is not only to build working technology. It is to practice the full path from **problem discovery to solution design to technical proof to implementation to adoption to measurable outcome**.
+The point is not only to build working technology. It is to practice the full path from **client problem to solution design to technical proof to implementation to adoption to measurable value**.
 
 ## Explore the build
 
 - **[Current mission](docs/CURRENT-MISSION.md)** — the problem I am actively working through and the evidence and implementation thinking the mission should produce.
 - **[How the build works](docs/HOW-THE-BUILD-WORKS.md)** — the full method for moving from a healthcare problem to a tested, implemented solution.
-- **[Implementation & adoption](docs/IMPLEMENTATION-ADOPTION.md)** — how stakeholder alignment, UAT, pilots, training, rollout, adoption, and measurement fit into every serious mission.
+- **[Client solutions, implementation & adoption](docs/IMPLEMENTATION-ADOPTION.md)** — how discovery, requirements, solution value, delivery handoff, UAT, pilots, training, rollout, adoption, and measurement fit into every serious mission.
 - **[Why these problems](docs/WHY-THESE-PROBLEMS.md)** — why the project focuses on access, data trust, prior authorization, interoperability, AI, security, and adoption.
 - **[AI approach](docs/AI-APPROACH.md)** — how I decide when AI belongs in a workflow and when it does not.
 - **[32-week roadmap](docs/ROADMAP.md)** — how SQL, Python, APIs, FHIR/HL7, AWS, architecture, implementation, and adoption build together.
@@ -66,7 +66,7 @@ The missions are built around places where healthcare operations and technology 
 - strong designs still fail when ownership, testing, training, or rollout are weak;
 - a solution that works in one clinic may need to scale across many.
 
-A mission is never created just because it is “time to learn Python” or “time to learn AWS.” The hospital problem comes first. The technology and implementation work appear because Harbor Health now needs them.
+A mission is never created just because it is “time to learn Python” or “time to learn AWS.” The hospital problem comes first. The technology, consulting, and implementation work appear because Harbor Health now needs them.
 
 ## 32-week build
 
@@ -78,7 +78,7 @@ A mission is never created just because it is “time to learn Python” or “t
 | **Weeks 15–20** | FHIR / HL7 | Make those connections work correctly with healthcare data. |
 | **Weeks 21–32** | AWS + architecture | Make the whole system secure, reliable, scalable, and ready for a real organization. |
 
-**Implementation, adoption, architecture, and AI judgment run across the full 32 weeks.** The later stages go deeper technically, but every serious mission asks how the solution would move into real use.
+**Client discovery, implementation, adoption, architecture, and AI judgment run across the full 32 weeks.** The later stages go deeper technically, but every serious mission asks how the solution creates value and how it would move into real use.
 
 ## Project status
 
@@ -86,6 +86,6 @@ This is an **active build**, not a finished case study. Completed missions and e
 
 ## End goal
 
-By the end, Harbor Health should read like one complete healthcare transformation case: the original problems, the evidence, the systems built, the integrations, the healthcare data standards, justified AI components, cloud design, security decisions, stakeholder strategy, UAT, pilot and rollout plan, training and adoption approach, failure modes, tradeoffs, and measurable outcomes.
+By the end, Harbor Health should read like one complete healthcare transformation case: the original problems, discovery findings, requirements, solution decisions, evidence, systems built, integrations, healthcare data standards, justified AI components, cloud design, security decisions, stakeholder strategy, solution value, implementation handoff, UAT, pilot and rollout plan, operational readiness, training and adoption approach, failure modes, tradeoffs, and measurable outcomes.
 
-The end state is a full-scale solutions-consulting simulation: understand the operation, design the future state, prove the solution technically, align the people who need to use it, implement it safely, drive adoption, and improve it after launch.
+The end state is a full-scale solutions-consulting simulation: understand the client and operation, shape the right solution, prove it technically, communicate its value, align the people who need to use it, hand it into delivery clearly, implement it safely, drive adoption, and improve it after launch.
