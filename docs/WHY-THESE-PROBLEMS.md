@@ -1,14 +1,10 @@
 # Why These Healthcare Problems
 
-## What this proves
+## What this page is for
 
-Harbor Health is not built around random technical exercises. It is built around operating problems U.S. healthcare organizations are dealing with now.
+Harbor Health is fictional, but the pressures behind it are real. This page explains **why these are worthwhile healthcare problems to practice solving in 2026**.
 
-## Why it matters
-
-The value of the project is not that I can complete tutorials. It is that I can practice solving problems where operations, data, technology, implementation, and patient access collide.
-
-The hospital is fictional. The pressures are not.
+It is not a second roadmap and does not explain the technical curriculum.
 
 ## 2026 national context
 
@@ -22,20 +18,14 @@ The hospital is fictional. The pressures are not.
 
 **Cybersecurity & continuity** — in April 2026, HHS announced four ransomware-related HIPAA settlements involving breaches affecting more than **427,000 people**. By July 2026, OCR announced its **21st ransomware enforcement action**. [Source: HHS, April 2026](https://www.hhs.gov/press-room/ocr-settles-four-ransomware-investigations.html) · [HHS, July 2026](https://www.hhs.gov/press-room/hhs-ocr-settles-ransomware-investigation-with-healthcare-system.html)
 
-## What Harbor Health turns those pressures into
+## Why Harbor Health uses these pressures
 
-**Access & data trust** — determine whether the problem is scheduling, staffing, referrals, capacity, or unreliable data before acting.
+These conditions create the kind of work I want the lab to force me to solve: unclear root causes, fragmented systems, manual burden, unreliable information, implementation risk, security constraints, and decisions that affect both staff and patients.
 
-**Prior authorization & automation** — reduce manual burden without removing the human judgment healthcare workflows still require.
+The problems are chosen because they require more than one kind of thinking at a time. A strong answer may require operational judgment, technical evidence, workflow redesign, architecture, implementation planning, or a decision **not** to add more technology.
 
-**System integration & interoperability** — connect fragmented tools and make sure healthcare information keeps its meaning as it moves.
+## The standard
 
-**AI & human control** — decide when AI adds value, when simpler rules are better, and how people stay in control.
+A Harbor Health problem belongs in the lab only if it could plausibly matter to a real U.S. healthcare organization and force a meaningful decision.
 
-**Security, continuity & scale** — design for permissions, outages, monitoring, recovery, reliability, and growth.
-
-**Implementation & adoption** — prove that a technically correct solution can survive testing, go-live, real users, and post-launch measurement.
-
-## What good looks like
-
-Each Harbor Health problem should feel believable enough that the technical work exists because the healthcare problem demands it—not because a roadmap says it is time to learn a tool.
+The technical work should exist because the healthcare problem demands it—not because the curriculum needs another exercise.
