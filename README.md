@@ -22,6 +22,12 @@ SQL — validate Harbor Health’s appointment data, identify what is driving lo
 
 [Open Mission 001 →](docs/CURRENT-MISSION.md)
 
+## Executive briefings
+
+Every completed mission publishes a 90-second one-page brief and a short leadership deck.
+
+[View completed briefings →](docs/EXECUTIVE-BRIEFINGS.md)
+
 ## Go deeper
 
 [Architecture + technical build →](docs/HOW-THE-BUILD-WORKS.md)  
