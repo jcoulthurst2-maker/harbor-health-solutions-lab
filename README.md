@@ -24,9 +24,9 @@ The goal is to be able to take a healthcare problem from unclear and messy to de
 
 ## Current mission
 
-Harbor Health believes patients are waiting too long for appointments, but leadership does not trust the current dashboard enough to know why.
+Harbor Health believes patients are waiting too long for appointments, but leadership does not trust the dashboard enough to know why.
 
-I inherit synthetic appointment data, determine what the evidence actually supports, identify data-quality risks, and then turn the finding into a solution and implementation recommendation.
+I am using synthetic appointment data to prove what is actually happening, identify data-quality risks, and recommend what Harbor Health should change next.
 
 [Open Mission 001 →](docs/CURRENT-MISSION.md)
 
