@@ -1,48 +1,33 @@
-# Future Harbor Health Missions
+# Future Work
 
-These are planned problem areas, not completed work.
+## What this proves
 
-## Access and data
-- Conflicting no-show rates
-- Referral leakage
-- Capacity imbalance
+Harbor Health is designed to become more difficult as the system and my capability grow.
 
-## Automation
-- Manual referral queue
-- Prior-authorization work
-- Repeatable clinic action lists
+## Why it matters
 
-## System connections
-- Vendor synchronization failure
-- Automatic downstream triggers
-- Safe write-back
+The project should not repeat the same kind of problem with different tools. Each future problem should introduce a new operating risk, technical dependency, implementation challenge, or leadership decision that forces broader solutions judgment.
 
-## Healthcare interoperability
-- FHIR intake
-- FHIR + HL7 coexistence
-- SMART app context
+## What comes next
 
-## AI and human control
-- Rules vs AI for referral prioritization
-- Wrong-patient flags
-- Clinician distrust
-- Unsupported AI summaries
-- AI outage
-- Human override monitoring
+**Access & data** — conflicting no-show rates, referral leakage, and capacity imbalance test whether the evidence is trustworthy before action is taken.
 
-## Security and continuity
-- Credential exposure
-- Ransomware / outage
-- Excessive access
+**Automation & prior authorization** — manual referral queues, prior-authorization work, and repeatable clinic action lists test when workflow logic should be automated and where human judgment still belongs.
 
-## Scale and implementation
-- Twenty-clinic rollout
-- Latency and reliability failures
-- Cost redesign
-- Pilot rejection
-- Training breakdown
-- Feedback gaps
-- Phased launch
+**System connections** — vendor synchronization failures, downstream triggers, and safe write-back test whether multiple systems can exchange information reliably without creating new operational risk.
+
+**Healthcare interoperability** — FHIR intake, FHIR/HL7 coexistence, and SMART app context test whether healthcare data keeps the right meaning as it moves between systems.
+
+**AI & human control** — referral prioritization, wrong-patient flags, unsupported summaries, clinician distrust, outages, and override monitoring test whether AI can be useful without becoming uncontrolled.
+
+**Security & continuity** — credential exposure, ransomware, outages, and excessive access test whether Harbor Health can protect information and keep critical workflows running during failure.
+
+**Enterprise scale & go-live** — multi-clinic rollout, reliability problems, cost redesign, pilot rejection, training breakdowns, feedback gaps, and phased launch test whether a solution can survive real organizational complexity.
 
 ## Final integrated case
-Present the rebuilt Harbor Health system to a mixed executive and engineering audience.
+
+The final Harbor Health case brings the work together for a mixed executive and technical audience: the original operating problems, evidence, architecture, technical build, integrations, healthcare standards, justified AI, security decisions, implementation, go-live, adoption, measurement, and recommendations.
+
+## What good looks like
+
+By the end, the difficulty should come from having to make good decisions across the entire system—not from simply writing harder code.
