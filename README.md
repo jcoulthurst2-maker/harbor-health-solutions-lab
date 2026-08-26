@@ -1,69 +1,84 @@
-# Harbor Health Command System
+# Solutions Lab
 
-> A 32-week healthcare solutions apprenticeship built around one evolving fictional hospital based on real-world U.S. healthcare problems.
+> A 32-week hands-on technical apprenticeship built inside a live mission simulation.
 
-Harbor Health is not just a set of exercises. It combines hands-on technical training with a live operating simulation. I still have to write the SQL, work with APIs, reason through architecture, understand healthcare data, and carry solutions through implementation — but the environment can change while I work. New evidence appears. Assumptions break. Stakeholders disagree. Deadlines move. The goal is to train both technical capability and operating judgment.
+This is not a collection of tutorials or static coding exercises.
 
-[Enter the interactive lab →](https://www.jadencoulthurst.com/lab)
+I use the Lab to build technical depth across **SQL, Python, APIs, data systems, cloud architecture, AI systems, and implementation** by solving realistic missions in changing fictional environments.
 
-## My role
+The technical work is real. The worlds are not.
 
-**Healthcare AI Solutions Consultant & Solution Architect**
+A mission might begin as a counterintelligence investigation, an urban logistics problem, a systems failure, a strange startup, or another operating environment entirely. New evidence can arrive while I work. Initial explanations can be wrong. Data can conflict. Time pressure can change the decision. The goal is to train the technical skill **and** the judgment required to use it well.
 
-I take Harbor Health from discovery and solution design through hands-on technical build, implementation, go-live, adoption, and measurable results.
+[Enter the interactive Lab →](https://www.jadencoulthurst.com/lab)
 
-## How the training works
+## How it works
 
-**Technical work** — SQL, data analysis, Python, APIs, healthcare interoperability, architecture, cloud, AI systems, implementation, and measurement.
+**Learn the capability** — build the underlying technical concept through guided checkpoints.
 
-**Operating simulation** — changing evidence, stakeholder pressure, conflicting information, deadlines, uncertainty, and consequences that force me to update my view rather than solve a static prompt.
+**Use it in a mission** — query data, work with systems, build or connect components, and investigate what is actually happening.
 
-**Evidence trail** — completed work, decisions, technical artifacts, executive briefings, and lessons are preserved here as the public record of the apprenticeship.
+**Operate under uncertainty** — deal with incomplete evidence, competing hypotheses, changing conditions, false leads, tradeoffs, and consequences.
 
-## Core responsibilities
+**Preserve the proof** — completed work, technical artifacts, decisions, architecture, and lessons are kept here as the public evidence trail.
 
-**Discovery & solution design** — lead client discovery, define requirements, map workflows, align stakeholders, and translate business needs into a clear solution.
+## Capability path
 
-**Solution architecture & technical delivery** — design and build data, integration, AI, and cloud solutions; validate the technical approach and prepare the solution for production use.
+### SQL + Data
+Querying, aggregation, joins, subqueries, CTEs, window functions, data quality, metric definitions, anomaly detection, timeline reconstruction, and analytical reasoning.
 
-**Implementation, go-live & adoption** — lead UAT, launch readiness, rollout, training, go-live support, adoption, and post-launch measurement.
+### Python + APIs
+Python fundamentals, data handling, automation, REST APIs, authentication, JSON, error handling, integration logic, and small service builds.
 
-## End state
+### Data Systems
+Schemas, normalization, pipelines, data contracts, interoperability, event flows, transformations, validation, lineage, and system-to-system reasoning.
 
-By the end, Harbor Health should read like one complete healthcare transformation case: discovery, evidence, workflow redesign, architecture, technical build, integrations, healthcare data standards, AI decisions, cloud design, implementation, go-live, adoption, security, tradeoffs, and measurable outcomes.
+### Cloud + Architecture
+Service boundaries, storage, compute, queues, observability, resilience, security, scaling, cost, deployment, and architecture tradeoffs.
 
-## Current work
+### AI Systems
+Model behavior, evaluation, retrieval, context, tool use, state, guardrails, failure modes, human authority, and designing AI that improves real decisions rather than producing impressive output.
 
-**Appointment Access · Stage: Assess**
+### Implementation
+Discovery, requirements, workflow reconstruction, rollout planning, UAT, readiness, change management, adoption, incident response, measurement, and proving whether the system actually worked.
 
-SQL — validate the appointment data, identify what is driving long waits, and determine what leadership should investigate next while the simulated operating environment changes around the analysis.
+## Mission model
 
-[View current work →](docs/CURRENT-MISSION.md)
+The **skills are structured; the worlds are disposable.**
 
-## Executive briefings
+That means the same capability can be trained through completely different environments so repetition does not become homework. A SQL `JOIN` might be learned through a counterintelligence breach. A Python/API exercise might involve reconstructing a moving logistics network. A cloud architecture mission might begin with a failing orbital research station. An implementation mission might involve a product launch where the technology works but the organization does not.
 
-Each solved Harbor Health problem closes with a 90-second one-page brief and a short leadership deck.
+The scenario is there to create stakes, ambiguity, memory, and curiosity. The competency underneath remains real.
 
-[View completed briefings →](docs/EXECUTIVE-BRIEFINGS.md)
+## Current mission worlds
 
-## Go deeper
+**Operation Glasshouse** — counterintelligence / defensive cyber investigation. Separate account activity from human attribution across identity, device, access, file, vendor, and physical-presence evidence.
 
-[32-week capability roadmap →](docs/ROADMAP.md)  
-How technical depth and delivery responsibility grow together from SQL through cloud architecture and go-live.
+**Night Train** — urban intelligence / logistics. Reconstruct a courier network whose apparent hub may be deliberate misdirection.
 
-[Why these healthcare problems →](docs/WHY-THESE-PROBLEMS.md)  
-The 2026 U.S. healthcare pressures that make Harbor Health's access, prior authorization, interoperability, security, and implementation problems worth solving.
+**Orbital Failure** — space systems. Diagnose a station-wide systems problem when telemetry sources disagree and the repair window is closing.
 
-[AI decision framework →](docs/AI-APPROACH.md)  
-How I decide when AI belongs, keep humans in control, plan for failure, and measure whether it creates value.
+Additional worlds are added as the capability path expands.
 
-[Technical architecture & build →](docs/HOW-THE-BUILD-WORKS.md)  
-How I design and prove the technical side of the solution across data, automation, integrations, cloud architecture, reliability, and AI.
+## Why the simulation matters
 
-[Client delivery, go-live & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
-How I model the real decision environment around stakeholders, readiness, simulated UAT, launch criteria, support, adoption, and value—without inventing fake approvals or stakeholder feedback.
+Most technical exercises tell you what kind of problem you are solving and provide a clean dataset designed around one correct answer. Real work rarely behaves like that.
 
-[Future work →](docs/MISSION-BACKLOG.md)  
-How Harbor Health becomes more difficult across integrations, AI, security, enterprise scale, and go-live.
+The Lab deliberately introduces:
+
+- incomplete and contradictory information
+- multiple plausible explanations
+- changing evidence
+- false leads
+- pressure and deadlines
+- decisions that can be made before attribution is complete
+- consequences for acting too early or too late
+- a requirement to distinguish evidence, inference, and uncertainty
+
+The purpose is not to turn technical training into a game. It is to make the technical training difficult to separate from the thinking required to use it responsibly.
+
+## Public evidence
+
+The interactive environment is the training surface. This repository is the build and evidence layer: mission design, technical artifacts, completed work, architecture, and the progression of the apprenticeship itself.
 
 Project status: active build. Completed evidence is added only after the work is actually completed.
