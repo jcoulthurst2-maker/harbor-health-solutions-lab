@@ -1,12 +1,24 @@
 # Harbor Health Command System
 
-> A 32-week healthcare solutions lab built around one evolving fictional hospital based on real-world U.S. healthcare problems.
+> A 32-week healthcare solutions apprenticeship built around one evolving fictional hospital based on real-world U.S. healthcare problems.
+
+Harbor Health is not just a set of exercises. It combines hands-on technical training with a live operating simulation. I still have to write the SQL, work with APIs, reason through architecture, understand healthcare data, and carry solutions through implementation — but the environment can change while I work. New evidence appears. Assumptions break. Stakeholders disagree. Deadlines move. The goal is to train both technical capability and operating judgment.
+
+[Enter the interactive lab →](https://www.jadencoulthurst.com/lab)
 
 ## My role
 
 **Healthcare AI Solutions Consultant & Solution Architect**
 
 I take Harbor Health from discovery and solution design through hands-on technical build, implementation, go-live, adoption, and measurable results.
+
+## How the training works
+
+**Technical work** — SQL, data analysis, Python, APIs, healthcare interoperability, architecture, cloud, AI systems, implementation, and measurement.
+
+**Operating simulation** — changing evidence, stakeholder pressure, conflicting information, deadlines, uncertainty, and consequences that force me to update my view rather than solve a static prompt.
+
+**Evidence trail** — completed work, decisions, technical artifacts, executive briefings, and lessons are preserved here as the public record of the apprenticeship.
 
 ## Core responsibilities
 
@@ -24,7 +36,7 @@ By the end, Harbor Health should read like one complete healthcare transformatio
 
 **Appointment Access · Stage: Assess**
 
-SQL — validate the appointment data, identify what is driving long waits, and determine what should change next.
+SQL — validate the appointment data, identify what is driving long waits, and determine what leadership should investigate next while the simulated operating environment changes around the analysis.
 
 [View current work →](docs/CURRENT-MISSION.md)
 
