@@ -1,40 +1,37 @@
-# Current Work — Appointment Access
+# Current Mission — Operation Glasshouse
 
-**Stage: Assess**
+**Track:** SQL + Data  
+**Mode:** Counterintelligence / defensive cyber investigation  
+**Status:** Active
 
-Harbor Health believes patients are waiting too long for appointments. Leadership does not trust the existing dashboard enough to know why.
+A fictional aerospace company has had three confidential project milestones appear in a competitor briefing within hours of internal approval.
 
-## What I am figuring out now
+Security believes there is an insider. Legal suspects a vendor. The CTO believes compromised credentials are being mistaken for human behavior.
 
-- Which appointments waited the longest?
-- Do certain clinics or appointment types appear more often in the problem?
-- Do cancellations or no-shows matter?
-- Is there bad data that could make the conclusion misleading?
-- What important information is still missing?
+## What I am working through
 
-## Why this stage comes first
+- separate account activity from human attribution
+- join access, device, identity, file, vendor, and badge data
+- reconstruct the timeline across multiple leak windows
+- test whether the anomaly is stable or incidental
+- challenge attractive but incomplete explanations
+- make a containment decision before attribution is fully proven
 
-If Harbor Health cannot trust its basic operational data, then adding automation, APIs, AI, or cloud infrastructure simply makes the wrong answer move faster.
+## Technical capabilities in use
 
-## Delivery cycle
+- SQL joins
+- filtering and grouping
+- timeline reconstruction
+- repeated-pattern analysis
+- cross-source reconciliation
+- evidence quality and uncertainty
 
-Assess → Design → Build → Validate → Go Live → Adopt → Measure
+## What makes the mission difficult
 
-Appointment Access moves through the full cycle before it is considered solved.
+The first explanation is intentionally plausible but incomplete. Some clues are real and still causally irrelevant. New information arrives while the investigation is underway, and the decision to contain risk can happen before there is enough evidence to name a person.
 
-## What the completed work will leave behind
+## Evidence standard
 
-The final package will include the supported diagnosis, recommended workflow change, architecture or technical build where needed, UAT, rollout and adoption plan, measures of success, and the key implementation artifacts needed to move the change into real use.
+The public Lab shows the mission environment, but the executable runtime is private. Completed SQL, investigation notes, scoring, and mission artifacts will be added here only after they are actually completed.
 
-## Executive briefing
-
-When Appointment Access is solved, it closes with:
-
-- **90-second one-page brief** — problem, evidence, decision, impact, implementation, key risk, and next step.
-- **Short leadership deck** — the full executive story from problem through adoption and results.
-
-**Status:** In progress. The briefing is published only after the full problem has been worked through and the evidence is complete.
-
-[View Executive Briefings →](EXECUTIVE-BRIEFINGS.md)
-
-Results are added only after the work is actually completed.
+[← Back to Solutions Lab](../README.md)
