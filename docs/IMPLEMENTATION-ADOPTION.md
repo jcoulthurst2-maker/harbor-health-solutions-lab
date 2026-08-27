@@ -1,45 +1,40 @@
-# Client Delivery, Go-Live & Adoption
+# Implementation, Go-Live & Adoption
 
-## What this page is for
+[← Back to Solutions Lab](../README.md)
 
-This page shows **how I think about moving a Harbor Health solution into organizational use** without pretending the fictional hospital has real stakeholders.
+This page covers the part of technical work that begins after the system appears to work: **what has to be true for people to trust it, use it, support it, and know whether it helped.**
 
-The technical-build page shows whether the solution works. This page asks a different question: **what would have to be true for a real healthcare organization to trust it, launch it, support it, and measure it?**
-
-## How a fictional hospital can still test real delivery thinking
-
-Harbor Health does **not** invent stakeholder quotes, fake approvals, or fictional executive sign-off.
-
-Instead, I model the **decision environment** a real implementation would have to survive. I identify the relevant roles, the decisions they would own, the evidence they would need, the risks they would challenge, and the conditions that should stop the work from moving forward.
-
-For example, instead of writing “the clinic manager approved the workflow,” I define what the clinic manager would need to evaluate, what evidence should answer that concern, and what should block launch if the evidence is weak.
-
-The point is not role-play. It is to demonstrate delivery judgment using real technical evidence from the lab.
+The Lab does not invent fake stakeholder approvals or fictional executive quotes. Instead, it models the decision environment a real implementation would have to survive.
 
 ## What I practice
 
-**Stakeholder & decision model** — identify the executive, operational, clinical, technical, security/compliance, and frontline roles that matter; define what each one owns and what evidence they would need.
+**Discovery and ownership** — identify who is affected, what changes in the workflow, who owns the future state, and what decisions have to be made before launch.
 
-**Workflow & readiness design** — define how work changes, who owns the future state, what dependencies exist, what users need to know, and what support or fallback must exist before launch.
+**Requirements and readiness** — define acceptance criteria, dependencies, training needs, support paths, data requirements, permissions, and conditions that should stop the rollout.
 
-**Simulated UAT** — run realistic normal, edge, bad-data, and failure scenarios through the actual solution. The stakeholder participation is simulated; the technical test evidence is real.
+**UAT and failure testing** — run normal, edge-case, bad-data, dependency-failure, and recovery scenarios through the actual solution.
 
-**Pilot & go-live recommendation** — define pilot scope, readiness criteria, stop conditions, rollback or fallback expectations, escalation paths, and the evidence required before recommending launch.
+**Pilot and go-live planning** — define pilot scope, cutover, stop conditions, rollback or fallback expectations, escalation paths, and evidence required before expanding use.
 
-**Adoption & value measurement** — define how usage, operational outcomes, quality, reliability, staff experience, and business value would be assessed after launch.
+**Adoption and value** — measure whether people use the new system, whether the workflow actually changes, and whether the result shows up in time, quality, reliability, access, capacity, cost, or another meaningful outcome.
 
-## How the public evidence is labeled
+## Real evidence vs. modeled delivery work
 
-The portfolio clearly distinguishes between what was actually built and what is modeled for implementation.
+The repository keeps these separate.
 
-**Real evidence:** code, test results, validation output, failure testing, technical findings.
+**Real evidence** can include code, query results, tests, technical validation, failure behavior, architecture, and completed mission work.
 
-**Modeled delivery work:** proposed requirements, stakeholder-role maps, simulated UAT participation, recommended pilot design, anticipated adoption risks, proposed go-live criteria, and post-launch measurement frameworks.
-
-## Evidence this produces
-
-A completed problem may include a stakeholder-role map, decision requirements, workflow design, simulated UAT results, pilot recommendation, go-live readiness criteria, training or support plan, adoption measures, and KPI framework.
+**Modeled delivery work** can include stakeholder maps, requirements, UAT plans, pilot designs, readiness criteria, training approaches, adoption risks, and post-launch measurement frameworks.
 
 ## What good looks like
 
-The implementation work is strong when I can show what a real decision-maker would need to know, what should stop a launch, how users would be prepared and supported, and how leadership would judge whether the change created value—without pretending a fictional organization gave me real-world approval.
+The work is strong when someone can answer:
+
+- What changed for the user or operator?
+- What had to be true before launch?
+- What could stop the rollout?
+- How would failure be handled?
+- Who owns the process after go-live?
+- How would we know whether the implementation created value?
+
+The objective is not to make a fictional organization look real. It is to make implementation judgment inspectable.
