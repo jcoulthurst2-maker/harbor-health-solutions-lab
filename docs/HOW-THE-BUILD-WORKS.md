@@ -1,41 +1,52 @@
-# Technical Architecture & Build
+# How the Lab Build Works
 
-## What this page is for
+[← Back to Solutions Lab](../README.md)
 
-This page shows **how I turn a Harbor Health problem into something technically real**.
+The Lab has two jobs at the same time: teach a technical capability and place that capability inside a changing situation where judgment matters.
 
-The roadmap explains when capabilities are introduced. The AI page explains AI-specific judgment. This page stays focused on architecture, build quality, integration, testing, and technical evidence.
+## Training layer
 
-## What I am responsible for technically
+Each track introduces the technical skill in a structured way: concepts, guided checkpoints, starter work, verification, and progressively less help.
 
-**Data foundation** — validate source data, define trustworthy measures, and make sure the solution is built on evidence that can be defended.
+The training surface is interactive. The goal is to do the work, not read about it.
 
-**Application logic** — turn requirements into repeatable logic, scripts, services, or prototypes that another person can inspect and test.
+## Mission layer
 
-**System integration** — define how information moves between systems, what each system owns, what happens at handoffs, and how failures are handled.
+The same capability is then used inside a fictional scenario with incomplete information, competing explanations, changing evidence, and consequences.
 
-**Healthcare interoperability** — preserve the meaning of healthcare information when FHIR or HL7 is required, rather than treating integration as simple data movement.
+A mission can add:
 
-**Architecture & reliability** — define boundaries, hosting, security, permissions, monitoring, recovery, dependencies, and scale appropriate to the solution.
+- multiple data sources
+- false leads
+- contradictory evidence
+- time pressure
+- changing priorities
+- uncertainty that cannot be resolved immediately
+- a decision that has to be made before every question is answered
 
-## How I prove the build
+## Runtime layer
 
-A diagram or recommendation alone does not count as technical proof. Where the problem requires it, I create working evidence such as queries, scripts, prototypes, API flows, tests, architecture decisions, and failure scenarios.
+The private Lab runtime handles the executable work: mission state, technical exercises, simulation events, progress, scoring, and saved training state.
 
-The record should make it possible to answer:
+The public site is a showcase only. It demonstrates the interface and mission model without exposing the full executable training environment.
 
-- What was actually built?
-- What does each component own?
-- How do the components communicate?
-- What assumptions were tested?
-- What happens when a dependency or input fails?
-- What tradeoffs were made and why?
-- What remains before production use?
+## Evidence layer
 
-## Evidence this produces
+GitHub is the public record of the apprenticeship.
 
-The public portfolio can show code, validation results, data-quality findings, prototypes, integration flows, architecture diagrams, technical decision records, test output, and reliability or security decisions.
+When work is actually completed, this repository can hold:
 
-## What good looks like
+- queries and code
+- architecture diagrams
+- API and data contracts
+- tests and validation
+- implementation artifacts
+- mission write-ups
+- decision notes
+- postmortems and lessons learned
 
-The technical work is strong when another technical or implementation lead can inspect the evidence, understand why the design looks the way it does, see how it behaves under failure, and identify exactly what would still be required before production.
+## Build standard
+
+A diagram, prompt, or recommendation does not count as technical proof by itself. Where a mission requires technical execution, the evidence should show what was built, what assumptions were tested, how failure was handled, and what remains incomplete.
+
+The point is not to make the repository look finished. It is to make the progression inspectable.
