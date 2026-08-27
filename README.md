@@ -1,22 +1,18 @@
 # Solutions Lab
 
-> A 32-week technical apprenticeship built inside an interactive mission environment.
+> A 32-week technical apprenticeship built around interactive missions.
 
-I use the Lab to build technical depth across **SQL, Python, APIs, data systems, cloud architecture, AI systems, and implementation** by solving realistic missions in changing fictional environments.
+The Solutions Lab is where I am building deeper technical capability across **SQL, Python, APIs, data systems, cloud architecture, AI systems, and implementation**.
 
-The technical work is real. The worlds are not.
+Instead of learning each skill through disconnected exercises, I use it inside fictional operating scenarios that change as I work. The technical work is real; the mission setting gives the work context, pressure, and consequences.
 
-The Lab is designed to train two things together:
-
-**Technical capability** — the actual tools, systems, code, data, architecture, and implementation work.
-
-**Judgment** — knowing what to inspect, what the evidence supports, what remains uncertain, and what should happen next when the situation changes.
-
-[View the public Lab showcase →](https://www.jadencoulthurst.com/lab)
+**Public showcase:** [jadencoulthurst.com/lab →](https://www.jadencoulthurst.com/lab)
 
 ---
 
-## Capability path
+## Capability map
+
+Each capability has its own page with the skills being developed, how the Lab trains them, the progression, and what will count as completed evidence.
 
 ### [SQL + Data →](docs/capabilities/SQL-DATA.md)
 Querying, joins, aggregation, CTEs, window functions, data quality, metric definitions, anomaly detection, timeline reconstruction, and analytical reasoning.
@@ -28,32 +24,35 @@ Python fundamentals, automation, REST APIs, authentication, JSON, error handling
 Schemas, normalization, data contracts, pipelines, transformations, events, validation, lineage, interoperability, and system-to-system reasoning.
 
 ### [Cloud + Architecture →](docs/capabilities/CLOUD-ARCHITECTURE.md)
-Service boundaries, compute, storage, queues, state, observability, reliability, security, scaling, deployment, cost, and architecture tradeoffs.
+Compute, storage, state, queues, service boundaries, observability, reliability, security, scaling, deployment, cost, and architecture tradeoffs.
 
 ### [AI Systems →](docs/capabilities/AI-SYSTEMS.md)
-Model behavior, retrieval, tools, context, state, continuity, evaluation, guardrails, authority, failure modes, and measuring useful outcomes.
+Model behavior, retrieval, tools, context, state, continuity, evaluation, guardrails, authority, failure handling, and measuring whether an AI system is actually useful.
 
 ### [Implementation →](docs/capabilities/IMPLEMENTATION.md)
 Discovery, requirements, workflow reconstruction, UAT, readiness, rollout, go-live, adoption, measurement, and post-launch learning.
 
 ---
 
-## How the Lab works
+## How the interactive Lab works
 
-**Learn the capability**  
-Build the underlying technical concept through guided work.
+### 1. Learn the capability
+Build the underlying concept through guided work and progressively harder technical tasks.
 
-**Enter a mission**  
-Apply the skill inside a fictional operating environment with a real technical problem underneath it.
+### 2. Receive a mission
+The skill is placed inside a fictional scenario with a real technical problem underneath it.
 
-**Investigate what is actually happening**  
-Work through incomplete information, conflicting evidence, false leads, changing conditions, and competing explanations.
+### 3. Investigate
+Query data, inspect systems, write code, test assumptions, and determine what the evidence actually supports.
 
-**Make a decision**  
-Separate evidence from inference, decide what action is justified, and state what remains unproven.
+### 4. Adapt as the situation changes
+New information can arrive, assumptions can break, evidence can conflict, and the correct next step may change.
 
-**Preserve the proof**  
-Completed work, technical artifacts, decisions, architecture, and lessons are added here only after the work is actually done.
+### 5. Make and defend a decision
+The Lab tests technical correctness and judgment: what is known, what is inferred, what remains uncertain, and what action is justified.
+
+### 6. Preserve the work
+Completed technical artifacts and lessons are added to this repository only after the work has actually been completed.
 
 ---
 
@@ -62,55 +61,34 @@ Completed work, technical artifacts, decisions, architecture, and lessons are ad
 ### Operation Glasshouse
 **Counterintelligence / defensive cyber investigation · SQL + Data**
 
-A fictional aerospace company has had confidential project milestones appear in a competitor briefing within hours of internal approval. Security suspects an insider. Legal suspects a vendor. Raw telemetry suggests the visible account may not identify the human actor.
+A fictional aerospace company has had confidential milestones appear in a competitor briefing shortly after internal approval. Several explanations initially fit the evidence: an insider, compromised credentials, a vendor disclosure, or an attribution problem in the security tooling.
 
-The mission requires joining identity, device, access, file, vendor, and physical-presence evidence; testing competing explanations; and making a containment decision without overstating attribution.
+The mission requires working across identity, device, access, file, vendor, and physical-presence evidence; testing competing explanations; and deciding what can be contained without claiming more than the evidence proves.
 
-The public site shows the mission environment. The executable training runtime is private and authenticated.
+The public site shows the mission environment. The full executable training runtime is private and authenticated.
 
----
-
-## Mission model
-
-The **skills are structured; the worlds can change.**
-
-A SQL `JOIN` does not have to be learned through a generic customer table. It can be used to investigate a suspected intelligence breach. Python and APIs can be trained through a moving logistics problem. Cloud architecture can be tested against a failing orbital system. Implementation can be tested in an environment where the technology works but the organization does not.
-
-The scenario creates stakes and ambiguity. The competency underneath remains real.
-
-### Mission worlds in the system
-
-**Operation Glasshouse** — counterintelligence, identity attribution, conflicting evidence, SQL joins, timelines, and containment judgment.
-
-**Night Train** — urban intelligence and logistics; reconstruct a courier network whose apparent hub may be deliberate misdirection.
-
-**Orbital Failure** — space systems; diagnose a station-wide failure when telemetry sources disagree and the repair window is closing.
-
-Additional mission worlds will be added as the capability path expands.
+[Open the current mission record →](docs/CURRENT-MISSION.md)
 
 ---
 
-## Go deeper
+## Program structure
 
-[32-week capability roadmap →](docs/ROADMAP.md)  
-How technical depth and responsibility increase across the six tracks.
+[32-week roadmap →](docs/ROADMAP.md)  
+How the six capability tracks progress from foundations into more independent technical work.
 
 [How the build works →](docs/HOW-THE-BUILD-WORKS.md)  
-How the Lab combines guided learning, real technical execution, simulation, state, scoring, and evidence.
+The architecture of the training environment: guided learning, execution, simulation, state, scoring, and evidence.
 
 [AI approach →](docs/AI-APPROACH.md)  
-How I think about context, evaluation, continuity, human authority, restraint, and useful AI systems.
+How I think about context, continuity, evaluation, restraint, human authority, and useful AI systems.
 
 [Implementation & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
-How the Lab trains delivery, readiness, rollout, adoption, and measurable outcomes alongside technical work.
-
-[Current mission file →](docs/CURRENT-MISSION.md)  
-The public record for the active training mission and what has actually been completed.
+How the Lab develops the delivery side of technical work: readiness, rollout, adoption, measurement, and iteration.
 
 ---
 
 ## Evidence standard
 
-This repository is the public build and evidence layer. It is not a place to manufacture completed work for a portfolio.
+This repository is the public learning and build record for the Solutions Lab. It is not a collection of invented portfolio artifacts.
 
-**Project status: active build. Completed evidence is added only after the work has actually been completed.**
+**Status: active build. Completed evidence is added only after the underlying work has actually been completed.**
