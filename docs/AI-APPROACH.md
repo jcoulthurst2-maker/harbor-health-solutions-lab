@@ -1,33 +1,39 @@
 # AI Approach
 
-## What this proves
+[← Back to Solutions Lab](../README.md)
 
-I can decide when AI belongs in a healthcare workflow, design the right human controls, and plan for failure instead of treating AI as the default answer.
+This page captures how I think about AI inside the Lab. The emphasis is not on adding a model everywhere. It is on building intelligence that is useful because it understands enough context, behaves predictably, and improves a real decision.
 
-## Why it matters
+## What I am interested in
 
-In healthcare, adding a model is not the hard part. The harder questions are whether AI is actually necessary, what data it can use, what decisions it is allowed to influence, how people stay in control, and what happens when the model is wrong or unavailable.
+**Context over blank prompts** — useful intelligence should understand the situation around the request: history, constraints, people, timing, goals, and consequences.
 
-Harbor Health uses AI as one possible component inside a larger solution architecture.
+**Continuity over reset** — relevant state should carry forward so the system can understand how a situation has changed instead of beginning from zero every interaction.
 
-## How I evaluate AI
+**Wisdom over accumulation** — more memory and more data are not automatically better. The system should become more discerning about what still matters, what changed, and what should be ignored.
 
-**Use case** — first determine whether SQL, business rules, normal software, or automation can solve the problem more safely and reliably.
+**Restraint as a capability** — the ability to answer, alert, recommend, or act does not mean the system should always do so. Waiting, surfacing uncertainty, or leaving a decision with a person can be the better behavior.
 
-**Human control** — define what the AI may recommend or do, what still requires human approval, and how overrides are handled.
+**Human authority by design** — people should not be added as an afterthought. Responsibility, approval, escalation, and override should be explicit parts of the system.
 
-**Safety & fallback** — define failure modes, unavailable-model behavior, bad-output handling, permissions, and what gets logged for review.
+**Outcomes over impressive output** — a summary, recommendation, or generated artifact matters only if it improves what happens next.
 
-**Monitoring & value** — track whether the AI is accurate enough, useful enough, trusted enough, and actually improving the workflow after launch.
+## How the Lab trains this
 
-## AI in the build process
+AI missions will require more than producing a good answer. I will have to decide:
 
-AI can also help me learn and build, but it does not replace understanding. I make the first attempt, run the work, inspect what happened, and use AI for targeted explanation, debugging, critique, or review. I still have to fix the work and explain why it works.
+- whether AI belongs in the workflow at all
+- what context the system needs
+- what tools or data it may use
+- what state should persist
+- how behavior will be evaluated
+- what uncertainty looks like
+- when a human has to approve or take over
+- how the system behaves when a model or dependency fails
+- what measure would show that the AI actually helped
 
-## Evidence this produces
+## What counts as proof
 
-When AI is justified, the portfolio can show the use-case decision, model boundaries, human-control design, fallback path, monitoring plan, validation results, and the reason AI was chosen over simpler alternatives.
+Completed evidence can include evaluation sets, model comparisons, retrieval tests, tool-use flows, authority designs, failure tests, structured-output checks, cost/latency tradeoffs, and outcome measures.
 
-## What good looks like
-
-Sometimes the strongest AI decision is not to use AI at all. The goal is a healthcare solution that is useful, controlled, explainable, monitored, and safe enough for the workflow it supports.
+The objective is not to demonstrate that I can call a model. It is to demonstrate that I can reason about the system around it.
