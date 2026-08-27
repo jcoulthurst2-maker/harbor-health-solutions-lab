@@ -1,36 +1,43 @@
-# 32-Week Harbor Health Capability Roadmap
+# 32-Week Capability Roadmap
 
-## What this page is for
+[← Back to Solutions Lab](../README.md)
 
-This is the timeline for the entire Harbor Health build. It shows **when each capability becomes the main focus** and how the level of responsibility grows across 32 weeks.
+This roadmap shows when each capability becomes the main focus and how the work becomes more technically demanding across the apprenticeship.
 
-The deeper pages explain the individual capabilities. This page does not repeat those details.
+## Weeks 1–8 · SQL + Data
+Build fluency in querying, joins, aggregation, CTEs, window functions, data quality, metric definitions, anomaly detection, and evidence-based reasoning.
 
-## 32-week progression
+**Mission style:** investigations where the first explanation may be wrong and the data has to be reconciled before a decision is made.
 
-**Weeks 1–4 · SQL · Assess**  
-Build data judgment and establish a trustworthy picture of the operating problem.
+## Weeks 9–14 · Python + APIs
+Move from analysis into automation and integration: Python fundamentals, structured data, REST APIs, authentication, error handling, testing, and small service builds.
 
-**Weeks 5–10 · Python · Design & Build**  
-Turn analysis into repeatable logic, tools, and early solution prototypes.
+**Mission style:** systems that require data to be pulled, transformed, validated, and moved reliably while conditions change.
 
-**Weeks 11–14 · APIs · Build & Integrate**  
-Connect systems and make information move reliably between them.
+## Weeks 15–19 · Data Systems
+Work with schemas, contracts, events, transformations, pipelines, lineage, validation, and interoperability across multiple systems.
 
-**Weeks 15–20 · FHIR / HL7 · Validate**  
-Make healthcare data exchange work correctly in real healthcare workflows.
+**Mission style:** environments where the systems disagree and the real problem sits in the movement or meaning of the data.
 
-**Weeks 21–32 · AWS & Solution Architecture · Go Live, Adopt & Measure**  
-Design the full solution for security, reliability, monitoring, launch readiness, support, scale, and measurable value.
+## Weeks 20–24 · Cloud + Architecture
+Design service boundaries, compute, storage, queues, state, security, observability, reliability, deployment, scaling, and cost tradeoffs.
 
-## The delivery cycle
+**Mission style:** systems under operational pressure where architecture decisions affect reliability, recovery, and the ability to keep operating.
 
-**Assess → Design → Build → Validate → Go Live → Adopt → Measure**
+## Weeks 25–28 · AI Systems
+Work with model behavior, retrieval, tools, context, state, evaluation, authority boundaries, failure modes, and useful measures of outcome.
 
-The cycle is a guide, not a forced checklist. A problem only moves as far as the solution requires; Harbor Health does not invent a technical launch when analysis or an operational change is the right answer.
+**Mission style:** decide whether AI belongs, design the surrounding system, test it, and define where it should act, defer, or stay out of the way.
 
-## End of the 32 weeks
+## Weeks 29–32 · Implementation
+Bring the technical work into discovery, requirements, UAT, readiness, rollout, go-live, adoption, support, measurement, and post-launch learning.
 
-The goal is one connected healthcare transformation case showing progression from evidence and workflow diagnosis to technical build, integration, healthcare interoperability, architecture, implementation, go-live, adoption, and measurable results.
+**Mission style:** technically sound systems that still have to survive people, process, ownership, timing, and organizational reality.
 
-The value of the roadmap is not the number of tools covered. It is the increasing level of judgment required to decide what to build, how far to take it, and what has to be true before it can move forward.
+## What changes across the 32 weeks
+
+The missions become less guided, the data becomes less clean, the systems become more connected, and the cost of a weak assumption becomes higher.
+
+The objective is not to collect tools. It is to become increasingly capable of understanding an unfamiliar technical situation, deciding what matters, building what is appropriate, and explaining the decision clearly.
+
+Completed evidence is added only after the work is actually completed.
