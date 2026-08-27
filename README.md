@@ -10,9 +10,25 @@ Instead of learning each skill through disconnected exercises, I use it inside f
 
 ---
 
+## Program structure
+
+[32-week roadmap →](docs/ROADMAP.md)  
+How the six capability tracks progress from foundations into more independent technical work.
+
+[How the build works →](docs/HOW-THE-BUILD-WORKS.md)  
+The architecture of the training environment: guided learning, execution, simulation, state, scoring, and evidence.
+
+[AI approach →](docs/AI-APPROACH.md)  
+How I think about context, continuity, evaluation, restraint, human authority, and useful AI systems.
+
+[Implementation & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
+How the Lab develops the delivery side of technical work: readiness, rollout, adoption, measurement, and iteration.
+
+---
+
 ## Capability map
 
-Each capability has its own page with the skills being developed, how the Lab trains them, the progression, and what will count as completed evidence.
+Each capability has its own page with the skills being developed, the progression, and what will count as completed evidence.
 
 ### [SQL + Data →](docs/capabilities/SQL-DATA.md)
 Querying, joins, aggregation, CTEs, window functions, data quality, metric definitions, anomaly detection, timeline reconstruction, and analytical reasoning.
@@ -34,28 +50,6 @@ Discovery, requirements, workflow reconstruction, UAT, readiness, rollout, go-li
 
 ---
 
-## How the interactive Lab works
-
-### 1. Learn the capability
-Build the underlying concept through guided work and progressively harder technical tasks.
-
-### 2. Receive a mission
-The skill is placed inside a fictional scenario with a real technical problem underneath it.
-
-### 3. Investigate
-Query data, inspect systems, write code, test assumptions, and determine what the evidence actually supports.
-
-### 4. Adapt as the situation changes
-New information can arrive, assumptions can break, evidence can conflict, and the correct next step may change.
-
-### 5. Make and defend a decision
-The Lab tests technical correctness and judgment: what is known, what is inferred, what remains uncertain, and what action is justified.
-
-### 6. Preserve the work
-Completed technical artifacts and lessons are added to this repository only after the work has actually been completed.
-
----
-
 ## Current mission
 
 ### Operation Glasshouse
@@ -68,22 +62,6 @@ The mission requires working across identity, device, access, file, vendor, and 
 The public site shows the mission environment. The full executable training runtime is private and authenticated.
 
 [Open the current mission record →](docs/CURRENT-MISSION.md)
-
----
-
-## Program structure
-
-[32-week roadmap →](docs/ROADMAP.md)  
-How the six capability tracks progress from foundations into more independent technical work.
-
-[How the build works →](docs/HOW-THE-BUILD-WORKS.md)  
-The architecture of the training environment: guided learning, execution, simulation, state, scoring, and evidence.
-
-[AI approach →](docs/AI-APPROACH.md)  
-How I think about context, continuity, evaluation, restraint, human authority, and useful AI systems.
-
-[Implementation & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
-How the Lab develops the delivery side of technical work: readiness, rollout, adoption, measurement, and iteration.
 
 ---
 
