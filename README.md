@@ -1,132 +1,126 @@
 # Solutions Lab
 
-> An 8-month technical apprenticeship built to become deployable across borders — not merely more technical.
+> An 8-month technical apprenticeship built to make me globally deployable across solutions engineering, technical implementation, forward-deployed work, AI systems, data, APIs, cloud, and enterprise transformation.
 
-The Solutions Lab is my working system for becoming a **technical transformation / forward-deployed solutions operator**: someone who can enter an unfamiliar organization, understand the operating problem, interrogate the data, work across APIs and systems, build enough of the solution to make it real, and carry it through implementation and adoption.
+The Solutions Lab is not a coding-course portfolio and it is not a collection of cinematic simulations. It is a structured attempt to build a specific professional profile:
 
-The target is not to compete with pure software engineers at pure software engineering. The target is to build a rarer hybrid: **technical depth + operating judgment + customer fluency + implementation ownership**.
+**someone who can enter an unfamiliar organization, understand the operating problem, interrogate the data, work across technical systems, build enough of the solution to make it real, and carry the change through implementation and adoption.**
 
-**Interactive Lab:** [jadencoulthurst.com/lab →](https://www.jadencoulthurst.com/lab)
+The target lane sits between engineering, implementation, operations, data, AI, customers, and executive outcomes.
+
+**Public explanation:** https://www.jadencoulthurst.com/solutions-lab.html  
+**Interactive Lab:** https://www.jadencoulthurst.com/lab
 
 ---
 
-## North star
-
-Within 32 weeks, the evidence should support international hiring conversations for roles such as:
+## Roles this is designed toward
 
 - Solutions Engineer
-- Forward Deployed Engineer / Operator
-- Technical Implementation Consultant
-- Implementation Engineer
+- Technical Implementation / Implementation Engineer
+- Forward Deployed Engineer / Forward Deployed Operator
 - AI Solutions / AI Implementation
-- Technology Transformation Consultant
-- selective technical program and deployment roles
+- Integration / Automation Consultant
+- Technical Transformation / Solutions Consulting
 
-The Lab is intentionally market-facing. Major work belongs here only when it maps to capabilities that real target roles pay for.
-
----
-
-## Capability stack
-
-### 01 — Query
-**SQL + data reasoning**
-
-Read unfamiliar databases, reconstruct what is happening, validate definitions, identify patterns, reconcile contradictions, and defend what the evidence does — and does not — support.
-
-### 02 — Compute
-**Python + automation**
-
-Transform data, automate repetitive work, write reusable logic, test assumptions, and move from manual analysis toward reliable technical execution.
-
-### 03 — Connect
-**APIs + integrations**
-
-REST, JSON, authentication, webhooks, retries, failure handling, data exchange, and the practical work of making systems communicate reliably.
-
-### 04 — Deploy
-**Cloud + production systems**
-
-Git, deployment, databases, state, permissions, observability, reliability, secrets, serverless infrastructure, containers, cost, and production tradeoffs.
-
-### 05 — Intelligence
-**AI systems**
-
-LLM APIs, retrieval, tool use, structured outputs, evaluation, human authority, observability, failure handling, and designing AI inside real workflows rather than as a disconnected chatbot.
-
-### 06 — Operate
-**Implementation + adoption**
-
-Discovery, requirements, workflow reconstruction, architecture decisions, UAT, rollout, go-live, change management, support, adoption, measurement, and executive communication.
+The objective is not to outcompete a local software engineer on pure software-engineering depth after eight months. The differentiation is **technical capability + implementation judgment + operating fluency + customer communication + measurable outcomes**.
 
 ---
 
-## How the Lab works
+## Curriculum
 
-The training loop is:
+### 01 — Tokyo · SQL + Data · Weeks 1–8
+**Enterprise Deployment Rescue**
 
-**Learn → Drill → Solve → Build → Defend**
+A strategic SaaS customer is late across multiple business units and 18 days from renewal. Product, implementation, and the customer disagree about the cause.
 
-As the program progresses, guidance decreases and ambiguity increases. The objective is not course completion. It is an expanding **independent radius**: how much of an unfamiliar technical and operational problem I can own without being carried through the answer.
+The work: SQL, joins, metric definitions, implementation health, integration evidence, support-ticket analysis, adoption data, and a 14-day recovery plan.
 
-The private runtime includes assistance modes ranging from guided teaching to interview and field conditions. How much help was required is itself part of the evidence.
+**Employer signal:** diagnose a deployment without collapsing every problem into “engineering.”
+
+### 02 — Nairobi · Python + APIs · Weeks 9–14
+**Payments API Reliability**
+
+A mobile-money partner API changed and payment failures doubled.
+
+The work: Python, JSON, validation, normalization, REST concepts, retries, idempotency, quarantine, failure handling, and observability.
+
+**Employer signal:** make an integration reliable instead of merely making the happy path work.
+
+### 03 — London · Data Systems · Weeks 15–19
+**Enterprise Migration Cutover**
+
+A legacy CRM and target platform disagree about customer identity, status, and ownership.
+
+The work: canonical schemas, identity mapping, pipelines, lineage, reconciliation, exception handling, cutover gates, rollback, and sign-off.
+
+**Employer signal:** treat migration as an operating cutover, not just an ETL script.
+
+### 04 — Trinidad · Cloud + Architecture · Weeks 20–24
+**Regional Logistics Platform**
+
+A synchronous carrier dependency is creating cascading dispatch delays across a regional logistics operation.
+
+The work: cloud responsibilities, queues, workers, retries, dead-letter handling, logs, metrics, traces, fallback, cost, and recovery ownership.
+
+**Employer signal:** design proportional architecture around real operational continuity.
+
+### 05 — Global · AI Systems · Weeks 25–28
+**Production AI Rollout**
+
+The AI demo performs well, but rare failures are expensive and users do not trust it.
+
+The work: task definition, retrieval evaluation, failure sets, abstention, tool boundaries, human approval, observability, adoption, and rollback.
+
+**Employer signal:** move AI from demo quality to production trust.
+
+### 06 — Multi-region · Implementation · Weeks 29–32
+**Enterprise Go-Live**
+
+Tokyo, London, Nairobi, and Port of Spain are technically live at different levels of stability and adoption.
+
+The work: workflow reconstruction, requirements, UAT, readiness, support, go-live, adoption, containment triggers, executive communication, and value verification.
+
+**Employer signal:** carry technically sound work all the way into a functioning operating reality.
+
+---
+
+## Training model
+
+The interactive Lab follows a consistent progression:
+
+**Learn → Apply → Diagnose → Build → Defend → Prove**
+
+Early work is guided. Guidance decreases as the curriculum progresses. The main screen centers the **current task**, while supporting context shows the employer signal, evidence tier, current phase, and what comes next.
+
+The goal is to expand my independent radius: how much of a technical deployment I can understand and own without being handed the answer.
 
 ---
 
 ## Evidence standard
 
-The Lab separates training from portfolio proof.
+The Lab distinguishes training from proof.
 
-| Level | Meaning |
-|---|---|
-| **L0 — Drill** | Contained skill execution. Learning evidence only. |
-| **L1 — Simulation** | A messy environment with realistic constraints and changing evidence. |
-| **L2 — Production analogue** | Real APIs, infrastructure, scale, failure modes, and engineering constraints. |
-| **L3 — Deployment** | An actual user or organization, a real workflow, and a measurable result. |
+- **L0 — Drill:** contained technical exercise
+- **L1 — Employer simulation:** realistic operating problem and constraints
+- **L2 — Production analogue:** authentic technical patterns, failure handling, architecture, and documentation
+- **L3 — External deployment:** real user, real workflow, measurable outcome
 
-A fictional mission can train a real capability. It does **not** become a real deployment simply because the simulation is sophisticated.
+A fictional scenario never gets presented as a real client deployment.
 
-Completed public evidence is labeled accordingly.
+The strongest portfolio evidence will eventually include:
 
----
-
-## The employer test
-
-Every substantial Lab project should eventually withstand two defenses.
-
-### Technical defense
-Explain the architecture, data, APIs, failure handling, security, testing, performance, limitations, and tradeoffs to a technical audience.
-
-### Executive defense
-Explain the problem, decision, operational effect, economics, adoption, and next move without hiding behind technical language.
-
-That dual ability is the lane the Lab is designed to strengthen.
+**problem → discovery → system map → architecture → code → implementation → failure handling → adoption → measurable result → technical defense → executive defense**
 
 ---
 
-## Global context
+## What success looks like
 
-The program is designed around geographic portability rather than one local job market. Market evidence and proof will be evaluated against target environments including **Tokyo, London, Nairobi, Trinidad & Tobago, and global-remote teams**.
+By the end of the apprenticeship, the résumé should not be the strongest argument that I can do this work.
 
-Tokyo also has a parallel technical/business Japanese track because technical capability and local operating fluency are different forms of readiness.
+A hiring team should be able to inspect the evidence and conclude:
 
-The interface is set in **Tokyo at 02:00**: a quiet night-shift environment built around precision, craft, and continuous improvement rather than gamified course completion.
+> He can understand the business problem, work with the data and systems, communicate with technical and non-technical stakeholders, and help get a difficult deployment across the line.
 
----
+That is the standard this repository is being built against.
 
-## Current phase
-
-### QUERY — SQL + Data
-
-**Operation Glasshouse** remains the opening SQL proving ground.
-
-The fictional setting is training infrastructure. The capability being tested is real: interrogating unfamiliar data, joining evidence across sources, testing competing explanations, updating a hypothesis when the facts change, and refusing to claim more than the evidence supports.
-
-The executable runtime is private and authenticated; the public site and this repository expose the learning architecture and completed evidence without presenting simulations as real client work.
-
----
-
-## Repository role
-
-This repository is the **public evidence and learning record** for the Solutions Lab. The authenticated interactive runtime is deployed separately inside the connected personal-site application.
-
-**Status: active apprenticeship. Evidence is added only after the underlying work has actually been completed.**
+**Status: active build. Evidence is added only after the underlying work has actually been completed.**
