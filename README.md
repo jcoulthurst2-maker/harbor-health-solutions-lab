@@ -1,72 +1,132 @@
 # Solutions Lab
 
-> A 32-week technical apprenticeship built around interactive missions.
+> An 8-month technical apprenticeship built to become deployable across borders — not merely more technical.
 
-The Solutions Lab is where I am building deeper technical capability across **SQL, Python, APIs, data systems, cloud architecture, AI systems, and implementation**.
+The Solutions Lab is my working system for becoming a **technical transformation / forward-deployed solutions operator**: someone who can enter an unfamiliar organization, understand the operating problem, interrogate the data, work across APIs and systems, build enough of the solution to make it real, and carry it through implementation and adoption.
 
-Instead of learning each skill through disconnected exercises, I use it inside fictional operating scenarios that change as I work. The technical work is real; the mission setting gives the work context, pressure, and consequences.
+The target is not to compete with pure software engineers at pure software engineering. The target is to build a rarer hybrid: **technical depth + operating judgment + customer fluency + implementation ownership**.
 
-**Public showcase:** [jadencoulthurst.com/lab →](https://www.jadencoulthurst.com/lab)
-
----
-
-## Program structure
-
-[32-week roadmap →](docs/ROADMAP.md)  
-How the six capability tracks progress from foundations into more independent technical work.
-
-[How the build works →](docs/HOW-THE-BUILD-WORKS.md)  
-The architecture of the training environment: guided learning, execution, simulation, state, scoring, and evidence.
-
-[AI approach →](docs/AI-APPROACH.md)  
-How I think about context, continuity, evaluation, restraint, human authority, and useful AI systems.
-
-[Implementation & adoption →](docs/IMPLEMENTATION-ADOPTION.md)  
-How the Lab develops the delivery side of technical work: readiness, rollout, adoption, measurement, and iteration.
+**Interactive Lab:** [jadencoulthurst.com/lab →](https://www.jadencoulthurst.com/lab)
 
 ---
 
-## Capability map
+## North star
 
-Each capability has its own page with the skills being developed, the progression, and what will count as completed evidence.
+Within 32 weeks, the evidence should support international hiring conversations for roles such as:
 
-### [SQL + Data →](docs/capabilities/SQL-DATA.md)
-Querying, joins, aggregation, CTEs, window functions, data quality, metric definitions, anomaly detection, timeline reconstruction, and analytical reasoning.
+- Solutions Engineer
+- Forward Deployed Engineer / Operator
+- Technical Implementation Consultant
+- Implementation Engineer
+- AI Solutions / AI Implementation
+- Technology Transformation Consultant
+- selective technical program and deployment roles
 
-### [Python + APIs →](docs/capabilities/PYTHON-APIS.md)
-Python fundamentals, automation, REST APIs, authentication, JSON, error handling, integration logic, testing, and small service builds.
-
-### [Data Systems →](docs/capabilities/DATA-SYSTEMS.md)
-Schemas, normalization, data contracts, pipelines, transformations, events, validation, lineage, interoperability, and system-to-system reasoning.
-
-### [Cloud + Architecture →](docs/capabilities/CLOUD-ARCHITECTURE.md)
-Compute, storage, state, queues, service boundaries, observability, reliability, security, scaling, deployment, cost, and architecture tradeoffs.
-
-### [AI Systems →](docs/capabilities/AI-SYSTEMS.md)
-Model behavior, retrieval, tools, context, state, continuity, evaluation, guardrails, authority, failure handling, and measuring whether an AI system is actually useful.
-
-### [Implementation →](docs/capabilities/IMPLEMENTATION.md)
-Discovery, requirements, workflow reconstruction, UAT, readiness, rollout, go-live, adoption, measurement, and post-launch learning.
+The Lab is intentionally market-facing. Major work belongs here only when it maps to capabilities that real target roles pay for.
 
 ---
 
-## Current mission
+## Capability stack
 
-### Operation Glasshouse
-**Counterintelligence / defensive cyber investigation · SQL + Data**
+### 01 — Query
+**SQL + data reasoning**
 
-A fictional aerospace company has had confidential milestones appear in a competitor briefing shortly after internal approval. Several explanations initially fit the evidence: an insider, compromised credentials, a vendor disclosure, or an attribution problem in the security tooling.
+Read unfamiliar databases, reconstruct what is happening, validate definitions, identify patterns, reconcile contradictions, and defend what the evidence does — and does not — support.
 
-The mission requires working across identity, device, access, file, vendor, and physical-presence evidence; testing competing explanations; and deciding what can be contained without claiming more than the evidence proves.
+### 02 — Compute
+**Python + automation**
 
-The public site shows the mission environment. The full executable training runtime is private and authenticated.
+Transform data, automate repetitive work, write reusable logic, test assumptions, and move from manual analysis toward reliable technical execution.
 
-[Open the current mission record →](docs/CURRENT-MISSION.md)
+### 03 — Connect
+**APIs + integrations**
+
+REST, JSON, authentication, webhooks, retries, failure handling, data exchange, and the practical work of making systems communicate reliably.
+
+### 04 — Deploy
+**Cloud + production systems**
+
+Git, deployment, databases, state, permissions, observability, reliability, secrets, serverless infrastructure, containers, cost, and production tradeoffs.
+
+### 05 — Intelligence
+**AI systems**
+
+LLM APIs, retrieval, tool use, structured outputs, evaluation, human authority, observability, failure handling, and designing AI inside real workflows rather than as a disconnected chatbot.
+
+### 06 — Operate
+**Implementation + adoption**
+
+Discovery, requirements, workflow reconstruction, architecture decisions, UAT, rollout, go-live, change management, support, adoption, measurement, and executive communication.
+
+---
+
+## How the Lab works
+
+The training loop is:
+
+**Learn → Drill → Solve → Build → Defend**
+
+As the program progresses, guidance decreases and ambiguity increases. The objective is not course completion. It is an expanding **independent radius**: how much of an unfamiliar technical and operational problem I can own without being carried through the answer.
+
+The private runtime includes assistance modes ranging from guided teaching to interview and field conditions. How much help was required is itself part of the evidence.
 
 ---
 
 ## Evidence standard
 
-This repository is the public learning and build record for the Solutions Lab. It is not a collection of invented portfolio artifacts.
+The Lab separates training from portfolio proof.
 
-**Status: active build. Completed evidence is added only after the underlying work has actually been completed.**
+| Level | Meaning |
+|---|---|
+| **L0 — Drill** | Contained skill execution. Learning evidence only. |
+| **L1 — Simulation** | A messy environment with realistic constraints and changing evidence. |
+| **L2 — Production analogue** | Real APIs, infrastructure, scale, failure modes, and engineering constraints. |
+| **L3 — Deployment** | An actual user or organization, a real workflow, and a measurable result. |
+
+A fictional mission can train a real capability. It does **not** become a real deployment simply because the simulation is sophisticated.
+
+Completed public evidence is labeled accordingly.
+
+---
+
+## The employer test
+
+Every substantial Lab project should eventually withstand two defenses.
+
+### Technical defense
+Explain the architecture, data, APIs, failure handling, security, testing, performance, limitations, and tradeoffs to a technical audience.
+
+### Executive defense
+Explain the problem, decision, operational effect, economics, adoption, and next move without hiding behind technical language.
+
+That dual ability is the lane the Lab is designed to strengthen.
+
+---
+
+## Global context
+
+The program is designed around geographic portability rather than one local job market. Market evidence and proof will be evaluated against target environments including **Tokyo, London, Nairobi, Trinidad & Tobago, and global-remote teams**.
+
+Tokyo also has a parallel technical/business Japanese track because technical capability and local operating fluency are different forms of readiness.
+
+The interface is set in **Tokyo at 02:00**: a quiet night-shift environment built around precision, craft, and continuous improvement rather than gamified course completion.
+
+---
+
+## Current phase
+
+### QUERY — SQL + Data
+
+**Operation Glasshouse** remains the opening SQL proving ground.
+
+The fictional setting is training infrastructure. The capability being tested is real: interrogating unfamiliar data, joining evidence across sources, testing competing explanations, updating a hypothesis when the facts change, and refusing to claim more than the evidence supports.
+
+The executable runtime is private and authenticated; the public site and this repository expose the learning architecture and completed evidence without presenting simulations as real client work.
+
+---
+
+## Repository role
+
+This repository is the **public evidence and learning record** for the Solutions Lab. The authenticated interactive runtime is deployed separately inside the connected personal-site application.
+
+**Status: active apprenticeship. Evidence is added only after the underlying work has actually been completed.**
