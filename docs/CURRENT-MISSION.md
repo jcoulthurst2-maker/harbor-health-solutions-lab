@@ -1,37 +1,46 @@
-# Current Mission — Operation Glasshouse
+# Current Mission — Tokyo Enterprise Deployment Rescue
 
 **Track:** SQL + Data  
-**Mode:** Counterintelligence / defensive cyber investigation  
+**Market frame:** Tokyo / enterprise SaaS  
 **Status:** Active
 
-A fictional aerospace company has had three confidential project milestones appear in a competitor briefing within hours of internal approval.
+A strategic enterprise customer is late across four business units and is 18 days from renewal.
 
-Security believes there is an insider. Legal suspects a vendor. The CTO believes compromised credentials are being mistaken for human behavior.
+Engineering sees an integration defect. The customer says the product is broken. Implementation sees workflow changes that were never re-baselined after UAT. Usage data shows two business units are barely using the system.
+
+The job is not to pick a team to blame. It is to determine **which problem exists where, what can move immediately, what truly requires engineering, and how recovery will be measured.**
 
 ## What I am working through
 
-- separate account activity from human attribution
-- join access, device, identity, file, vendor, and badge data
-- reconstruct the timeline across multiple leak windows
-- test whether the anomaly is stable or incidental
-- challenge attractive but incomplete explanations
-- make a containment decision before attribution is fully proven
+- join implementation status to product usage
+- isolate integration failures and retry behavior
+- distinguish a real product defect from its actual blast radius
+- classify support pain without treating tickets as root cause
+- compare training, configuration readiness, and adoption
+- reconcile stakeholder explanations with system evidence
+- build a 14-day recovery plan with owners and measurable thresholds
+- explain the same decision in technical and executive language
 
 ## Technical capabilities in use
 
-- SQL joins
-- filtering and grouping
-- timeline reconstruction
-- repeated-pattern analysis
-- cross-source reconciliation
-- evidence quality and uncertainty
+- SQL filtering, sorting, grouping, and joins
+- multi-source implementation diagnosis
+- integration reliability reasoning
+- product usage and adoption analysis
+- metric definition and evidence limits
+- customer deployment recovery
+- decision-making under renewal pressure
 
-## What makes the mission difficult
+## Why this mission exists
 
-The first explanation is intentionally plausible but incomplete. Some clues are real and still causally irrelevant. New information arrives while the investigation is underway, and the decision to contain risk can happen before there is enough evidence to name a person.
+This is much closer to the work a Solutions Engineer, Technical Implementation Consultant, Forward Deployed operator, or technical transformation team can be paid to do than a generic coding exercise.
+
+The scenario tests whether technical analysis can be connected to customer reality and an actual implementation decision.
 
 ## Evidence standard
 
-The public Lab shows the mission environment, but the executable runtime is private. Completed SQL, investigation notes, scoring, and mission artifacts will be added here only after they are actually completed.
+This mission is **L1 employer simulation**: the company and data are fictional, but the failure patterns and work product are intentionally modeled on real enterprise implementation problems.
+
+It does not count as a real client deployment. Stronger evidence tiers require production analogues and ultimately real external users with measurable outcomes.
 
 [← Back to Solutions Lab](../README.md)
