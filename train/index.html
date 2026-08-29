@@ -1,40 +1,551 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#070a0f">
-<title>Solutions Lab // Tokyo 02:00</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#070a0f">
+<title>Solutions Lab // 26-Week Apprenticeship</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/sql-wasm.js"></script>
 <style>
-:root{--bg:#070a0f;--p:#0d141d;--p2:#091018;--l:#223141;--t:#edf2f5;--m:#7d8b98;--c:#83d8e8;--g:#8fd2b2;--a:#d6ae70;--r:#d18181;--mono:SFMono-Regular,Consolas,monospace;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#112535 0,transparent 32%),linear-gradient(#080b11,#06080c);color:var(--t);font-family:var(--sans);min-height:100vh}.shell{display:grid;grid-template-columns:240px 1fr;grid-template-rows:62px 1fr;min-height:100vh}.top{grid-column:1/-1;display:grid;grid-template-columns:240px 1fr;align-items:center;padding:0 24px;border-bottom:1px solid var(--l);background:#080b10e8;position:sticky;top:0;z-index:3;backdrop-filter:blur(16px)}.brand{font-size:12px;letter-spacing:.1em;text-transform:uppercase}.clock{justify-self:center;font:11px var(--mono);letter-spacing:.14em;color:#bdc7ce}.clock b{color:var(--c);font-weight:500}.side{padding:30px 22px;border-right:1px solid var(--l);position:sticky;top:62px;height:calc(100vh - 62px);background:#080c12b8}.label,.eyebrow{font:9px var(--mono);letter-spacing:.15em;color:var(--m);text-transform:uppercase}.side h3{font-size:16px;line-height:1.35;font-weight:500;margin:10px 0 5px}.muted{color:var(--m)}.tiny{font-size:10px;line-height:1.5}.nav{display:grid;gap:2px;margin:30px 0}.nav button{border:0;border-left:1px solid transparent;background:none;color:#83909b;padding:10px;text-align:left;font:11px var(--mono);cursor:pointer}.nav button.active,.nav button:hover{border-left-color:var(--c);color:white;background:linear-gradient(90deg,#17303a55,transparent)}select{width:100%;margin-top:9px;background:#080d13;border:1px solid var(--l);color:#d8e1e7;padding:9px;font:10px var(--mono)}.meter{height:3px;background:#15202b;margin:12px 0 8px}.meter span{display:block;height:100%;width:18%;background:linear-gradient(90deg,#6889b8,var(--c))}.main{padding:54px clamp(22px,5vw,74px) 90px;min-width:0}.view{display:none;max-width:1280px;margin:auto}.view.active{display:block}.head{display:grid;grid-template-columns:1fr 270px;gap:52px;align-items:end}.head h1,.page h2{font-size:clamp(44px,6vw,82px);line-height:.95;letter-spacing:-.055em;margin:10px 0 20px;font-weight:580}.lead,.page p{max-width:780px;color:#a7b2bb;font-size:17px;line-height:1.65}.meta{border-left:1px solid var(--l);padding-left:20px;display:grid;gap:10px}.meta div{display:flex;justify-content:space-between;gap:16px;font:9px var(--mono);text-transform:uppercase}.meta span:first-child{color:var(--m)}.signals{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--l);margin:30px 0 18px}.sig{padding:16px;border-right:1px solid var(--l)}.sig:last-child{border:0}.sig small{display:block;font:8px var(--mono);letter-spacing:.13em;color:var(--m)}.sig strong{display:block;margin-top:7px;font:12px var(--mono);font-weight:500}.work{display:grid;grid-template-columns:minmax(260px,.7fr) minmax(0,1.5fr);gap:16px}.panel{border:1px solid var(--l);background:linear-gradient(#0d141dea,#091018e8);box-shadow:0 25px 80px #0003}.brief{padding:24px}.brief h3{font-size:17px;margin:10px 0}.brief p,.brief li{font-size:12px;line-height:1.65;color:#95a2ad}.brief ul{padding-left:17px}.divider{height:1px;background:var(--l);margin:22px 0}.schema{padding:9px 0;border-bottom:1px solid #1b2733}.schema b{display:block;font:10px var(--mono);font-weight:500}.schema span{font:8px/1.5 var(--mono);color:#687887}.termbar{display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--l);font:9px var(--mono);color:#84929d}#sql{width:100%;min-height:330px;resize:vertical;border:0;outline:0;padding:22px;background:#060a0f;color:#d9e4ea;font:12px/1.7 var(--mono)}.actions{display:flex;gap:8px;padding:11px 14px;border-block:1px solid #182431}.btn{border:1px solid #2b3c4c;background:#101923;color:#c4cfd7;padding:9px 13px;font:9px var(--mono);letter-spacing:.08em;cursor:pointer}.btn.primary{border-color:#4a8190;background:#18303a;color:#bcebf2}.btn.ghost{background:transparent;color:#758391}.box{margin:12px 14px;padding:12px;border:1px solid #2b3b4b;background:#09111a;font:10px/1.6 var(--mono)}.box.good{border-color:#426d5a;color:#a4d8bf}.box.bad{border-color:#704849;color:#d4a3a3}.result{margin:14px;border:1px solid #182431;min-height:145px;overflow:auto}.empty{padding:24px;color:#596979;font:10px var(--mono)}table{border-collapse:collapse;width:100%;font:10px var(--mono)}th,td{padding:8px 10px;border-right:1px solid #17222d;border-bottom:1px solid #17222d;text-align:left;white-space:nowrap}th{background:#0d151e;color:#9eb0bd}.defenses{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.def{padding:20px}.def p{font-size:11px;color:#81909c;line-height:1.55}.def textarea{width:100%;min-height:120px;background:#070c12;border:1px solid #1e2d3b;color:#d4dde3;padding:13px;font:11px/1.6 var(--mono)}.submit{display:flex;gap:18px;align-items:center;padding:22px 0}.page{margin-bottom:44px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card,.city{padding:22px;border:1px solid var(--l);background:#0b1119c9}.card h3,.city h3{font-size:23px;margin:18px 0 10px}.card p,.city p{font-size:12px;color:#8d9aa5;line-height:1.6}.score{float:right;font:21px var(--mono);color:#c7d1d8}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:15px}.tag{padding:5px 7px;border:1px solid #2a3a49;color:#8ea0ad;font:8px var(--mono)}.tag.live{border-color:#396773;color:#91dce8}.proof{border-top:1px solid var(--l)}.proof article{display:grid;grid-template-columns:130px 1fr 100px;gap:20px;padding:18px 3px;border-bottom:1px solid var(--l)}.proof h3{margin:0 0 7px;font-size:16px}.proof p{margin:0;font-size:11px;color:#82909b;line-height:1.55}.level{font:9px var(--mono);color:var(--c)}.status{text-align:right;font:8px var(--mono);color:#72818e}.marketrow{display:grid;grid-template-columns:1fr 1.4fr 2fr;gap:20px;padding:16px 2px;border-bottom:1px solid var(--l);font-size:11px}.marketrow span{color:#8896a1}.jp{margin-top:16px;padding:22px;border:1px solid var(--l);background:#0b121a}.jprow{display:grid;grid-template-columns:170px 1fr 1fr;gap:14px;padding:10px 0;border-bottom:1px solid #1b2834;font:10px var(--mono)}.jprow:last-child{border:0}@media(max-width:900px){.shell{grid-template-columns:1fr}.top{grid-template-columns:1fr auto;padding:0 16px}.clock{justify-self:end}.side{display:none}.main{padding:36px 16px 70px}.head,.work,.defenses,.grid{grid-template-columns:1fr}.meta{border-left:0;border-top:1px solid var(--l);padding:16px 0 0}.signals{grid-template-columns:1fr 1fr}.sig:nth-child(2){border-right:0}.sig:nth-child(-n+2){border-bottom:1px solid var(--l)}.proof article{grid-template-columns:85px 1fr}.status{grid-column:2;text-align:left}.marketrow,.jprow{grid-template-columns:1fr}}
+:root{
+  --bg:#070a0f;--panel:#0c1219;--panel2:#0a0f15;--line:#22303d;--text:#edf3f6;--muted:#83919e;
+  --cyan:#85d9e7;--green:#92d2b4;--amber:#d7b277;--red:#d47f83;--violet:#9ea6f0;
+  --mono:SFMono-Regular,Consolas,Menlo,monospace;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;color:var(--text);font-family:var(--sans);background:
+radial-gradient(circle at 88% 0,#102838 0,transparent 30%),
+linear-gradient(180deg,#080b10,#06080c 80%);min-height:100vh}
+button,textarea,select,input{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);padding:22px 18px;background:#080c11ee;backdrop-filter:blur(14px);z-index:5}
+.brand{display:flex;align-items:center;gap:10px;font:11px var(--mono);letter-spacing:.12em}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px #85d9e777}
+.subbrand{font:9px var(--mono);color:var(--muted);letter-spacing:.13em;margin:6px 0 26px 18px}
+.label{font:8px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#6f7f8d}
+.current h3{margin:8px 0 6px;font-size:18px;font-weight:540;line-height:1.25}
+.current p{margin:0;color:var(--muted);font-size:11px;line-height:1.55}
+.nav{display:grid;gap:2px;margin:26px 0}
+.nav button{border:0;border-left:1px solid transparent;background:none;color:#83909b;padding:10px 10px;text-align:left;font:10px var(--mono);letter-spacing:.04em}
+.nav button.active,.nav button:hover{color:white;border-left-color:var(--cyan);background:linear-gradient(90deg,#15313b55,transparent)}
+.progressbar{height:3px;background:#15202a;margin:10px 0 7px}
+.progressbar span{display:block;height:100%;width:4%;background:linear-gradient(90deg,#718bd0,var(--cyan))}
+.assist{margin-top:20px}
+.assist select{width:100%;margin-top:8px;background:#080d13;color:#dce6eb;border:1px solid var(--line);padding:9px;font:9px var(--mono)}
+.assistcopy{color:var(--muted);font-size:10px;line-height:1.5;min-height:45px}
+.main{min-width:0}
+.topbar{height:58px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 26px;position:sticky;top:0;background:#080b10e8;backdrop-filter:blur(16px);z-index:4}
+.topbar .clock{font:9px var(--mono);letter-spacing:.14em;color:#b7c4cc}
+.topbar .phase{font:9px var(--mono);color:var(--muted);letter-spacing:.11em}
+.content{padding:38px clamp(18px,4vw,58px) 80px;max-width:1500px;margin:0 auto}
+.view{display:none}.view.active{display:block}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:42px;align-items:end;padding:8px 0 24px}
+.eyebrow{font:9px var(--mono);letter-spacing:.16em;color:var(--cyan)}
+.hero h1{font-size:clamp(42px,6vw,82px);line-height:.96;letter-spacing:-.052em;margin:10px 0 18px;font-weight:590}
+.hero p{font-size:16px;line-height:1.65;color:#aab6be;max-width:820px;margin:0}
+.heroaside{border-left:1px solid var(--line);padding-left:20px}
+.kv{display:flex;justify-content:space-between;gap:15px;padding:7px 0;border-bottom:1px solid #16212b;font:9px var(--mono);text-transform:uppercase}
+.kv span:first-child{color:#667785}
+.phase-strip{display:grid;grid-template-columns:repeat(8,1fr);margin:14px 0 26px;border-block:1px solid var(--line)}
+.phase-strip div{padding:12px 8px;border-right:1px solid var(--line);min-width:0}
+.phase-strip div:last-child{border:0}
+.phase-strip small{display:block;color:#637382;font:7px var(--mono);letter-spacing:.08em}
+.phase-strip b{display:block;font:9px var(--mono);margin-top:5px;font-weight:500}
+.phase-strip .active{background:linear-gradient(180deg,#17344155,transparent)}
+.phase-strip .active b{color:var(--cyan)}
+.workspace{display:grid;grid-template-columns:minmax(260px,.72fr) minmax(0,1.45fr);gap:16px}
+.panel{border:1px solid var(--line);background:linear-gradient(180deg,#0d141ce8,#091018e8)}
+.panelhead{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 15px;border-bottom:1px solid var(--line);font:9px var(--mono);color:#82919c}
+.panelbody{padding:19px}
+.brief h3{margin:0 0 9px;font-size:21px}
+.brief p,.brief li{font-size:12px;line-height:1.62;color:#95a3ae}
+.brief ul{padding-left:18px}
+.persona{padding:11px 0;border-top:1px solid #1c2934}
+.persona b{display:block;font-size:11px}
+.persona span{display:block;color:#7f8f9b;font-size:10px;margin-top:4px}
+.evidence-list{display:grid;gap:8px}
+.evidence{border:1px solid #1c2934;background:#090f15;padding:12px;text-align:left;color:inherit;width:100%}
+.evidence:hover,.evidence.selected{border-color:#385267;background:#0c151d}
+.evidence small{font:8px var(--mono);color:#6e8291;letter-spacing:.08em}
+.evidence strong{display:block;font-size:12px;margin:4px 0}
+.evidence span{font-size:10px;color:#8595a1}
+.inspect{min-height:170px;padding:16px;border:1px solid #1c2934;background:#070c11;margin-top:10px}
+.inspect h4{margin:0 0 10px}
+.inspect p,.inspect li{font-size:11px;line-height:1.65;color:#9aa7b1}
+.lensrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tag{border:1px solid #2a3c4b;color:#8ea1af;padding:5px 7px;font:8px var(--mono);letter-spacing:.06em}
+.tag.on{border-color:#416e7d;color:#a6e4ed;background:#10242b}
+.mentor{margin-top:16px;border-left:2px solid #33495c;padding:4px 0 4px 13px}
+.mentor small{font:8px var(--mono);color:var(--violet);letter-spacing:.1em}
+.mentor p{margin:7px 0 0;font-size:12px;line-height:1.6;color:#b0bac2}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.tabs button{background:#0b1219;border:1px solid #1e2d39;color:#7f8f9d;padding:7px 10px;font:8px var(--mono);letter-spacing:.07em}
+.tabs button.active{border-color:#416a78;color:#c5eef3;background:#11262e}
+.tool{display:none}.tool.active{display:block}
+textarea{width:100%;min-height:185px;resize:vertical;background:#060a0f;color:#dbe6ec;border:0;outline:0;padding:18px;font:11px/1.7 var(--mono)}
+.actions{display:flex;gap:7px;padding:10px 12px;border-top:1px solid var(--line);flex-wrap:wrap}
+.btn{border:1px solid #2b3d4c;background:#101923;color:#c6d0d8;padding:9px 12px;font:8px var(--mono);letter-spacing:.08em}
+.btn.primary{border-color:#4b8290;background:#18313a;color:#c8f0f5}
+.btn.warn{border-color:#6b5736;color:#dec492;background:#1b1710}
+.output{margin:12px;border:1px solid #192631;min-height:110px;overflow:auto}
+.empty{padding:22px;color:#5f7080;font:9px var(--mono)}
+table{border-collapse:collapse;width:100%;font:9px var(--mono)}
+th,td{padding:8px 9px;border-right:1px solid #17232d;border-bottom:1px solid #17232d;white-space:nowrap;text-align:left}
+th{background:#0d151d;color:#9caeba}
+.notes{padding:16px}
+.notes textarea{border:1px solid #1d2b36;min-height:235px;background:#080d13}
+.decisiongrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.decision{border:1px solid #1c2934;padding:14px;background:#091017}
+.decision label{font:8px var(--mono);letter-spacing:.1em;color:#7f909d}
+.decision textarea{min-height:95px;margin-top:8px;border:1px solid #1c2934}
+.submitbar{margin-top:16px;padding:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center}
+.status{font:9px var(--mono);color:#7d8d99}
+.page h2{font-size:clamp(34px,5vw,64px);letter-spacing:-.045em;margin:10px 0 12px}
+.page .lead{font-size:15px;color:#9eabb5;line-height:1.65;max-width:800px}
+.months{display:grid;gap:14px;margin-top:24px}
+.month{border:1px solid var(--line);background:#0a1017}
+.monthhead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px}
+.monthhead b{font-size:14px}.monthhead span{font:9px var(--mono);color:#738491}
+.weeks{display:grid;grid-template-columns:repeat(4,1fr)}
+.week{padding:14px;border-right:1px solid #1b2833;min-height:122px}
+.week:last-child{border-right:0}
+.week small{font:8px var(--mono);color:#687b8a}
+.week h4{font-size:13px;margin:7px 0}
+.week p{font-size:10px;line-height:1.5;color:#81919d;margin:0}
+.frameworks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}
+.frame{padding:18px;border:1px solid var(--line);background:#0a1017}
+.frame h3{margin:6px 0 8px;font-size:18px}.frame p{font-size:11px;line-height:1.55;color:#8595a1}
+.frame small{font:8px var(--mono);letter-spacing:.1em;color:var(--cyan)}
+.ledger{border-top:1px solid var(--line);margin-top:22px}
+.ledger article{display:grid;grid-template-columns:170px 1fr 110px;gap:20px;padding:16px 2px;border-bottom:1px solid var(--line)}
+.ledger h3{font-size:14px;margin:0 0 6px}.ledger p{font-size:10px;color:#81919d;margin:0;line-height:1.5}
+.level{font:8px var(--mono);color:var(--cyan)}
+.rubric{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px}
+.rubric .card{padding:16px;border:1px solid var(--line);background:#0a1017}
+.rubric h3{margin:0 0 8px;font-size:15px}.rubric p{font-size:10px;color:#8494a0;line-height:1.5}
+.modal{position:fixed;inset:0;background:#020407d9;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}
+.modal.open{display:flex}
+.modalbox{max-width:680px;width:100%;border:1px solid #304454;background:#0a1118;padding:22px;box-shadow:0 40px 120px #0009}
+.modalbox h2{font-size:26px;margin:5px 0 10px}.modalbox p,.modalbox li{color:#9aa7b1;font-size:12px;line-height:1.6}
+.lesson{border:1px solid #1d2b36;background:#070c11;padding:14px;margin:12px 0;font:11px/1.65 var(--mono);color:#c3d0d8}
+@media(max-width:980px){
+ .app{grid-template-columns:1fr}.sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+ .nav{grid-template-columns:repeat(4,1fr);overflow:auto}.nav button{border-left:0;border-bottom:1px solid transparent}
+ .nav button.active{border-left:0;border-bottom-color:var(--cyan)}.assist,.current .meta-hide{display:none}
+ .topbar{top:0}.hero,.workspace{grid-template-columns:1fr}.heroaside{border-left:0;border-top:1px solid var(--line);padding:15px 0 0}
+ .phase-strip{grid-template-columns:repeat(4,1fr)}.weeks{grid-template-columns:1fr 1fr}.frameworks{grid-template-columns:1fr 1fr}
+}
+@media(max-width:620px){
+ .content{padding:26px 14px 60px}.topbar{padding:0 14px}.nav{grid-template-columns:1fr 1fr}
+ .hero h1{font-size:44px}.phase-strip{grid-template-columns:1fr 1fr}.decisiongrid,.rubric,.frameworks{grid-template-columns:1fr}
+ .weeks{grid-template-columns:1fr}.week{border-right:0;border-bottom:1px solid #1b2833}
+ .ledger article{grid-template-columns:90px 1fr}.ledger .status{grid-column:2}
+}
 </style>
 </head>
-<body><div class="shell">
-<header class="top"><div class="brand">JC / SOLUTIONS LAB</div><div class="clock"><b>●</b> 東京 // 02:00 &nbsp; NIGHT SHIFT</div></header>
-<aside class="side"><div class="label">CURRENT CAPABILITY</div><h3>Query unfamiliar data.</h3><div class="tiny muted">Evidence-backed, not course completion.</div><nav class="nav"><button class="active" data-v="mission">01 / CURRENT MISSION</button><button data-v="capabilities">02 / CAPABILITY MAP</button><button data-v="proof">03 / PROOF LEDGER</button><button data-v="market">04 / MARKET</button><button data-v="world">05 / WORLD</button></nav><div class="label">ASSISTANCE</div><select id="mode"><option value="teach">TEACH</option><option value="pair">PAIR</option><option value="night" selected>NIGHT SHIFT</option><option value="interview">INTERVIEW</option><option value="field">FIELD</option></select><p id="modecopy" class="tiny muted"></p><div class="label" style="margin-top:28px">INDEPENDENT RADIUS</div><div class="meter"><span id="meter"></span></div><div><b id="radius" style="font:17px var(--mono)">18%</b> <span class="tiny muted">target 80%+</span></div></aside>
-<main class="main"><section id="mission" class="view active"></section><section id="capabilities" class="view"></section><section id="proof" class="view"></section><section id="market" class="view"></section><section id="world" class="view"></section></main></div>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>JC / SOLUTIONS LAB</div>
+    <div class="subbrand">26-WEEK APPRENTICESHIP · TOKYO 02:00</div>
+    <section class="current">
+      <div class="label">CURRENT ENGAGEMENT</div>
+      <h3>Aster Systems</h3>
+      <p>Customer activation failure. Establish reality before accepting anyone's diagnosis.</p>
+    </section>
+    <nav class="nav">
+      <button class="active" data-view="engagement">01 / ENGAGEMENT</button>
+      <button data-view="roadmap">02 / 26 WEEKS</button>
+      <button data-view="standards">03 / STANDARDS</button>
+      <button data-view="evidence">04 / EVIDENCE</button>
+    </nav>
+    <div class="label">APPRENTICESHIP PROGRESS</div>
+    <div class="progressbar"><span></span></div>
+    <div style="font:15px var(--mono)">WEEK 01 <span style="font-size:9px;color:var(--muted)">/ 26</span></div>
+    <section class="assist">
+      <div class="label">MENTOR PRESENCE</div>
+      <select id="mentorMode">
+        <option value="observe" selected>OBSERVE + ASSIST</option>
+        <option value="guided">GUIDED OPERATOR</option>
+        <option value="colead">CO-LEAD</option>
+        <option value="review">REVIEW ONLY</option>
+      </select>
+      <p id="mentorModeCopy" class="assistcopy"></p>
+    </section>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="clock"><span style="color:var(--cyan)">●</span> 東京 // 02:00 &nbsp; PROFESSIONAL PRACTICE</div>
+      <div class="phase">DISCOVER → FRAME → ESTABLISH REALITY → DIAGNOSE → DESIGN → ACT → OBSERVE → IMPROVE</div>
+    </header>
+
+    <div class="content">
+      <section id="engagement" class="view active">
+        <div class="hero">
+          <div>
+            <div class="eyebrow">ENGAGEMENT 01 · WEEK 01 · OBSERVE + ASSIST</div>
+            <h1>Activation is falling.<br>Everyone has a theory.</h1>
+            <p>Aster Systems is a B2B workflow platform serving mid-market and enterprise customers across the US and UK. Activation has fallen for six weeks. Sales, Product, Customer Success, and Engineering disagree about why. You joined the engagement this morning.</p>
+          </div>
+          <aside class="heroaside">
+            <div class="kv"><span>Client</span><span>Aster Systems</span></div>
+            <div class="kv"><span>Stage</span><span>Discovery</span></div>
+            <div class="kv"><span>Business exposure</span><span>$4.8M ARR cohort</span></div>
+            <div class="kv"><span>Your autonomy</span><span>Assisted</span></div>
+            <div class="kv"><span>Mentor</span><span>Present</span></div>
+          </aside>
+        </div>
+
+        <div class="phase-strip">
+          <div class="active"><small>01</small><b>DISCOVER</b></div>
+          <div><small>02</small><b>FRAME</b></div>
+          <div><small>03</small><b>REALITY</b></div>
+          <div><small>04</small><b>DIAGNOSE</b></div>
+          <div><small>05</small><b>DESIGN</b></div>
+          <div><small>06</small><b>ACT</b></div>
+          <div><small>07</small><b>OBSERVE</b></div>
+          <div><small>08</small><b>IMPROVE</b></div>
+        </div>
+
+        <div class="workspace">
+          <section class="panel brief">
+            <div class="panelhead"><span>CLIENT BRIEFING</span><span>MON 08:47</span></div>
+            <div class="panelbody">
+              <h3>What leadership thinks</h3>
+              <p>The COO wants an answer by Friday. The stated problem is “customers are taking too long to activate.” Your first job is not to fix it. Your first job is to determine what is actually true.</p>
+              <ul>
+                <li>Activation rate fell from 78% to 57% in six weeks.</li>
+                <li>Sales says the newest cohort is lower quality.</li>
+                <li>Product says onboarding UX has not changed.</li>
+                <li>Engineering says there are no major incidents.</li>
+                <li>Customer Success says enterprise accounts are “getting stuck.”</li>
+              </ul>
+
+              <div class="mentor">
+                <small>MASTER PRACTITIONER // DAY 1</small>
+                <p id="mentorText">Do not begin with SQL. Begin by understanding the decision the business is trying to make. Then ask which evidence could disprove the strongest stories in the room.</p>
+              </div>
+
+              <div class="label" style="margin-top:22px">ACTIVE PROFESSIONAL LENSES</div>
+              <div class="lensrow">
+                <span class="tag on">Problem Framing</span>
+                <span class="tag on">Data</span>
+                <span class="tag on">Product</span>
+                <span class="tag on">Economics</span>
+                <span class="tag">Architecture</span>
+                <span class="tag">Security</span>
+                <span class="tag">AI</span>
+                <span class="tag">SRE</span>
+              </div>
+
+              <div class="label" style="margin-top:22px">STAKEHOLDERS</div>
+              <div class="persona"><b>Maya Chen · COO</b><span>Needs a decision by Friday. Believes speed is the problem.</span></div>
+              <div class="persona"><b>Leon Grant · VP Sales</b><span>Believes lead quality declined after expansion.</span></div>
+              <div class="persona"><b>Priya Raman · Head of Product</b><span>Believes product behavior is stable.</span></div>
+              <div class="persona"><b>Sam Okafor · Director, Customer Success</b><span>Sees enterprise accounts stalling after provisioning.</span></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="tabs">
+              <button class="active" data-tool="evidenceTool">EVIDENCE ROOM</button>
+              <button data-tool="sqlTool">DATA WORKBENCH</button>
+              <button data-tool="notesTool">FIELD NOTES</button>
+              <button data-tool="decisionTool">DECISION LOG</button>
+            </div>
+
+            <div id="evidenceTool" class="tool active">
+              <div class="panelbody">
+                <div class="label">AVAILABLE EVIDENCE · CHOOSE WHAT TO INSPECT</div>
+                <div class="evidence-list" id="evidenceList"></div>
+                <div class="inspect" id="inspectPane">
+                  <h4>No evidence selected.</h4>
+                  <p>In a real engagement, attention is a scarce resource. Choose what you want to inspect first.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="sqlTool" class="tool">
+              <div class="panelhead"><span>SQL WORKBENCH</span><span>REAL QUERY EXECUTION</span></div>
+              <textarea id="sql">-- Start with a question, not a query.
+SELECT cohort_week,
+       ROUND(100.0 * SUM(CASE WHEN activated_14d = 1 THEN 1 ELSE 0 END) / COUNT(*), 1) AS activation_rate
+FROM accounts
+GROUP BY cohort_week
+ORDER BY cohort_week;</textarea>
+              <div class="actions">
+                <button class="btn primary" id="runSql">RUN QUERY</button>
+                <button class="btn" id="skillSql">OPEN SKILL CHAMBER</button>
+                <button class="btn" id="resetSql">RESET</button>
+              </div>
+              <div class="output" id="sqlOutput"><div class="empty">Query results appear here.</div></div>
+            </div>
+
+            <div id="notesTool" class="tool">
+              <div class="notes">
+                <div class="label">FIELD NOTES</div>
+                <textarea id="fieldNotes" placeholder="What do you know? What is claimed? What is still uncertain? What evidence would change your mind?"></textarea>
+              </div>
+            </div>
+
+            <div id="decisionTool" class="tool">
+              <div class="notes">
+                <div class="decisiongrid">
+                  <div class="decision"><label>CURRENT PROBLEM FRAME</label><textarea id="problemFrame" placeholder="What problem are you actually trying to solve?"></textarea></div>
+                  <div class="decision"><label>STRONGEST CURRENT HYPOTHESIS</label><textarea id="hypothesis" placeholder="What do you currently think is happening?"></textarea></div>
+                  <div class="decision"><label>EVIDENCE THAT WOULD DISPROVE IT</label><textarea id="disproof" placeholder="What would make you change your mind?"></textarea></div>
+                  <div class="decision"><label>NEXT HIGHEST-VALUE ACTION</label><textarea id="nextAction" placeholder="What should happen next, and why?"></textarea></div>
+                </div>
+                <div class="submitbar">
+                  <div class="status" id="decisionStatus">Evidence ledger not yet updated.</div>
+                  <button class="btn primary" id="recordDecision">RECORD DECISION</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section id="roadmap" class="view page">
+        <div class="eyebrow">26-WEEK OPERATING MAP</div>
+        <h2>Problems drive the curriculum.</h2>
+        <p class="lead">The Lab no longer teaches SQL, Python, APIs, cloud, AI, security, or architecture as disconnected subjects. Each capability appears when an engagement requires it, then reappears later under less guidance and different conditions.</p>
+        <div class="months" id="months"></div>
+      </section>
+
+      <section id="standards" class="view page">
+        <div class="eyebrow">EXTERNAL LEGITIMACY LAYER</div>
+        <h2>Professional standards define “good.”</h2>
+        <p class="lead">The Lab is independent and is not affiliated with or endorsed by these organizations. Their public frameworks inform how engagements are reviewed so the standard is inspectable outside the Lab.</p>
+        <div class="frameworks" id="frameworks"></div>
+        <div class="rubric">
+          <div class="card"><h3>Lens Engine</h3><p>Each engagement activates only the standards that matter. A production AI system may trigger architecture, NIST AI RMF, OWASP, SRE, and FinOps. A product adoption problem may emphasize product, data, economics, and organizational execution instead.</p></div>
+          <div class="card"><h3>Improvement over scoring</h3><p>Reviews produce evidence and improvement actions, not decorative percentages. The question is what was demonstrated, what remains partial, and what must improve before the capability can be called independent.</p></div>
+        </div>
+      </section>
+
+      <section id="evidence" class="view page">
+        <div class="eyebrow">EVIDENCE ENGINE</div>
+        <h2>Claims require artifacts.</h2>
+        <p class="lead">Capabilities advance through observed work: queries, analyses, designs, technical artifacts, decisions, incident handling, architecture reviews, financial models, and transfer to unfamiliar contexts.</p>
+        <div class="ledger" id="ledger"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="modal" id="skillModal" role="dialog" aria-modal="true" aria-labelledby="skillTitle">
+  <div class="modalbox">
+    <div class="eyebrow">JUST-IN-TIME SKILL CHAMBER</div>
+    <h2 id="skillTitle">SQL: interrogating evidence</h2>
+    <p>This is not a detour into a course. Learn only what you need to move the engagement forward, prove it in the workbench, then return to the client problem.</p>
+    <div class="lesson"><b>SELECT</b> chooses the fields you want to inspect.<br><b>FROM</b> identifies the table.<br><b>WHERE</b> filters the evidence.<br><b>GROUP BY</b> lets you compare cohorts or segments.<br><b>JOIN</b> connects evidence that lives in different tables.</div>
+    <ul>
+      <li>Start with a business question.</li>
+      <li>Write the smallest query that can answer it.</li>
+      <li>Inspect the result before adding complexity.</li>
+      <li>Do not claim causality from a descriptive query alone.</li>
+    </ul>
+    <div class="actions" style="padding:10px 0 0;border:0">
+      <button class="btn primary" id="closeSkill">RETURN TO ENGAGEMENT</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const K='solutions-lab-global-v2';let S;try{S=JSON.parse(localStorage.getItem(K))||{done:[],attempt:{},hints:{},def:{},mode:'night'}}catch{S={done:[],attempt:{},hints:{},def:{},mode:'night'}};let DB,SQL,idx=0;
-const assist={teach:'Concept explanations + direct examples.',pair:'Collaborative structure; you still write the solution.',night:'Hints only. Enough light to keep moving.',interview:'No solution help; clarification only.',field:'Documentation mindset. No coaching.'};
-const missions=[
-{id:'Q-001',phase:'QUERY // MONTH 01',title:'Cohort Drift',level:'L1 SIMULATION',demand:'HIGH',proof:'Analytical reasoning',brief:'Enterprise implementation completion has declined for three consecutive cohorts. Leadership thinks customer quality is falling. Prove or disprove that explanation from the operating data.',story:'Sales blames weaker customers. Implementation blames staffing. Product blames integration complexity. You have database access and ninety minutes before the operating review.',criteria:['Identify the completion-rate pattern by cohort.','Separate customer mix from implementation complexity.','Test at least one competing explanation.','Do not claim causality the data cannot support.'],tables:[['implementations','implementation_id, customer_id, cohort_month, integration_tier, status, days_to_complete, owner_id'],['customers','customer_id, customer_segment, region, employee_count, contract_value'],['staffing','owner_id, cohort_month, active_projects, capacity_band']],starter:`-- Understand cohort performance, then test the explanations.\nSELECT cohort_month, COUNT(*) AS implementations\nFROM implementations\nGROUP BY cohort_month\nORDER BY cohort_month;`,hint:{teach:'Calculate completion rate by cohort, then join customer and integration attributes.',pair:'Compare cohort_month with integration_tier and customer_segment.',night:'The denominator matters. Segment before accepting the first explanation.',interview:'Clarification: completion means status = completed.',field:'Use the schema and evidence available.'},valid:(q,r)=>/group\s+by/i.test(q)&&/(join|integration|customer)/i.test(q)&&r.length>0},
-{id:'Q-002',phase:'QUERY // MONTH 01',title:'Time to Value',level:'L1 SIMULATION',demand:'HIGH',proof:'Cross-table diagnosis',brief:'New enterprise customers are taking longer to reach first value. Find where the delay is introduced and which population is most exposed.',story:'Customer Success blames training. Product blames API provisioning. Finance cares because renewals correlate with time-to-value.',criteria:['Join customer, deployment, and milestone context.','Identify the stage introducing delay.','Segment the exposed population.','Distinguish bottleneck from correlation.'],tables:[['deployments','deployment_id, customer_id, days_to_first_value, adoption_30d'],['milestone_events','deployment_id, provisioning_delay_days, training_delay_days, data_delay_days'],['customers','customer_id, customer_segment, region, contract_value']],starter:`SELECT c.customer_segment, AVG(d.days_to_first_value) AS avg_days_to_value\nFROM deployments d\nJOIN customers c ON c.customer_id=d.customer_id\nGROUP BY c.customer_segment\nORDER BY avg_days_to_value DESC;`,hint:{teach:'Bring milestone_events into the analysis. The slowest segment is not automatically the cause.',pair:'Compare provisioning, training, and data delays after joining the deployment.',night:'Find the stage, not merely the account.',interview:'days_to_first_value is already calculated.',field:'Use the tables.'},valid:(q,r)=>/join/i.test(q)&&/milestone_events/i.test(q)&&r.length>0},
-{id:'Q-003',phase:'QUERY // MONTH 02',title:'Incident Gravity',level:'L2 PRODUCTION ANALOGUE',demand:'HIGH',proof:'Prioritization under noise',brief:'A global integration platform has rising incidents while the SLA dashboard remains mostly green. Identify customers whose incident pattern is becoming structurally dangerous.',story:'Support volume is rising. You need an early-warning view that separates noisy customers from worsening severity.',criteria:['Use window logic or defensible trend comparison.','Separate frequency from severity.','Rank material customer exposure.','Create a result an operator could act on.'],tables:[['incidents','incident_id, customer_id, occurred_at, severity, minutes_to_resolve, source'],['customers','customer_id, customer_segment, region, contract_value']],starter:`WITH ranked AS (\n SELECT customer_id,occurred_at,severity,ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY occurred_at DESC) AS recency_rank\n FROM incidents\n)\nSELECT * FROM ranked WHERE recency_rank<=5;`,hint:{teach:'A count rewards noisy low-severity customers. Combine recency, severity, and trend.',pair:'Compare recent severity to earlier severity per customer.',night:'Green lagging metrics can coexist with deteriorating leading indicators.',interview:'severity is 1 low through 4 critical.',field:'No coaching.'},valid:(q,r)=>/over\s*\(/i.test(q)&&r.length>0},
-{id:'Q-004',phase:'QUERY // MONTH 02',title:'Migration Reconciliation',level:'L2 PRODUCTION ANALOGUE',demand:'VERY HIGH',proof:'Migration evidence',brief:'A legacy migration reports 99.2% success. The remaining 0.8% may contain high-value active accounts. Decide whether cutover can proceed.',story:'The vendor wants sign-off. Operations wants to avoid another weekend. You need empirical reconciliation, not reassurance.',criteria:['Identify missing or duplicated records.','Reconcile active/high-value accounts separately.','Quantify unresolved exposure.','Make an evidence-based cutover recommendation.'],tables:[['legacy_accounts','account_id, active_flag, account_value, region'],['target_accounts','target_row_id, account_id, active_flag, account_value, migrated_at']],starter:`SELECT l.account_id,l.account_value,t.account_id AS migrated_account_id\nFROM legacy_accounts l\nLEFT JOIN target_accounts t ON t.account_id=l.account_id\nWHERE t.account_id IS NULL\nORDER BY l.account_value DESC;`,hint:{teach:'Start with an anti-join for missing records; separately check duplicates.',pair:'LEFT JOIN for missing, then GROUP BY target account_id HAVING COUNT(*) > 1.',night:'99.2% is a population statistic. Risk lives in the 0.8%.',interview:'active_flag = 1 means active.',field:'Reconcile the systems.'},valid:(q,r)=>/(left\s+join|not\s+exists)/i.test(q)&&r.length>0}
+const STORAGE='solutions-lab-apprenticeship-v3';
+let state={view:'engagement',mentorMode:'observe',inspected:[],fieldNotes:'',problemFrame:'',hypothesis:'',disproof:'',nextAction:'',decisions:[]};
+try{state={...state,...JSON.parse(localStorage.getItem(STORAGE)||'{}')}}catch{}
+const save=()=>localStorage.setItem(STORAGE,JSON.stringify(state));
+
+const mentorCopy={
+ observe:'The mentor demonstrates expert attention, narrates why evidence matters, and gives direct micro-lessons when a required capability is new.',
+ guided:'The mentor asks questions and challenges assumptions. You choose more of the investigation path.',
+ colead:'You frame the problem and propose action. The mentor mainly tests your reasoning and tradeoffs.',
+ review:'You operate independently. The mentor appears after major decisions for professional review.'
+};
+const mentorMessages={
+ observe:'Do not begin with SQL. Begin by understanding the decision the business is trying to make. Then ask which evidence could disprove the strongest stories in the room.',
+ guided:'Choose the next evidence source yourself. Explain what uncertainty it resolves before opening it.',
+ colead:'Give me your current frame, the strongest alternative explanation, and the evidence that would change your mind.',
+ review:'No coaching. Establish reality, record assumptions, make the decision, and leave an evidence trail.'
+};
+
+const evidence=[
+ {id:'coo',type:'EXECUTIVE NOTE',title:'COO operating review',summary:'“Activation is taking too long. Fix onboarding speed.”',body:'Maya wants a Friday recommendation. She is treating slower activation as the root problem and is considering adding onboarding staff. No staffing approval has been made yet.',lesson:'Stated problem ≠ verified problem.'},
+ {id:'sales',type:'CRM / SALES',title:'New-logo cohort mix',summary:'Sales says expansion produced weaker customers.',body:'The newest cohort includes more mid-market accounts, but average contract value is only 6% lower. Enterprise share fell modestly. Lead-source quality scores are nearly unchanged.',lesson:'Test the magnitude of a claimed mix shift.'},
+ {id:'cs',type:'CUSTOMER SUCCESS',title:'Escalation excerpts',summary:'Enterprise accounts mention provisioning and data mapping.',body:'Several accounts report waiting days for production credentials, unclear data requirements, and repeated mapping corrections. CSMs use phrases such as “blocked after kickoff” rather than “training confusion.”',lesson:'Qualitative evidence can reveal where to interrogate structured data.'},
+ {id:'eng',type:'ENGINEERING',title:'Incident dashboard',summary:'No Sev-1 incident increase. SLA remains green.',body:'Platform-wide uptime is 99.96%. No critical incident cluster appears during the six-week decline. API 5xx errors are stable. This does not rule out non-incident workflow friction.',lesson:'Green aggregate reliability can coexist with customer-level friction.'},
+ {id:'product',type:'PRODUCT ANALYTICS',title:'Onboarding funnel',summary:'UI completion is stable until provisioning begins.',body:'Profile setup and training completion have not materially changed. The largest new drop appears between workspace configuration and production provisioning.',lesson:'Locate the transition where behavior changed.'},
+ {id:'finance',type:'FINANCE',title:'ARR exposure model',summary:'The six affected cohorts represent $4.8M ARR.',body:'Historically, accounts activating after 21 days renew at a lower rate than accounts activating inside 14 days. Finance does not claim causality, but the exposure is material enough to prioritize.',lesson:'Translate operational delay into economic relevance.'}
 ];
-const caps=[['I','QUERY',18,'SQL, Postgres reasoning, joins, CTEs, windows, data quality.','ACTIVE'],['II','COMPUTE',6,'Python, pandas, automation, transformation, testing.','QUEUED'],['III','CONNECT',4,'REST, JSON, OAuth, webhooks, Postman, integration patterns.','QUEUED'],['IV','DEPLOY',3,'Git, Azure, IAM, secrets, logging, monitoring, production hygiene.','QUEUED'],['V','INTELLIGENCE',7,'LLM APIs, RAG, tools, agents, evaluation, human authority.','QUEUED'],['VI','OPERATE',62,'Discovery, requirements, rollout, adoption, recovery, economics, executive communication.','TRANSFERABLE']];
-const markets=[['Tokyo','Solutions / FDE / Technical Implementation','APIs, enterprise deployment, Japanese customer work'],['London','Solutions / Technical Consulting / AI Deployment','Architecture, regulated systems, client delivery'],['Nairobi','Fintech / Data / Solutions / Transformation','Payments, logistics, reliability, constraint-aware operations'],['Port of Spain','Digital Transformation / Data / Enterprise Systems','Financial services, energy, regional implementation'],['Global Remote','Implementation Engineering / Solutions / AI Ops','Production ownership, APIs, async delivery, measurable outcomes']];
-const seed=`CREATE TABLE implementations(implementation_id INTEGER,customer_id INTEGER,cohort_month TEXT,integration_tier TEXT,status TEXT,days_to_complete INTEGER,owner_id INTEGER);INSERT INTO implementations VALUES(1,101,'2026-05','standard','completed',21,1),(2,102,'2026-05','standard','completed',24,2),(3,103,'2026-05','complex','completed',39,3),(4,104,'2026-05','standard','completed',20,1),(5,105,'2026-05','complex','in_progress',NULL,2),(6,106,'2026-06','standard','completed',23,1),(7,107,'2026-06','complex','completed',44,2),(8,108,'2026-06','complex','in_progress',NULL,3),(9,109,'2026-06','complex','in_progress',NULL,3),(10,110,'2026-06','standard','completed',27,2),(11,111,'2026-07','complex','in_progress',NULL,1),(12,112,'2026-07','complex','completed',49,2),(13,113,'2026-07','complex','in_progress',NULL,3),(14,114,'2026-07','standard','completed',25,1),(15,115,'2026-07','complex','in_progress',NULL,2);CREATE TABLE customers(customer_id INTEGER,customer_segment TEXT,region TEXT,employee_count INTEGER,contract_value INTEGER);INSERT INTO customers VALUES(101,'mid-market','US',800,90000),(102,'enterprise','UK',5000,240000),(103,'enterprise','JP',9200,410000),(104,'mid-market','KE',1200,110000),(105,'enterprise','TT',4300,220000),(106,'mid-market','US',900,95000),(107,'enterprise','JP',12000,480000),(108,'enterprise','UK',7100,320000),(109,'mid-market','KE',1500,130000),(110,'enterprise','TT',3800,205000),(111,'enterprise','JP',14000,520000),(112,'enterprise','UK',8200,350000),(113,'mid-market','KE',1800,145000),(114,'mid-market','US',1000,104000),(115,'enterprise','TT',5100,260000);CREATE TABLE staffing(owner_id INTEGER,cohort_month TEXT,active_projects INTEGER,capacity_band TEXT);INSERT INTO staffing VALUES(1,'2026-05',5,'normal'),(2,'2026-05',5,'normal'),(3,'2026-05',4,'normal'),(1,'2026-06',5,'normal'),(2,'2026-06',6,'high'),(3,'2026-06',6,'high'),(1,'2026-07',5,'normal'),(2,'2026-07',6,'high'),(3,'2026-07',5,'normal');CREATE TABLE deployments(deployment_id INTEGER,customer_id INTEGER,days_to_first_value INTEGER,adoption_30d REAL);INSERT INTO deployments VALUES(201,101,18,.71),(202,102,26,.63),(203,103,41,.48),(204,106,21,.68),(205,107,47,.42),(206,108,39,.51),(207,110,31,.57);CREATE TABLE milestone_events(deployment_id INTEGER,provisioning_delay_days INTEGER,training_delay_days INTEGER,data_delay_days INTEGER);INSERT INTO milestone_events VALUES(201,2,1,2),(202,5,4,3),(203,18,4,7),(204,3,2,2),(205,22,3,9),(206,16,5,8),(207,8,4,5);CREATE TABLE incidents(incident_id INTEGER,customer_id INTEGER,occurred_at TEXT,severity INTEGER,minutes_to_resolve INTEGER,source TEXT);INSERT INTO incidents VALUES(1,101,'2026-08-01',1,18,'api'),(2,101,'2026-08-09',1,22,'api'),(3,101,'2026-08-18',2,37,'webhook'),(4,101,'2026-08-25',2,42,'webhook'),(5,103,'2026-08-02',1,25,'api'),(6,103,'2026-08-08',2,44,'api'),(7,103,'2026-08-13',2,51,'auth'),(8,103,'2026-08-19',3,89,'auth'),(9,103,'2026-08-25',4,166,'auth'),(10,107,'2026-08-03',2,38,'api'),(11,107,'2026-08-11',2,41,'api'),(12,107,'2026-08-19',2,43,'api'),(13,107,'2026-08-24',2,40,'api'),(14,108,'2026-08-05',1,17,'webhook'),(15,108,'2026-08-12',3,94,'webhook'),(16,108,'2026-08-21',3,101,'webhook'),(17,108,'2026-08-27',4,190,'webhook');CREATE TABLE legacy_accounts(account_id INTEGER,active_flag INTEGER,account_value INTEGER,region TEXT);INSERT INTO legacy_accounts VALUES(5001,1,420000,'JP'),(5002,1,190000,'UK'),(5003,0,12000,'US'),(5004,1,610000,'TT'),(5005,1,80000,'KE'),(5006,0,9000,'US'),(5007,1,370000,'JP');CREATE TABLE target_accounts(target_row_id INTEGER,account_id INTEGER,active_flag INTEGER,account_value INTEGER,migrated_at TEXT);INSERT INTO target_accounts VALUES(1,5001,1,420000,'2026-08-27'),(2,5002,1,190000,'2026-08-27'),(3,5003,0,12000,'2026-08-27'),(4,5005,1,80000,'2026-08-27'),(5,5006,0,9000,'2026-08-27'),(6,5007,1,370000,'2026-08-27'),(7,5007,1,370000,'2026-08-27');`;
-function save(){localStorage.setItem(K,JSON.stringify(S));radius()}function esc(x){return String(x??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}function m(){return missions[idx]}
-async function boot(){try{SQL=await initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/${f}`});DB=new SQL.Database();DB.run(seed);document.querySelector('#engine').textContent='runtime ready';document.querySelector('#engine').style.color='var(--g)'}catch(e){document.querySelector('#engine').textContent='runtime failed';document.querySelector('#engine').style.color='var(--r)'}}
-function renderMission(){let x=m(),h=document.querySelector('#mission');h.innerHTML=`<div class="head"><div><div class="eyebrow">${x.phase} // ${x.id}</div><h1>${x.title}</h1><p class="lead">${x.brief}</p></div><div class="meta"><div><span>Evidence</span><span>${x.level}</span></div><div><span>Demand</span><span>${x.demand}</span></div><div><span>Lane</span><span>Solutions / FDE</span></div><div><span>Proof</span><span>${x.proof}</span></div></div></div><div class="signals"><div class="sig"><small>MISSION</small><strong>${idx+1}/${missions.length}</strong></div><div class="sig"><small>ASSIST</small><strong>${S.mode.toUpperCase()}</strong></div><div class="sig"><small>STATUS</small><strong>${S.done.includes(x.id)?'EVIDENCED':'ACTIVE'}</strong></div><div class="sig"><small>MARKET MAP</small><strong>EMPLOYER-MAPPED</strong></div></div><div class="work"><section class="panel brief"><div class="label">BRIEFING</div><h3>Situation</h3><p>${x.story}</p><div class="divider"></div><div class="label">WHAT COUNTS</div><ul>${x.criteria.map(c=>`<li>${c}</li>`).join('')}</ul><div class="divider"></div><div class="label">AVAILABLE TABLES</div>${x.tables.map(t=>`<div class="schema"><b>${t[0]}</b><span>${t[1]}</span></div>`).join('')}</section><section class="panel"><div class="termbar"><span>postgres_analogue // sqlite runtime</span><span id="engine">${DB?'runtime ready':'booting…'}</span></div><textarea id="sql" spellcheck="false">${esc(S.attempt[x.id]?.q||x.starter)}</textarea><div class="actions"><button class="btn primary" id="run">RUN QUERY</button><button class="btn" id="hint">HINT</button><button class="btn ghost" id="reset">RESET</button></div><div id="feedback" class="box" hidden></div><div id="hintbox" class="box" hidden></div><div id="result" class="result"><div class="empty">Run a query when ready. Cmd/Ctrl + Enter also works.</div></div></section></div><div class="defenses"><section class="panel def"><div class="label">TECHNICAL DEFENSE</div><p>Explain query logic, assumptions, edge cases, and production validation.</p><textarea id="tech" placeholder="Your technical defense…">${esc(S.def[x.id]?.tech||'')}</textarea></section><section class="panel def"><div class="label">EXECUTIVE DEFENSE</div><p>Explain what changed, why it matters, and what should happen next.</p><textarea id="exec" placeholder="Your executive defense…">${esc(S.def[x.id]?.exec||'')}</textarea></section></div><div class="submit"><button class="btn primary" id="submit">SUBMIT EVIDENCE</button><span id="stat" class="tiny muted">Completion requires a valid query plus both defenses.</span></div>`;if(!DB)boot();document.querySelector('#run').onclick=run;document.querySelector('#hint').onclick=hint;document.querySelector('#reset').onclick=()=>document.querySelector('#sql').value=x.starter;document.querySelector('#submit').onclick=submit;document.querySelector('#sql').onkeydown=e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();run()}};['tech','exec'].forEach(id=>document.querySelector('#'+id).oninput=defs);if(S.done.includes(x.id)){document.querySelector('#stat').textContent='EVIDENCED — query + both defenses recorded';document.querySelector('#stat').style.color='var(--g)'}}
-function defs(){let x=m();S.def[x.id]={tech:document.querySelector('#tech').value,exec:document.querySelector('#exec').value};save()}
-function run(){let x=m(),q=document.querySelector('#sql').value,f=document.querySelector('#feedback');if(!DB){f.hidden=false;f.className='box bad';f.textContent='Runtime is still loading.';return}try{let z=DB.exec(q),cols=z[0]?.columns||[],rows=z[0]?.values||[],ok=x.valid(q,rows);document.querySelector('#result').innerHTML=cols.length?`<table><thead><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table>`:'<div class="empty">Executed. No table returned.</div>';f.hidden=false;f.className='box '+(ok?'good':'bad');f.textContent=ok?'Evidence pattern detected. Now defend what the result proves.':'Push beyond the first answer. This mission has not met the employer-grade evidence standard yet.';S.attempt[x.id]={q,ok,rows:rows.length,at:new Date().toISOString()};save()}catch(e){f.hidden=false;f.className='box bad';f.textContent='SQL error: '+e.message}}
-function hint(){let x=m(),b=document.querySelector('#hintbox');S.hints[x.id]=(S.hints[x.id]||0)+1;save();b.hidden=false;b.textContent=x.hint[S.mode]||x.hint.night}
-function submit(){defs();let x=m(),a=S.attempt[x.id],d=S.def[x.id]||{},s=document.querySelector('#stat');if(!a?.ok){s.textContent='Not yet: query evidence standard not met.';s.style.color='var(--r)';return}if((d.tech||'').trim().length<80||(d.exec||'').trim().length<60){s.textContent='Not yet: both defenses need more substance.';s.style.color='var(--a)';return}if(!S.done.includes(x.id))S.done.push(x.id);save();s.textContent='Evidence recorded. This now counts toward demonstrated capability.';s.style.color='var(--g)';renderProof()}
-function radius(){let h=Object.values(S.hints||{}).reduce((a,b)=>a+b,0),v=Math.max(18,Math.min(82,Math.round(18+(S.done.length/missions.length)*54-Math.min(8,h*1.2))));document.querySelector('#radius').textContent=v+'%';document.querySelector('#meter').style.width=v+'%'}
-function renderCaps(){document.querySelector('#capabilities').innerHTML=`<div class="page"><div class="eyebrow">CAPABILITY MAP // NOT COURSE PROGRESS</div><h2>What can you do today?</h2><p>The Lab scores demonstrated capability, not hours watched. Technical depth rises while implementation strength gets converted into globally legible evidence.</p></div><div class="grid">${caps.map(c=>`<article class="card"><div class="eyebrow">PHASE ${c[0]} // ${c[4]}</div><span class="score">${c[2]}%</span><h3>${c[1]}</h3><p>${c[3]}</p><div class="tags"><span class="tag ${c[4]=='ACTIVE'?'live':''}">${c[4]}</span></div></article>`).join('')}</div>`}
-function renderProof(){document.querySelector('#proof').innerHTML=`<div class="page"><div class="eyebrow">PROOF LEDGER // DISCLOSED EVIDENCE</div><h2>No invented portfolio credit.</h2><p>L0 drills, L1 simulations, L2 production analogues, and L3 real deployments stay visibly distinct.</p></div><div class="proof">${missions.map(x=>`<article><div class="level">${x.level}</div><div><h3>${x.id} · ${x.title}</h3><p>${x.brief}</p>${S.attempt[x.id]?`<div class="tags"><span class="tag">${S.attempt[x.id].rows||0} rows</span><span class="tag">${S.hints[x.id]||0} hints</span><span class="tag">${x.proof}</span></div>`:''}</div><div class="status">${S.done.includes(x.id)?'EVIDENCED':'NOT YET'}</div></article>`).join('')}</div>`}
-function renderMarket(){document.querySelector('#market').innerHTML=`<div class="page"><div class="eyebrow">EMPLOYER DEMAND // CURRICULUM INPUT</div><h2>The market decides what matters.</h2><p>The mature Lab will ingest live target roles and reweight training demand. The lane is solutions, forward deployment, technical implementation, AI deployment, and transformation — not generic junior engineering.</p></div>${markets.map(x=>`<div class="marketrow"><strong>${x[0]}</strong><span>${x[1]}</span><span>${x[2]}</span></div>`).join('')}`}
-function renderWorld(){let cities=[['TOKYO','29%','Technical depth must rise sharply; Japanese becomes a parallel capability, not decoration.'],['LONDON','43%','Hybrid operator-builder becomes compelling when technical proof is undeniable.'],['NAIROBI','47%','Systems + data + deployment evidence travels well across fintech and logistics.'],['PORT OF SPAIN','58%','Existing operating experience transfers directly; technical proof expands the ceiling.']];let jp=[['要件定義','requirements definition','yōken teigi'],['実装','implementation','jissō'],['障害','incident / failure','shōgai'],['データ連携','data integration','dēta renkei'],['検証','validation','kenshō'],['本番環境','production environment','honban kankyō']];document.querySelector('#world').innerHTML=`<div class="page"><div class="eyebrow">WORLD // DEPLOYABILITY</div><h2>Drop into an unfamiliar system.</h2><p>Global readiness rises when technical proof, implementation judgment, language, and real deployment evidence remove the reasons a company would default to a local candidate.</p></div><div class="grid">${cities.map(c=>`<article class="city"><span class="score">${c[1]}</span><div class="eyebrow">TARGET MARKET</div><h3>${c[0]}</h3><p>${c[2]}</p></article>`).join('')}</div><div class="jp"><div class="eyebrow">TECHNICAL JAPANESE // PARALLEL TRACK</div>${jp.map(j=>`<div class="jprow"><strong>${j[0]}</strong><span>${j[1]}</span><span>${j[2]}</span></div>`).join('')}</div>`}
-document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelector('#'+b.dataset.v).classList.add('active')});let mode=document.querySelector('#mode');mode.value=S.mode;function modeSet(){S.mode=mode.value;document.querySelector('#modecopy').textContent=assist[S.mode];save();renderMission()}mode.onchange=modeSet;document.querySelector('#modecopy').textContent=assist[S.mode];renderMission();renderCaps();renderProof();renderMarket();renderWorld();radius();
-</script></body></html>
+
+const months=[
+ {m:'MONTH 1',theme:'LEARNING TO SEE',weeks:[
+  ['W01','Activation failure','Shadow the full problem-solving cycle; SQL appears just-in-time.'],
+  ['W02','Same client, deeper evidence','Join account, provisioning, product, and commercial evidence.'],
+  ['W03','Capacity mystery','Python/data cleaning; test whether headcount is actually the constraint.'],
+  ['W04','Transfer challenge','New industry; same reasoning without the original cues.']]},
+ {m:'MONTH 2',theme:'SYSTEMS TALK TO SYSTEMS',weeks:[
+  ['W05','Integration breakdown','APIs, JSON, auth, webhooks, logs, data contracts.'],
+  ['W06','Automation decision','Rules vs workflow vs software vs AI; ROI and controls.'],
+  ['W07','Integration challenge','No procedural instructions; diagnose an unfamiliar API failure.'],
+  ['W08','Return to Aster','Earlier decisions age; inspect technical and operational consequences.']]},
+ {m:'MONTH 3',theme:'FROM FIXING TO DESIGNING',weeks:[
+  ['W09','Product adoption','Analytics, interviews, experimentation, product and commercial judgment.'],
+  ['W10','Scaling system','Compute, storage, networking, queues, databases, observability.'],
+  ['W11','Architecture review','AWS/Google lenses; reliability, performance, cost, security tradeoffs.'],
+  ['W12','Build + validate','Deploy a working high-fidelity solution and verify behavior.']]},
+ {m:'MONTH 4',theme:'INTEGRATED OPERATOR',weeks:[
+  ['W13','APAC regional expansion','Singapore-led multi-market problem; latency, data, operations, economics.'],
+  ['W14','Production AI system','Use-case selection, RAG/tools, evals, governance, human escalation.'],
+  ['W15','AI architecture + security','NIST AI RMF, secure AI, application/API controls, cost.'],
+  ['W16','Independent integration review','Full mixed-domain engagement; mentor moves to reviewer.']]},
+ {m:'MONTH 5',theme:'OPERATE UNDER REALITY',weeks:[
+  ['W17','Enterprise transformation','Legacy systems, vendors, incentives, governance, operating model.'],
+  ['W18','Production incident','SLOs, monitoring, rollback, incident command, postmortem.'],
+  ['W19','Reliability follow-through','Error budgets, capacity, failure recurrence, improvement plan.'],
+  ['W20','Constrained-market system','Architecture under different infrastructure and economic assumptions.'],
+  ['W21','Return engagement','A prior organization changed; reassess old decisions under new reality.']]},
+ {m:'MONTH 6',theme:'GLOBAL INDEPENDENT PRACTICE',weeks:[
+  ['W22','Multinational architecture','Multi-region, multi-cloud, build/buy, resilience, lock-in, cost.'],
+  ['W23','Adversarial review board','Defend tradeoffs to engineering, finance, security, product, executives.'],
+  ['W24','Capstone discovery','Unfamiliar company; no prescribed technology or problem statement.'],
+  ['W25','Capstone execution','Build/intervene, validate, operationalize, measure.'],
+  ['W26','Capstone consequence','Reality changes; adapt, review, publish evidence and transfer assessment.']]}
+];
+
+const frameworks=[
+ ['AWS','Well-Architected + immersive learning','Customer conversation → requirements → proposal → build → validate; lenses, tradeoffs, continuous improvement.'],
+ ['Google Cloud','Well-Architected','Vendor-neutral architecture quality across security, reliability, performance, cost, operations, sustainability.'],
+ ['Google SRE','Production reliability','SLOs, error budgets, monitoring, incidents, postmortems, capacity, troubleshooting, automation.'],
+ ['Microsoft','Cloud Adoption Framework','Strategy, planning, readiness, governance, security, management, adoption, organizational operating standards.'],
+ ['OpenAI-style deployment','End-to-end applied work','Discovery, scoping, architecture, build, evaluation, production rollout, adoption, measurable workflow impact.'],
+ ['FinOps','Technology economics','Forecasting, unit economics, architecture placement, optimization, business-value tradeoffs.'],
+ ['NIST','AI Risk Management Framework','Govern → Map → Measure → Manage across AI design, deployment, use, and oversight.'],
+ ['OWASP','ASVS + API Security','Verifiable application/API security controls rather than “security considered” language.'],
+ ['CNCF','Performance-based proof','Hands-on execution as the standard for claiming technical competence.']
+];
+
+const ledgerBase=[
+ ['Problem framing','Assisted','Must distinguish the client’s stated problem from the decision the organization actually needs to make.'],
+ ['Data reasoning','Observed','Will advance only through unfamiliar datasets, defensible queries, and explanation of what the evidence does and does not establish.'],
+ ['SQL','Observed','Execution in the workbench is required; explanation alone does not advance capability.'],
+ ['Product reasoning','Observed','Must connect technical behavior to user behavior and adoption.'],
+ ['Economics','Observed','Must quantify materiality without inventing causality or fake savings.'],
+ ['APIs / integrations','Not yet observed','Introduced when systems begin disagreeing in Month 2.'],
+ ['Cloud architecture','Not yet observed','Introduced when scale, resilience, cost, and system boundaries require architecture decisions.'],
+ ['AI systems','Not yet observed','Introduced as a solution candidate, not a predetermined answer.'],
+ ['Security','Not yet observed','Verified through selected professional controls in later builds.'],
+ ['Reliability / SRE','Not yet observed','Demonstrated in production-style operating and incident scenarios.']
+];
+
+function renderEvidence(){
+ const list=document.getElementById('evidenceList');
+ list.innerHTML=evidence.map(e=>`<button class="evidence ${state.inspected.includes(e.id)?'selected':''}" data-eid="${e.id}">
+   <small>${e.type}</small><strong>${e.title}</strong><span>${e.summary}</span></button>`).join('');
+ list.querySelectorAll('.evidence').forEach(b=>b.addEventListener('click',()=>{
+   const e=evidence.find(x=>x.id===b.dataset.eid);
+   if(!state.inspected.includes(e.id))state.inspected.push(e.id);
+   save();renderEvidence();
+   document.getElementById('inspectPane').innerHTML=`<h4>${e.title}</h4><p>${e.body}</p><div class="mentor"><small>MENTOR NOTE</small><p>${e.lesson}</p></div>`;
+ }));
+}
+function renderRoadmap(){
+ document.getElementById('months').innerHTML=months.map(m=>`<section class="month">
+  <div class="monthhead"><b>${m.m} · ${m.theme}</b><span>${m.weeks.length} WEEKS</span></div>
+  <div class="weeks">${m.weeks.map(w=>`<article class="week"><small>${w[0]}</small><h4>${w[1]}</h4><p>${w[2]}</p></article>`).join('')}</div>
+ </section>`).join('');
+}
+function renderFrameworks(){
+ document.getElementById('frameworks').innerHTML=frameworks.map(f=>`<article class="frame"><small>${f[0]}</small><h3>${f[1]}</h3><p>${f[2]}</p></article>`).join('');
+}
+function renderLedger(){
+ const dynamic=state.decisions.length?[['Decision discipline','Assisted',`${state.decisions.length} decision record(s) captured with problem frame, hypothesis, disproof condition, and next action.`]]:[];
+ const rows=[...ledgerBase,...dynamic];
+ document.getElementById('ledger').innerHTML=rows.map(r=>`<article><div class="level">${r[1]}</div><div><h3>${r[0]}</h3><p>${r[2]}</p></div><div class="status">${r[1]==='Independent'?'PROVEN':'IN PROGRESS'}</div></article>`).join('');
+}
+function switchView(id){
+ state.view=id;save();
+ document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.view)));
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));
+ document.querySelectorAll('.tool').forEach(t=>t.classList.toggle('active',t.id===b.dataset.tool));
+}));
+
+const mm=document.getElementById('mentorMode');
+mm.value=state.mentorMode;
+function updateMentor(){
+ state.mentorMode=mm.value;save();
+ document.getElementById('mentorModeCopy').textContent=mentorCopy[state.mentorMode];
+ document.getElementById('mentorText').textContent=mentorMessages[state.mentorMode];
+}
+mm.addEventListener('change',updateMentor);updateMentor();
+
+['fieldNotes','problemFrame','hypothesis','disproof','nextAction'].forEach(id=>{
+ const el=document.getElementById(id);el.value=state[id]||'';
+ el.addEventListener('input',()=>{state[id]=el.value;save()});
+});
+document.getElementById('recordDecision').addEventListener('click',()=>{
+ const required=['problemFrame','hypothesis','disproof','nextAction'];
+ if(required.some(k=>!(state[k]||'').trim())){
+  document.getElementById('decisionStatus').textContent='Complete all four decision fields before recording.';
+  return;
+ }
+ state.decisions.push({at:new Date().toISOString(),frame:state.problemFrame,hypothesis:state.hypothesis,disproof:state.disproof,next:state.nextAction,evidence:[...state.inspected]});
+ save();renderLedger();
+ document.getElementById('decisionStatus').textContent=`Decision ${state.decisions.length} recorded with ${state.inspected.length} inspected evidence source(s).`;
+});
+
+document.getElementById('skillSql').addEventListener('click',()=>document.getElementById('skillModal').classList.add('open'));
+document.getElementById('closeSkill').addEventListener('click',()=>document.getElementById('skillModal').classList.remove('open'));
+document.getElementById('skillModal').addEventListener('click',e=>{if(e.target.id==='skillModal')e.currentTarget.classList.remove('open')});
+const defaultSql=document.getElementById('sql').value;
+document.getElementById('resetSql').addEventListener('click',()=>{document.getElementById('sql').value=defaultSql;document.getElementById('sqlOutput').innerHTML='<div class="empty">Query reset.</div>'});
+
+let DB=null;
+async function initDB(){
+ try{
+   const SQL=await initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/${f}`});
+   DB=new SQL.Database();
+   DB.run(`CREATE TABLE accounts(
+     account_id INTEGER, cohort_week TEXT, segment TEXT, region TEXT, arr INTEGER,
+     activated_14d INTEGER, provisioning_days INTEGER, training_days INTEGER, mapping_rework INTEGER
+   );`);
+   const rows=[
+    [1,'W-6','Enterprise','US',420000,1,4,2,0],[2,'W-6','Mid-market','US',180000,1,3,3,0],[3,'W-6','Enterprise','UK',380000,1,5,2,1],
+    [4,'W-5','Enterprise','US',510000,1,5,3,0],[5,'W-5','Mid-market','UK',160000,1,4,2,0],[6,'W-5','Mid-market','US',210000,1,5,3,1],
+    [7,'W-4','Enterprise','US',620000,0,16,3,3],[8,'W-4','Mid-market','US',170000,1,6,3,1],[9,'W-4','Enterprise','UK',450000,0,18,2,4],
+    [10,'W-3','Enterprise','US',560000,0,19,3,5],[11,'W-3','Mid-market','UK',190000,1,7,2,1],[12,'W-3','Mid-market','US',220000,1,8,3,1],
+    [13,'W-2','Enterprise','UK',490000,0,21,3,5],[14,'W-2','Mid-market','US',175000,1,8,2,1],[15,'W-2','Enterprise','US',690000,0,23,4,6],
+    [16,'W-1','Enterprise','US',720000,0,24,3,7],[17,'W-1','Mid-market','UK',200000,1,9,3,1],[18,'W-1','Enterprise','UK',540000,0,22,2,6]
+   ];
+   const stmt=DB.prepare('INSERT INTO accounts VALUES (?,?,?,?,?,?,?,?,?)');
+   rows.forEach(r=>stmt.run(r));stmt.free();
+ }catch(err){
+   document.getElementById('sqlOutput').innerHTML=`<div class="empty">Workbench unavailable: ${String(err)}</div>`;
+ }
+}
+function resultTable(cols,vals){
+ if(!cols||!vals)return '<div class="empty">No rows returned.</div>';
+ return `<table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${vals.map(r=>`<tr>${r.map(v=>`<td>${v===null?'NULL':v}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+}
+document.getElementById('runSql').addEventListener('click',()=>{
+ if(!DB){document.getElementById('sqlOutput').innerHTML='<div class="empty">Database still initializing.</div>';return}
+ try{
+   const res=DB.exec(document.getElementById('sql').value);
+   document.getElementById('sqlOutput').innerHTML=res.length?resultTable(res[0].columns,res[0].values):'<div class="empty">Query executed. No result set.</div>';
+ }catch(err){document.getElementById('sqlOutput').innerHTML=`<div class="empty" style="color:#d6a0a0">${String(err)}</div>`}
+});
+
+renderEvidence();renderRoadmap();renderFrameworks();renderLedger();switchView(state.view||'engagement');initDB();
+</script>
+</body>
+</html>
