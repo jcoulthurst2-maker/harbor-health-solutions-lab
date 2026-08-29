@@ -1,159 +1,87 @@
 # Solutions Lab
 
-> A 26-week global technical-business apprenticeship built around real engagements, professional standards, hands-on execution, and progressively independent judgment.
+> A 26-week global technical-business apprenticeship built around complex engagements, hands-on execution, and progressively independent judgment.
 
-The Solutions Lab is designed to develop one core capability:
+The Solutions Lab is designed to build one core capability:
 
-**enter an unfamiliar organization, understand what matters, establish reality, diagnose the right problem, work across business and technology, design and build an appropriate intervention, operate it, and prove whether value was created.**
+**Enter an unfamiliar organization, establish what is true, diagnose the right problem, work across business and technology, make a defensible intervention, and prove what changed.**
 
-The Lab is not organized around becoming an implementation specialist, cloud engineer, data analyst, or AI specialist. Those capabilities appear inside a broader professional formation: a globally deployable technical-business problem solver.
+It is not a SQL course, cloud course, AI course, or implementation bootcamp. Those capabilities are learned inside realistic problems where the correct answer may involve data, code, architecture, product, operations, economics, organizational change — or no new technology at all.
 
-**Public explanation:** https://www.jadencoulthurst.com/solutions-lab.html  
+**Public overview:** https://www.jadencoulthurst.com/solutions-lab.html  
 **Interactive Lab:** https://www.jadencoulthurst.com/lab/train
 
 ---
 
-## Core doctrine
+## How it works
 
-- Real problems over toy exercises.
-- Mastery over completion.
-- Guidance decreases as capability increases.
-- Problems drive capability acquisition, not the reverse.
-- The client’s diagnosis is evidence, not truth.
-- Technical success is insufficient without value, adoption, reliability, security, and economics.
-- No technical capability reaches **Independent** through explanation alone.
-- Vendor-specific tools are learned, but portable concepts are assessed.
-- Professional reviews produce improvement actions, not decorative scores.
-- Earlier organizations return later so decisions can be judged over time.
+The learner experiences **engagements, not lessons**.
 
----
+Each engagement includes an organization, stakeholders, systems, constraints, incomplete evidence, and a business outcome that matters. The Lab then introduces technical training only when the work requires it.
 
-## The professional lifecycle
+The operating loop is:
 
-**Discover → Frame → Establish Reality → Diagnose → Generate Options → Evaluate Tradeoffs → Design → Build / Intervene → Validate → Deploy / Operationalize → Observe → Measure Value → Improve → Transfer**
+**Discover → Establish Reality → Diagnose → Design → Act → Observe → Improve → Transfer**
 
-Day 1 exposes the whole chessboard. Ownership expands over time.
+Early work includes heavy expert guidance. Over time, the mentor shifts from demonstration to questioning, review, and eventually silence.
+
+Earlier organizations can return later, which means decisions are judged by what happens after the initial fix — not just whether an exercise was completed.
 
 ---
 
-## Apprenticeship progression
+## What the Lab develops
 
-### Weeks 1–4 — Observe + Assist
-Work beside the master practitioner. The mentor narrates attention, demonstrates problem framing, and opens just-in-time technical skill chambers when a capability is new.
+The capability map underneath the engagements includes:
 
-### Weeks 5–9 — Guided Operator
-Choose more of the investigation path. The mentor asks questions and challenges assumptions instead of prescribing steps.
-
-### Weeks 10–14 — Co-lead
-Frame problems, propose interventions, and defend technical and business tradeoffs.
-
-### Weeks 15–19 — Lead
-Own the engagement path. The mentor becomes primarily a reviewer.
-
-### Weeks 20–23 — Independent Practice
-Operate with minimal support and request consultation only when useful.
-
-### Weeks 24–26 — Capstone Assessment
-No teaching during primary execution. Professional review follows the work.
-
----
-
-## Six-month operating map
-
-### Month 1 — Learning to See
-Aster Systems activation failure, deeper evidence, a capacity mystery, and a transfer challenge. SQL and Python appear because the problems require them.
-
-### Month 2 — Systems Talk to Systems
-Integration breakdowns, APIs, authentication, webhooks, logs, automation choices, and a return to an earlier client to inspect how decisions aged.
-
-### Month 3 — From Fixing to Designing
-Product adoption, scaling systems, cloud architecture, architecture review, and build/validation work.
-
-### Month 4 — Integrated Operator
-APAC regional expansion, production AI, AI architecture/security, and an independent mixed-domain review. This is the major career inflection point.
-
-### Month 5 — Operate Under Reality
-Enterprise transformation, production incidents, SRE/reliability follow-through, constrained-market architecture, and another return engagement.
-
-### Month 6 — Global Independent Practice
-Multinational architecture, adversarial review boards, and a three-week capstone where the learner is not told which technology or even which diagnosis to use.
-
-Full curriculum: [`docs/CURRICULUM_V2.md`](docs/CURRICULUM_V2.md)
-
----
-
-## Four engines
-
-### Engagement Engine
-The operating world: organization, market, users, stakeholders, systems, data, economics, constraints, events, and changing conditions.
-
-### Mentor Engine
-A composite master-practitioner model that demonstrates early, then moves through questioning, review, and eventual silence.
-
-### Lens Engine
-Selects the professional standards relevant to the engagement instead of forcing every framework onto every problem.
-
-### Evidence Engine
-Tracks what was actually demonstrated through queries, code, architecture, decisions, financial models, reviews, incident handling, adoption, and transfer.
-
----
-
-## External legitimacy layer
-
-The Lab is independent and is **not affiliated with or endorsed by** the organizations below. Their public frameworks are used as inspectable reference standards.
-
-- **AWS** — Well-Architected and immersive problem/build/validation learning patterns
-- **Google Cloud** — Well-Architected and multi-cloud architecture reasoning
-- **Google SRE** — SLOs, error budgets, observability, incidents, postmortems, production reliability
-- **Microsoft** — Cloud Adoption Framework and performance-based workplace learning
-- **OpenAI-style applied deployment work** — discovery through production adoption and measurable workflow impact
-- **FinOps** — technology economics, forecasting, unit economics, value tradeoffs
-- **NIST AI RMF** — Govern → Map → Measure → Manage whenever AI appears
-- **OWASP** — ASVS and API security verification
-- **CNCF** — performance-based proof of technical competence
-
-Assessment methodology: [`docs/ASSESSMENT_METHODOLOGY_V2.md`](docs/ASSESSMENT_METHODOLOGY_V2.md)
-
----
-
-## Hidden capability map
-
-The learner experiences engagements rather than a syllabus. Underneath, the Lab tracks:
-
-- Problem framing
-- Systems thinking
-- Data reasoning
-- SQL
-- Python
-- APIs / integrations
-- Software reasoning
-- Cloud infrastructure
-- Architecture
-- AI systems
-- Security
+- Problem framing and systems thinking
+- SQL, Python, and data reasoning
+- APIs and integrations
+- Cloud infrastructure and architecture
+- AI systems, evaluation, security, and governance
 - Reliability / SRE
 - Technology economics
-- Product reasoning
+- Product reasoning and adoption
 - Organizational execution
 - Executive and technical communication
 
----
-
-## Evidence levels
-
-- **Observed** — has watched expert execution and understands its purpose
-- **Assisted** — can perform with direct support
-- **Guided** — can perform with questions/review but without prescribed steps
-- **Independent** — can execute without instruction in a known problem class
-- **Transferable** — can execute in an unfamiliar domain or system
-- **Adaptive** — can preserve sound judgment when requirements, constraints, or reality change
-
-Graduation aims for **Independent + Transferable** across the core capability set, with selected areas reaching **Adaptive**.
+The goal is breadth with usable depth: enough technical fluency to investigate, build, challenge assumptions, communicate across functions, and operate effectively inside unfamiliar systems.
 
 ---
 
-## Integrity standard
+## What counts as good
 
-A fictional or simulated engagement is never presented as a real client deployment. Modeled financial or operational consequences remain labeled as modeled. Public capability claims should link to artifacts whenever possible.
+The Lab does not invent its standards in isolation. Reviews use public professional frameworks as reference lenses, including:
 
-**Status: active rebuild. The v2 branch replaces skill-first coursework with engagement-first apprenticeship.**
+- AWS Well-Architected
+- Google Cloud Well-Architected
+- Google SRE
+- Microsoft Cloud Adoption Framework
+- FinOps
+- NIST AI Risk Management Framework
+- OWASP application and API security guidance
+- CNCF-style performance-based technical practice
+
+These frameworks are used to evaluate architecture, reliability, security, economics, adoption, AI risk, and hands-on execution where relevant.
+
+The Solutions Lab is independent and is **not affiliated with or endorsed by** these organizations.
+
+---
+
+## Evidence over completion
+
+Progress is based on demonstrated work: queries, code, architecture, investigations, decisions, financial models, incident handling, validation, communication, adoption, and transfer into unfamiliar contexts.
+
+A capability does not become independent because it was explained correctly once.
+
+**Real fluency > checklist completion.**
+
+---
+
+## Integrity
+
+Simulated engagements are always identified as simulated. Modeled financial or operational outcomes remain labeled as modeled. Public capability claims should be supported by inspectable artifacts whenever possible.
+
+Deeper documentation:
+
+- [`docs/CURRICULUM_V2.md`](docs/CURRICULUM_V2.md)
+- [`docs/ASSESSMENT_METHODOLOGY_V2.md`](docs/ASSESSMENT_METHODOLOGY_V2.md)
