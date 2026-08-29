@@ -1,0 +1,51 @@
+name: Validate Solutions Lab
+
+on:
+  pull_request:
+    paths:
+      - 'train/**'
+      - 'docs/**'
+      - 'README.md'
+      - '.github/workflows/validate-lab.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'train/**'
+      - 'docs/**'
+      - 'README.md'
+      - '.github/workflows/validate-lab.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check JavaScript syntax
+        run: |
+          node --check train/scenarios.js
+          node --check train/app.js
+      - name: Check required runtime files
+        run: |
+          test -f train/index.html
+          test -f train/app.css
+          test -f train/app.js
+          test -f train/scenarios.js
+          grep -q '26-WEEK APPRENTICESHIP' train/index.html
+          grep -q 'window.LAB_SCENARIOS' train/scenarios.js
+      - name: Parse HTML
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class Parser(HTMLParser):
+              pass
+          text=Path('train/index.html').read_text()
+          Parser().feed(text)
+          assert 'app.js' in text
+          assert 'scenarios.js' in text
+          assert 'app.css' in text
+          print('HTML parse OK')
+          PY
