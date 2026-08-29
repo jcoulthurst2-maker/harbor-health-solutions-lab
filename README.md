@@ -1,110 +1,159 @@
 # Solutions Lab
 
-> An 8-month technical apprenticeship across SQL, Python, APIs, data systems, cloud architecture, AI systems, and implementation.
+> A 26-week global technical-business apprenticeship built around real engagements, professional standards, hands-on execution, and progressively independent judgment.
 
-The Solutions Lab is a working environment for building a specific kind of technical capability:
+The Solutions Lab is designed to develop one core capability:
 
-**enter an unfamiliar system, understand the operating problem, interrogate the data, work across the underlying technology, build what is needed, and carry the change through implementation and adoption.**
+**enter an unfamiliar organization, understand what matters, establish reality, diagnose the right problem, work across business and technology, design and build an appropriate intervention, operate it, and prove whether value was created.**
 
-The work sits between engineering, implementation, operations, data, AI, users, and business outcomes.
+The Lab is not organized around becoming an implementation specialist, cloud engineer, data analyst, or AI specialist. Those capabilities appear inside a broader professional formation: a globally deployable technical-business problem solver.
 
 **Public explanation:** https://www.jadencoulthurst.com/solutions-lab.html  
-**Interactive Lab:** https://www.jadencoulthurst.com/lab
+**Interactive Lab:** https://www.jadencoulthurst.com/lab/train
 
 ---
 
-## The lane
+## Core doctrine
 
-- Solutions Engineering
-- Technical Implementation
-- Forward Deployed work
-- AI Solutions / AI Implementation
-- Integration / Automation
-- Technical Transformation
-
-The focus is the combination of **technical capability + implementation judgment + operating fluency + communication + measurable outcomes**.
-
----
-
-## Curriculum
-
-### 01 — SQL + Data · Weeks 1–8
-**Enterprise Deployment Rescue**
-
-A strategic SaaS implementation is late across multiple business units and approaching a renewal decision. Product, implementation, and the customer disagree about the cause.
-
-The work: SQL, joins, metric definitions, implementation health, integration evidence, support-ticket analysis, adoption data, and a recovery plan.
-
-### 02 — Python + APIs · Weeks 9–14
-**Payments API Reliability**
-
-A partner API changes and transaction failures double.
-
-The work: Python, JSON, validation, normalization, REST concepts, retries, idempotency, quarantine, failure handling, and observability.
-
-### 03 — Data Systems · Weeks 15–19
-**Enterprise Migration Cutover**
-
-A legacy CRM and target platform disagree about customer identity, status, and ownership.
-
-The work: canonical schemas, identity mapping, pipelines, lineage, reconciliation, exception handling, cutover gates, rollback, and sign-off.
-
-### 04 — Cloud + Architecture · Weeks 20–24
-**Regional Logistics Platform**
-
-A synchronous carrier dependency is creating cascading dispatch delays across a logistics operation.
-
-The work: cloud responsibilities, queues, workers, retries, dead-letter handling, logs, metrics, traces, fallback, cost, and recovery ownership.
-
-### 05 — AI Systems · Weeks 25–28
-**Production AI Rollout**
-
-The AI demo performs well, but rare failures are expensive and users do not trust it.
-
-The work: task definition, retrieval evaluation, failure sets, abstention, tool boundaries, human approval, observability, adoption, and rollback.
-
-### 06 — Implementation · Weeks 29–32
-**Enterprise Go-Live**
-
-A multi-region deployment is technically live at different levels of stability and adoption.
-
-The work: workflow reconstruction, requirements, UAT, readiness, support, go-live, adoption, containment triggers, executive communication, and value verification.
+- Real problems over toy exercises.
+- Mastery over completion.
+- Guidance decreases as capability increases.
+- Problems drive capability acquisition, not the reverse.
+- The client’s diagnosis is evidence, not truth.
+- Technical success is insufficient without value, adoption, reliability, security, and economics.
+- No technical capability reaches **Independent** through explanation alone.
+- Vendor-specific tools are learned, but portable concepts are assessed.
+- Professional reviews produce improvement actions, not decorative scores.
+- Earlier organizations return later so decisions can be judged over time.
 
 ---
 
-## Training model
+## The professional lifecycle
 
-The interactive Lab follows a consistent progression:
+**Discover → Frame → Establish Reality → Diagnose → Generate Options → Evaluate Tradeoffs → Design → Build / Intervene → Validate → Deploy / Operationalize → Observe → Measure Value → Improve → Transfer**
 
-**Learn → Apply → Diagnose → Build → Defend → Prove**
-
-Early work is guided. Guidance decreases as the curriculum progresses. The main screen centers the **current task**, with supporting context for the current phase, evidence level, and what comes next.
-
-The objective is to steadily expand the amount of a technical deployment I can understand and own independently.
+Day 1 exposes the whole chessboard. Ownership expands over time.
 
 ---
 
-## Evidence standard
+## Apprenticeship progression
 
-The Lab separates practice from proof.
+### Weeks 1–4 — Observe + Assist
+Work beside the master practitioner. The mentor narrates attention, demonstrates problem framing, and opens just-in-time technical skill chambers when a capability is new.
 
-- **L0 — Drill:** contained technical exercise
-- **L1 — Simulation:** realistic operating problem and constraints
-- **L2 — Production analogue:** authentic technical patterns, failure handling, architecture, and documentation
-- **L3 — External deployment:** real user, real workflow, measurable outcome
+### Weeks 5–9 — Guided Operator
+Choose more of the investigation path. The mentor asks questions and challenges assumptions instead of prescribing steps.
 
-A fictional scenario is never presented as a real client deployment.
+### Weeks 10–14 — Co-lead
+Frame problems, propose interventions, and defend technical and business tradeoffs.
 
-The strongest evidence follows the full arc of the work:
+### Weeks 15–19 — Lead
+Own the engagement path. The mentor becomes primarily a reviewer.
 
-**problem → discovery → system map → architecture → code → implementation → failure handling → adoption → measurable result → technical defense → executive defense**
+### Weeks 20–23 — Independent Practice
+Operate with minimal support and request consultation only when useful.
+
+### Weeks 24–26 — Capstone Assessment
+No teaching during primary execution. Professional review follows the work.
 
 ---
 
-## What completion means
+## Six-month operating map
 
-By the end of the apprenticeship, the body of work should show a progression from guided technical learning to independent ownership of increasingly complex systems and deployments.
+### Month 1 — Learning to See
+Aster Systems activation failure, deeper evidence, a capacity mystery, and a transfer challenge. SQL and Python appear because the problems require them.
 
-The standard is simple: **understand the problem, work with the technology, make the system better, and be able to explain what changed and why.**
+### Month 2 — Systems Talk to Systems
+Integration breakdowns, APIs, authentication, webhooks, logs, automation choices, and a return to an earlier client to inspect how decisions aged.
 
-**Status: active build. Evidence is added only after the underlying work has been completed.**
+### Month 3 — From Fixing to Designing
+Product adoption, scaling systems, cloud architecture, architecture review, and build/validation work.
+
+### Month 4 — Integrated Operator
+APAC regional expansion, production AI, AI architecture/security, and an independent mixed-domain review. This is the major career inflection point.
+
+### Month 5 — Operate Under Reality
+Enterprise transformation, production incidents, SRE/reliability follow-through, constrained-market architecture, and another return engagement.
+
+### Month 6 — Global Independent Practice
+Multinational architecture, adversarial review boards, and a three-week capstone where the learner is not told which technology or even which diagnosis to use.
+
+Full curriculum: [`docs/CURRICULUM_V2.md`](docs/CURRICULUM_V2.md)
+
+---
+
+## Four engines
+
+### Engagement Engine
+The operating world: organization, market, users, stakeholders, systems, data, economics, constraints, events, and changing conditions.
+
+### Mentor Engine
+A composite master-practitioner model that demonstrates early, then moves through questioning, review, and eventual silence.
+
+### Lens Engine
+Selects the professional standards relevant to the engagement instead of forcing every framework onto every problem.
+
+### Evidence Engine
+Tracks what was actually demonstrated through queries, code, architecture, decisions, financial models, reviews, incident handling, adoption, and transfer.
+
+---
+
+## External legitimacy layer
+
+The Lab is independent and is **not affiliated with or endorsed by** the organizations below. Their public frameworks are used as inspectable reference standards.
+
+- **AWS** — Well-Architected and immersive problem/build/validation learning patterns
+- **Google Cloud** — Well-Architected and multi-cloud architecture reasoning
+- **Google SRE** — SLOs, error budgets, observability, incidents, postmortems, production reliability
+- **Microsoft** — Cloud Adoption Framework and performance-based workplace learning
+- **OpenAI-style applied deployment work** — discovery through production adoption and measurable workflow impact
+- **FinOps** — technology economics, forecasting, unit economics, value tradeoffs
+- **NIST AI RMF** — Govern → Map → Measure → Manage whenever AI appears
+- **OWASP** — ASVS and API security verification
+- **CNCF** — performance-based proof of technical competence
+
+Assessment methodology: [`docs/ASSESSMENT_METHODOLOGY_V2.md`](docs/ASSESSMENT_METHODOLOGY_V2.md)
+
+---
+
+## Hidden capability map
+
+The learner experiences engagements rather than a syllabus. Underneath, the Lab tracks:
+
+- Problem framing
+- Systems thinking
+- Data reasoning
+- SQL
+- Python
+- APIs / integrations
+- Software reasoning
+- Cloud infrastructure
+- Architecture
+- AI systems
+- Security
+- Reliability / SRE
+- Technology economics
+- Product reasoning
+- Organizational execution
+- Executive and technical communication
+
+---
+
+## Evidence levels
+
+- **Observed** — has watched expert execution and understands its purpose
+- **Assisted** — can perform with direct support
+- **Guided** — can perform with questions/review but without prescribed steps
+- **Independent** — can execute without instruction in a known problem class
+- **Transferable** — can execute in an unfamiliar domain or system
+- **Adaptive** — can preserve sound judgment when requirements, constraints, or reality change
+
+Graduation aims for **Independent + Transferable** across the core capability set, with selected areas reaching **Adaptive**.
+
+---
+
+## Integrity standard
+
+A fictional or simulated engagement is never presented as a real client deployment. Modeled financial or operational consequences remain labeled as modeled. Public capability claims should link to artifacts whenever possible.
+
+**Status: active rebuild. The v2 branch replaces skill-first coursework with engagement-first apprenticeship.**
