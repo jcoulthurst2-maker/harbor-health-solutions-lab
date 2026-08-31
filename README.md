@@ -1,56 +1,55 @@
 # Solutions Lab
 
-> A 26-week global technical-business apprenticeship built around complex engagements, hands-on execution, and progressively independent judgment.
+> A production interactive apprenticeship for building technical judgment through realistic enterprise problems.
 
-The Solutions Lab is designed to build one core capability:
+Solutions Lab is designed around one core capability:
 
-**Enter an unfamiliar organization, establish what is true, diagnose the right problem, work across business and technology, make a defensible intervention, and prove what changed.**
+**Enter an unfamiliar environment, establish what is true, diagnose the right problem, work across business and technology, build a defensible solution, and verify what changed.**
 
-It is not a SQL course, cloud course, AI course, or implementation bootcamp. Those capabilities are learned inside realistic problems where the correct answer may involve data, code, architecture, product, operations, economics, organizational change — or no new technology at all.
+It is not organized as a sequence of standalone SQL, cloud, AI, or implementation courses. Technical skills are developed inside increasingly complex engagements where the right answer may require data analysis, software, integrations, architecture, automation, AI, operational redesign, or a combination of them.
 
 **Public overview:** https://www.jadencoulthurst.com/solutions-lab.html  
 **Interactive Lab:** https://www.jadencoulthurst.com/lab/train
 
 ---
 
-## How it works
+## How the Lab works
 
-The learner experiences **engagements, not lessons**.
+The environment is built around **engagements, not lessons**.
 
-Each engagement includes an organization, stakeholders, systems, constraints, incomplete evidence, and a business outcome that matters. The Lab then introduces technical training only when the work requires it.
+Each engagement introduces an organization, operating context, stakeholders, systems, constraints, incomplete evidence, and a meaningful business outcome. The work becomes progressively less structured as technical depth and judgment increase.
 
 The operating loop is:
 
-**Discover → Establish Reality → Diagnose → Design → Act → Observe → Improve → Transfer**
+**Discover → Establish Reality → Diagnose → Design → Build → Test → Deploy → Verify → Improve**
 
-Early work includes heavy expert guidance. Over time, the mentor shifts from demonstration to questioning, review, and eventually silence.
-
-Earlier organizations can return later, which means decisions are judged by what happens after the initial fix — not just whether an exercise was completed.
+Earlier environments can return under new conditions, so decisions are evaluated by what happens after an intervention — not simply whether an exercise was completed.
 
 ---
 
-## What the Lab develops
+## Technical scope
 
-The capability map underneath the engagements includes:
+Engagements can require work across:
 
-- Problem framing and systems thinking
 - SQL, Python, and data reasoning
-- APIs and integrations
+- APIs and systems integration
+- Software and workflow automation
 - Cloud infrastructure and architecture
 - AI systems, evaluation, security, and governance
-- Reliability / SRE
+- Reliability and incident reasoning
 - Technology economics
-- Product reasoning and adoption
-- Organizational execution
+- Product adoption and organizational execution
 - Executive and technical communication
 
-The goal is breadth with usable depth: enough technical fluency to investigate, build, challenge assumptions, communicate across functions, and operate effectively inside unfamiliar systems.
+The objective is usable technical breadth with increasing depth: enough to investigate unfamiliar systems, build working solutions, challenge assumptions, communicate across functions, and make sound implementation decisions.
 
 ---
 
-## What counts as good
+## Evaluation
 
-The Lab does not invent its standards in isolation. Reviews use public professional frameworks as reference lenses, including:
+Progress is based on demonstrated work rather than content completion. Evidence can include queries, code, architecture, integrations, investigations, deployed solutions, validation, technical explanations, financial reasoning, incident handling, and transfer into unfamiliar contexts.
+
+Public professional frameworks are used as reference lenses where relevant, including:
 
 - AWS Well-Architected
 - Google Cloud Well-Architected
@@ -59,27 +58,22 @@ The Lab does not invent its standards in isolation. Reviews use public professio
 - FinOps
 - NIST AI Risk Management Framework
 - OWASP application and API security guidance
-- CNCF-style performance-based technical practice
 
-These frameworks are used to evaluate architecture, reliability, security, economics, adoption, AI risk, and hands-on execution where relevant.
-
-The Solutions Lab is independent and is **not affiliated with or endorsed by** these organizations.
+Solutions Lab is independent and is **not affiliated with or endorsed by** these organizations.
 
 ---
 
-## Evidence over completion
+## Standard
 
-Progress is based on demonstrated work: queries, code, architecture, investigations, decisions, financial models, incident handling, validation, communication, adoption, and transfer into unfamiliar contexts.
+A capability is not considered mastered because it was explained correctly once. The standard is the ability to understand the problem, produce working evidence, explain the reasoning, and transfer the capability when the environment changes.
 
-A capability does not become independent because it was explained correctly once.
-
-**Real fluency > checklist completion.**
+**Working systems and demonstrated judgment > checklist completion.**
 
 ---
 
 ## Integrity
 
-Simulated engagements are always identified as simulated. Modeled financial or operational outcomes remain labeled as modeled. Public capability claims should be supported by inspectable artifacts whenever possible.
+Simulated engagements are identified as simulated. Modeled financial or operational outcomes remain labeled as modeled. Public capability claims should be supported by inspectable evidence whenever possible.
 
 Deeper documentation:
 
