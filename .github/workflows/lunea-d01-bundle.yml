@@ -13,7 +13,7 @@ permissions:
 jobs:
   one-bundle:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,7 +27,7 @@ jobs:
           mkdir -p lunea-bundle "$RUNNER_TEMP/lunea-bundle"
           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$RUNNER_TEMP/lunea-bundle/private.pem" >/dev/null 2>&1
           openssl pkey -in "$RUNNER_TEMP/lunea-bundle/private.pem" -pubout -out lunea-bundle/recipient-public.pem >/dev/null 2>&1
-          printf '{"schema":"lunea-one-bundle-v2","run_id":"%s"}\n' "$GITHUB_RUN_ID" > lunea-bundle/request.json
+          printf '{"schema":"lunea-one-bundle-v3","run_id":"%s"}\n' "$GITHUB_RUN_ID" > lunea-bundle/request.json
           git config user.name lunea-bundle-bot
           git config user.email lunea-bundle@users.noreply.github.com
           git add lunea-bundle/recipient-public.pem lunea-bundle/request.json
@@ -38,7 +38,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for attempt in $(seq 1 100); do
+          for attempt in $(seq 1 120); do
             git fetch origin lunea-d01-execution-locus --quiet
             git checkout -q origin/lunea-d01-execution-locus -- lunea-bundle 2>/dev/null || true
             if [[ -f lunea-bundle/envelope.json && -f lunea-bundle/body.tar.gz.enc.b64 && -f lunea-bundle/key.enc.b64 ]]; then
@@ -77,14 +77,15 @@ jobs:
           if files != set(expected): raise SystemExit('exact Body file set mismatch')
           if set(m.get('files',{})) != set(expected): raise SystemExit('manifest file set mismatch')
           for name,git_sha in expected.items():
-              b=(root/name).read_bytes()
-              sha256=hashlib.sha256(b).hexdigest()
+              b=(root/name).read_bytes(); item=m['files'][name]
+              if hashlib.sha256(b).hexdigest()!=item.get('sha256'): raise SystemExit('sha256 mismatch: '+name)
               blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-              item=m['files'][name]
-              if item.get('sha256') != sha256: raise SystemExit('sha256 mismatch: '+name)
-              if item.get('git_blob_sha') != git_sha or blob != git_sha: raise SystemExit('Git blob mismatch: '+name)
+              if item.get('git_blob_sha')!=git_sha or blob!=git_sha: raise SystemExit('Git blob mismatch: '+name)
           print(json.dumps({'private_body_acquired':True,'body_file_count':7,'manifest_verified':True,'git_blob_identities_verified':True,'readable_body_published':False},sort_keys=True))
           PY
+
+      - name: Acquire real temporary Habitat and preflight Womb membrane
+        run: python3 lunea-execution/cloudflare_preflight.py "$RUNNER_TEMP/lunea-body"
 
       - name: Destroy ephemeral material
         if: always()
