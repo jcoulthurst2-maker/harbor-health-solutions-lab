@@ -22,14 +22,68 @@ jobs:
           set -euo pipefail
           echo '{"runner_attached":true,"locus":"public-github-hosted"}'
 
-      - name: Probe Cloudflare temporary-preview challenge API
+      - name: Acquire disposable Cloudflare preview account
         shell: bash
         run: |
           set -euo pipefail
-          RESPONSE="$(curl --fail-with-body --silent --show-error \
-            -X POST \
-            -H 'accept: application/json' \
-            -H 'content-type: application/json' \
-            --data '{}' \
-            https://api.cloudflare.com/client/v4/provisioning/previews/challenge)"
-          python3 -c 'import json,sys; p=json.loads(sys.stdin.read()); assert p.get("success") is True; r=p.get("result") or {}; assert r.get("challengeToken"); assert r.get("seed"); assert int(r.get("k") or 0)>0; assert int(r.get("g") or 0)>0; print(json.dumps({"cloudflare_preview_challenge_reachable":True,"challenge_shape_valid":True,"k":int(r["k"]),"g":int(r["g"])}, sort_keys=True))' <<< "$RESPONSE"
+          python3 - <<'PY'
+          import base64, hashlib, json, urllib.request
+          from datetime import datetime, timezone
+
+          API='https://api.cloudflare.com/client/v4'
+          TERMS='https://www.cloudflare.com/terms/'
+          PRIVACY='https://www.cloudflare.com/privacypolicy/'
+          MAX=64_000_000
+
+          def post(path, payload):
+              data=json.dumps(payload, separators=(',',':')).encode()
+              req=urllib.request.Request(API+path, data=data, method='POST', headers={
+                  'accept':'application/json','content-type':'application/json'
+              })
+              with urllib.request.urlopen(req, timeout=90) as r:
+                  out=json.loads(r.read().decode())
+              if out.get('success') is not True:
+                  raise SystemExit('provider rejected '+path+': '+repr(out.get('errors')))
+              return out['result']
+
+          ch=post('/provisioning/previews/challenge', {})
+          token=str(ch.get('challengeToken') or '')
+          seed_s=str(ch.get('seed') or '')
+          k=int(ch.get('k') or 0); g=int(ch.get('g') or 0)
+          if not token or k<=0 or g<=0 or k*g>MAX:
+              raise SystemExit('challenge bounds invalid')
+          seed=base64.urlsafe_b64decode(seed_s + '='*((4-len(seed_s)%4)%4))
+          if len(seed)!=32:
+              raise SystemExit('challenge seed length invalid')
+          current=hashlib.sha256(seed).digest(); checkpoints=[current]
+          for _ in range(k):
+              for _ in range(g):
+                  current=hashlib.sha256(current).digest()
+              checkpoints.append(current)
+
+          acct=post('/provisioning/previews', {
+              'termsOfService': TERMS,
+              'privacyPolicy': PRIVACY,
+              'acceptTermsOfService':'yes',
+              'challengeToken': token,
+              'solution': {'checkpoints': base64.b64encode(b''.join(checkpoints)).decode('ascii')},
+          })
+          account=acct.get('account') or {}; claim=acct.get('claim') or {}
+          account_id=str(account.get('id') or '')
+          api_token=str(account.get('apiToken') or '')
+          claim_url=str(claim.get('url') or '')
+          if not account_id or not api_token or not claim_url.startswith('https://dash.cloudflare.com/claim-preview'):
+              raise SystemExit('temporary account material incomplete')
+
+          # Deliberately emit no bearer token, claim token, claim URL, or account id.
+          print(json.dumps({
+              'runner_attached': True,
+              'cloudflare_preview_challenge_reachable': True,
+              'proof_of_work_solved': True,
+              'temporary_account_acquired': True,
+              'terms_boundary_authorized': True,
+              'provider_credentials_retained': False,
+              'account_expires_at_present': bool(account.get('expiresAt')),
+              'claim_expires_at_present': bool(claim.get('expiresAt')),
+          }, sort_keys=True))
+          PY
