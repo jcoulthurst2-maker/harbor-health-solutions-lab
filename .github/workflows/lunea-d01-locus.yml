@@ -58,7 +58,7 @@ jobs:
             if [[ -f lunea-handoff/body-ticket-manifest.json ]]; then
               ACTUAL_RUN="$(python3 -c 'import json; print(json.load(open("lunea-handoff/body-ticket-manifest.json")).get("run_id",""))')"
               if [[ "$ACTUAL_RUN" == "$EXPECTED_RUN" ]]; then
-                python3 - <<'PY'
+                if python3 - <<'PY'
           import json, pathlib
           root=pathlib.Path('lunea-handoff')
           m=json.load(open(root/'body-ticket-manifest.json'))
@@ -66,12 +66,13 @@ jobs:
           required={'cloudflare_womb_v2.py','cloudflare_entry.py','genesis.py','witness.py','womb_protocol.py','wake_protocol.py','alarm_ffi.py'}
           if set(names) != required or len(names) != 7:
               raise SystemExit('ticket manifest does not name the exact Frontier-1 Body')
-          for name in names:
-              if not (root/f'{name}.url.enc.b64').is_file():
-                  raise SystemExit(2)
+          if any(not (root/f'{name}.url.enc.b64').is_file() for name in names):
+              raise SystemExit(2)
           PY
-                rc=$?
-                if [[ "$rc" -eq 0 ]]; then exit 0; fi
+                then
+                  echo "complete encrypted Body ticket set received for run $EXPECTED_RUN"
+                  exit 0
+                fi
               fi
             fi
             sleep 4
