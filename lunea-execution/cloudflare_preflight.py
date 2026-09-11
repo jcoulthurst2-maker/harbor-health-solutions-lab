@@ -72,9 +72,6 @@ def upload(account_id,api_token,root):
     metadata={
         'main_module':'cloudflare_womb_v2.py',
         'compatibility_date':'2026-09-11',
-        # Cloudflare's external Python SDK path regressed in Aug 2026 for direct
-        # source uploads, producing ModuleNotFoundError: workers. This experiment
-        # intentionally uses the runtime-provided SDK instead of a bundled wheel.
         'compatibility_flags':['python_workers','disable_python_external_sdk'],
         'bindings':bindings,
         'exports':{
@@ -100,20 +97,34 @@ def upload(account_id,api_token,root):
 
 
 def preflight(account_id,api_token):
+    # Raw script upload and public workers.dev routing are separate provider
+    # capabilities. Bind the route explicitly so endpoint evidence is not inferred.
+    route=ok_json('POST',f'/accounts/{account_id}/workers/scripts/{SCRIPT}/subdomain',
+                  token=api_token,payload={'enabled':True,'previews_enabled':False}).get('result') or {}
+    if route.get('enabled') is not True:
+        raise SystemExit('provider did not enable workers.dev route')
+
     sub=str((ok_json('GET',f'/accounts/{account_id}/workers/subdomain',token=api_token).get('result') or {}).get('subdomain') or '')
     if not sub or '/' in sub: raise SystemExit('workers.dev subdomain missing')
     endpoint=f'https://{SCRIPT}.{sub}.workers.dev/health'
-    health=None
-    for _ in range(12):
+    health=None; last_status=None; last_detail='no response'
+    for _ in range(15):
         try:
             with urllib.request.urlopen(endpoint,timeout=20) as r:
+                last_status=r.status
+                raw=r.read()
+                last_detail=raw[:500].decode('utf-8','replace')
                 if r.status==200:
-                    health=json.loads(r.read()); break
-        except Exception: pass
+                    health=json.loads(raw); break
+        except urllib.error.HTTPError as e:
+            last_status=e.code
+            last_detail=e.read()[:500].decode('utf-8','replace')
+        except Exception as e:
+            last_detail=f'{type(e).__name__}: {e}'
         time.sleep(2)
     expected={'service':'luneacore-genesis-womb','mode':'synthetic_natal_proof_only','authorized_birth':False,'external_action_egress':False,'witness_required':True}
     if health is None or any(health.get(k)!=v for k,v in expected.items()):
-        raise SystemExit('live Womb membrane preflight failed')
+        raise SystemExit(f'live Womb membrane preflight failed: status={last_status} detail={last_detail}')
     return health
 
 
@@ -128,6 +139,7 @@ def main():
     print(json.dumps({
         'temporary_provider_account_acquired':True,
         'exact_private_body_uploaded':True,
+        'workers_dev_route_enabled':True,
         'live_workers_endpoint_observed':True,
         'membrane_health_preflight_passed':True,
         'authorized_birth':health['authorized_birth'],
