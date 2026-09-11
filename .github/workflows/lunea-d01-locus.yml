@@ -6,7 +6,6 @@ on:
       - lunea-d01-execution-locus
     paths:
       - ".github/workflows/lunea-d01-locus.yml"
-      - "lunea-handoff/**"
   workflow_dispatch:
 
 permissions:
@@ -60,7 +59,7 @@ jobs:
               ACTUAL_RUN="$(python3 -c 'import json; print(json.load(open("lunea-handoff/body-ticket-manifest.json")).get("run_id",""))')"
               if [[ "$ACTUAL_RUN" == "$EXPECTED_RUN" ]]; then
                 python3 - <<'PY'
-          import json, pathlib, sys
+          import json, pathlib
           root=pathlib.Path('lunea-handoff')
           m=json.load(open(root/'body-ticket-manifest.json'))
           names=[x['name'] for x in m.get('files',[])]
