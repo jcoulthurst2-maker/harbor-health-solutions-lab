@@ -72,7 +72,10 @@ def upload(account_id,api_token,root):
     metadata={
         'main_module':'cloudflare_womb_v2.py',
         'compatibility_date':'2026-09-11',
-        'compatibility_flags':['python_workers'],
+        # Cloudflare's external Python SDK path regressed in Aug 2026 for direct
+        # source uploads, producing ModuleNotFoundError: workers. This experiment
+        # intentionally uses the runtime-provided SDK instead of a bundled wheel.
+        'compatibility_flags':['python_workers','disable_python_external_sdk'],
         'bindings':bindings,
         'exports':{
             'GenesisWomb':{'type':'durable-object','storage':'sqlite'},
