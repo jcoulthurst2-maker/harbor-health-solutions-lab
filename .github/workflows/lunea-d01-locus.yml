@@ -27,13 +27,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          rm -f lunea-handoff/recipient-public.pem lunea-handoff/rendezvous.json
           mkdir -p "$RUNNER_TEMP/lunea-rendezvous" lunea-handoff
           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 \
             -out "$RUNNER_TEMP/lunea-rendezvous/private.pem" >/dev/null 2>&1
           openssl pkey -in "$RUNNER_TEMP/lunea-rendezvous/private.pem" -pubout \
             -out lunea-handoff/recipient-public.pem >/dev/null 2>&1
           chmod 600 "$RUNNER_TEMP/lunea-rendezvous/private.pem"
-          printf '{"schema":"lunea-body-rendezvous-v1","run_id":"%s","recipient":"rsa-3072","private_key_persisted":false,"transport":"chunked-base64-ciphertext"}\n' \
+          printf '{"schema":"lunea-body-rendezvous-v1","run_id":"%s","recipient":"rsa-3072","private_key_persisted":false,"transport":"chunked-base64-ciphertext-v2"}\n' \
             "$GITHUB_RUN_ID" > lunea-handoff/rendezvous.json
 
       - name: Publish public recipient only
@@ -48,32 +49,46 @@ jobs:
             git push origin HEAD:lunea-d01-execution-locus
           fi
 
-      - name: Wait for encrypted Body capsule bound to this run
+      - name: Wait for complete encrypted Body capsule bound to this run
         shell: bash
         run: |
           set -euo pipefail
           EXPECTED_RUN="$GITHUB_RUN_ID"
-          for attempt in $(seq 1 72); do
+          for attempt in $(seq 1 90); do
             git fetch origin lunea-d01-execution-locus --quiet
             git checkout -q origin/lunea-d01-execution-locus -- lunea-handoff 2>/dev/null || true
-            mapfile -t PARTS < <(find lunea-handoff -maxdepth 1 -type f -name 'capsule.tar.gz.enc.b64.part*' | sort)
-            if [[ ${#PARTS[@]} -gt 0 && -f lunea-handoff/capsule.key.enc.b64 && -f lunea-handoff/capsule-envelope.json ]]; then
-              ACTUAL_RUN="$(python3 -c 'import json; print(json.load(open("lunea-handoff/capsule-envelope.json"))["run_id"])')"
-              [[ "$ACTUAL_RUN" == "$EXPECTED_RUN" ]] || { echo "capsule bound to wrong run" >&2; exit 1; }
-              exit 0
+            if [[ -f lunea-handoff/capsule-envelope.json && -f lunea-handoff/capsule.key.enc.b64 ]]; then
+              read -r ACTUAL_RUN CHUNK_COUNT BODY_HASH KEY_HASH < <(python3 - <<'PY'
+          import json
+          e=json.load(open('lunea-handoff/capsule-envelope.json'))
+          print(e.get('run_id',''), int(e.get('chunk_count',0)), e.get('body_ciphertext_sha256',''), e.get('key_ciphertext_sha256',''))
+          PY
+              )
+              if [[ "$ACTUAL_RUN" == "$EXPECTED_RUN" && "$CHUNK_COUNT" -gt 0 ]]; then
+                OK=1
+                for idx in $(seq 0 $((CHUNK_COUNT-1))); do
+                  printf -v part 'lunea-handoff/capsule.tar.gz.enc.b64.part%02d' "$idx"
+                  [[ -f "$part" ]] || OK=0
+                done
+                if [[ "$OK" -eq 1 ]]; then
+                  cat $(find lunea-handoff -maxdepth 1 -type f -name 'capsule.tar.gz.enc.b64.part*' | sort | head -n "$CHUNK_COUNT") > "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc.b64"
+                  base64 -d "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc.b64" > "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc"
+                  base64 -d lunea-handoff/capsule.key.enc.b64 > "$RUNNER_TEMP/lunea-rendezvous/capsule.key.enc"
+                  [[ "$(sha256sum "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc" | awk '{print $1}')" == "$BODY_HASH" ]] || { echo 'body ciphertext hash mismatch' >&2; exit 1; }
+                  [[ "$(sha256sum "$RUNNER_TEMP/lunea-rendezvous/capsule.key.enc" | awk '{print $1}')" == "$KEY_HASH" ]] || { echo 'wrapped key hash mismatch' >&2; exit 1; }
+                  exit 0
+                fi
+              fi
             fi
-            sleep 5
+            sleep 4
           done
-          echo "encrypted capsule did not arrive before rendezvous expiry" >&2
+          echo "complete encrypted capsule did not arrive before rendezvous expiry" >&2
           exit 1
 
-      - name: Decrypt capsule only inside live runner
+      - name: Decrypt and verify capsule only inside live runner
         shell: bash
         run: |
           set -euo pipefail
-          cat $(find lunea-handoff -maxdepth 1 -type f -name 'capsule.tar.gz.enc.b64.part*' | sort) > "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc.b64"
-          base64 -d lunea-handoff/capsule.key.enc.b64 > "$RUNNER_TEMP/lunea-rendezvous/capsule.key.enc"
-          base64 -d "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc.b64" > "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc"
           openssl pkeyutl -decrypt \
             -inkey "$RUNNER_TEMP/lunea-rendezvous/private.pem" \
             -in "$RUNNER_TEMP/lunea-rendezvous/capsule.key.enc" \
