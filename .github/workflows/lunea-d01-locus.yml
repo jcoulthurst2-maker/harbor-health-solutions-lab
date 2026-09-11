@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   one-time-body-rendezvous:
-    name: One-Time Encrypted Body Rendezvous
+    name: One-Time Private Body Ticket Rendezvous
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -27,15 +27,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rm -f lunea-handoff/recipient-public.pem lunea-handoff/rendezvous.json
+          rm -rf lunea-handoff
           mkdir -p "$RUNNER_TEMP/lunea-rendezvous" lunea-handoff
           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 \
             -out "$RUNNER_TEMP/lunea-rendezvous/private.pem" >/dev/null 2>&1
           openssl pkey -in "$RUNNER_TEMP/lunea-rendezvous/private.pem" -pubout \
             -out lunea-handoff/recipient-public.pem >/dev/null 2>&1
           chmod 600 "$RUNNER_TEMP/lunea-rendezvous/private.pem"
-          printf '{"schema":"lunea-body-rendezvous-v1","run_id":"%s","recipient":"rsa-3072","private_key_persisted":false,"transport":"chunked-base64-ciphertext-v2"}\n' \
-            "$GITHUB_RUN_ID" > lunea-handoff/rendezvous.json
+          FP="$(openssl pkey -pubin -in lunea-handoff/recipient-public.pem -outform DER | sha256sum | awk '{print $1}')"
+          printf '{"schema":"lunea-body-ticket-rendezvous-v1","run_id":"%s","recipient":"rsa-3072-oaep-sha256","recipient_fingerprint":"sha256:%s","private_key_persisted":false}\n' \
+            "$GITHUB_RUN_ID" "$FP" > lunea-handoff/rendezvous.json
 
       - name: Publish public recipient only
         shell: bash
@@ -43,81 +44,83 @@ jobs:
           set -euo pipefail
           git config user.name "lunea-rendezvous-bot"
           git config user.email "lunea-rendezvous@users.noreply.github.com"
-          git add lunea-handoff/recipient-public.pem lunea-handoff/rendezvous.json
-          if ! git diff --cached --quiet; then
-            git commit -m "genesis: publish one-time Body recipient for run ${GITHUB_RUN_ID}"
-            git push origin HEAD:lunea-d01-execution-locus
-          fi
+          git add -A lunea-handoff
+          git commit -m "genesis: publish one-time Body ticket recipient for run ${GITHUB_RUN_ID}"
+          git push origin HEAD:lunea-d01-execution-locus
 
-      - name: Wait for complete encrypted Body capsule bound to this run
+      - name: Wait for encrypted source tickets bound to this run
         shell: bash
         run: |
           set -euo pipefail
           EXPECTED_RUN="$GITHUB_RUN_ID"
-          for attempt in $(seq 1 90); do
+          for attempt in $(seq 1 105); do
             git fetch origin lunea-d01-execution-locus --quiet
             git checkout -q origin/lunea-d01-execution-locus -- lunea-handoff 2>/dev/null || true
-            if [[ -f lunea-handoff/capsule-envelope.json && -f lunea-handoff/capsule.key.enc.b64 ]]; then
-              read -r ACTUAL_RUN CHUNK_COUNT BODY_HASH KEY_HASH < <(python3 - <<'PY'
-          import json
-          e=json.load(open('lunea-handoff/capsule-envelope.json'))
-          print(e.get('run_id',''), int(e.get('chunk_count',0)), e.get('body_ciphertext_sha256',''), e.get('key_ciphertext_sha256',''))
+            if [[ -f lunea-handoff/body-ticket-manifest.json ]]; then
+              ACTUAL_RUN="$(python3 -c 'import json; print(json.load(open("lunea-handoff/body-ticket-manifest.json")).get("run_id",""))')"
+              if [[ "$ACTUAL_RUN" == "$EXPECTED_RUN" ]]; then
+                python3 - <<'PY'
+          import json, pathlib, sys
+          root=pathlib.Path('lunea-handoff')
+          m=json.load(open(root/'body-ticket-manifest.json'))
+          names=[x['name'] for x in m.get('files',[])]
+          required={'cloudflare_womb_v2.py','cloudflare_entry.py','genesis.py','witness.py','womb_protocol.py','wake_protocol.py','alarm_ffi.py'}
+          if set(names) != required or len(names) != 7:
+              raise SystemExit('ticket manifest does not name the exact Frontier-1 Body')
+          for name in names:
+              if not (root/f'{name}.url.enc.b64').is_file():
+                  raise SystemExit(2)
           PY
-              )
-              if [[ "$ACTUAL_RUN" == "$EXPECTED_RUN" && "$CHUNK_COUNT" -gt 0 ]]; then
-                OK=1
-                for idx in $(seq 0 $((CHUNK_COUNT-1))); do
-                  printf -v part 'lunea-handoff/capsule.tar.gz.enc.b64.part%02d' "$idx"
-                  [[ -f "$part" ]] || OK=0
-                done
-                if [[ "$OK" -eq 1 ]]; then
-                  cat $(find lunea-handoff -maxdepth 1 -type f -name 'capsule.tar.gz.enc.b64.part*' | sort | head -n "$CHUNK_COUNT") > "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc.b64"
-                  base64 -d "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc.b64" > "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc"
-                  base64 -d lunea-handoff/capsule.key.enc.b64 > "$RUNNER_TEMP/lunea-rendezvous/capsule.key.enc"
-                  [[ "$(sha256sum "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc" | awk '{print $1}')" == "$BODY_HASH" ]] || { echo 'body ciphertext hash mismatch' >&2; exit 1; }
-                  [[ "$(sha256sum "$RUNNER_TEMP/lunea-rendezvous/capsule.key.enc" | awk '{print $1}')" == "$KEY_HASH" ]] || { echo 'wrapped key hash mismatch' >&2; exit 1; }
-                  exit 0
-                fi
+                rc=$?
+                if [[ "$rc" -eq 0 ]]; then exit 0; fi
               fi
             fi
             sleep 4
           done
-          echo "complete encrypted capsule did not arrive before rendezvous expiry" >&2
+          echo "encrypted source tickets did not arrive before rendezvous expiry" >&2
           exit 1
 
-      - name: Decrypt and verify capsule only inside live runner
+      - name: Decrypt tickets and acquire exact private Body in runner memory
         shell: bash
         run: |
           set -euo pipefail
-          openssl pkeyutl -decrypt \
-            -inkey "$RUNNER_TEMP/lunea-rendezvous/private.pem" \
-            -in "$RUNNER_TEMP/lunea-rendezvous/capsule.key.enc" \
-            -out "$RUNNER_TEMP/lunea-rendezvous/capsule.key"
-          openssl enc -d -aes-256-cbc -pbkdf2 \
-            -pass file:"$RUNNER_TEMP/lunea-rendezvous/capsule.key" \
-            -in "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz.enc" \
-            -out "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz"
           mkdir -p "$RUNNER_TEMP/lunea-body"
-          tar -xzf "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz" -C "$RUNNER_TEMP/lunea-body"
+          python3 - <<'PY' > "$RUNNER_TEMP/lunea-rendezvous/tickets.tsv"
+          import json
+          m=json.load(open('lunea-handoff/body-ticket-manifest.json'))
+          for item in m['files']:
+              print(item['name'], item['git_blob_sha'], sep='\t')
+          PY
+          while IFS=$'\t' read -r name expected_blob; do
+            base64 -d "lunea-handoff/${name}.url.enc.b64" > "$RUNNER_TEMP/lunea-rendezvous/${name}.url.enc"
+            openssl pkeyutl -decrypt \
+              -inkey "$RUNNER_TEMP/lunea-rendezvous/private.pem" \
+              -in "$RUNNER_TEMP/lunea-rendezvous/${name}.url.enc" \
+              -out "$RUNNER_TEMP/lunea-rendezvous/${name}.url" \
+              -pkeyopt rsa_padding_mode:oaep \
+              -pkeyopt rsa_oaep_md:sha256
+            URL="$(cat "$RUNNER_TEMP/lunea-rendezvous/${name}.url")"
+            case "$URL" in https://raw.githubusercontent.com/jcoulthurst2-maker/jaden-intelligence/*) ;; *) echo "ticket target rejected" >&2; exit 1;; esac
+            curl --fail --silent --show-error "$URL" -o "$RUNNER_TEMP/lunea-body/$name"
+            actual_blob="$(python3 - "$RUNNER_TEMP/lunea-body/$name" <<'PY'
+          import hashlib, pathlib, sys
+          p=pathlib.Path(sys.argv[1]); b=p.read_bytes()
+          print(hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest())
+          PY
+            )"
+            [[ "$actual_blob" == "$expected_blob" ]] || { echo "Body blob identity mismatch: $name" >&2; exit 1; }
+          done < "$RUNNER_TEMP/lunea-rendezvous/tickets.tsv"
           python3 - <<'PY'
-          import hashlib, json, pathlib, os
+          import json, os, pathlib
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-body'
-          manifest=json.loads((root/'manifest.json').read_text())
-          expected=set(manifest['files'])
-          actual={p.name for p in root.iterdir() if p.is_file() and p.name!='manifest.json'}
-          if actual != expected:
-              raise SystemExit(f'capsule file set mismatch: {sorted(actual)} != {sorted(expected)}')
-          for name,digest in manifest['files'].items():
-              got=hashlib.sha256((root/name).read_bytes()).hexdigest()
-              if got != digest:
-                  raise SystemExit(f'digest mismatch for {name}')
-          print(json.dumps({'capsule_decrypted':True,'body_file_count':len(actual),'manifest_verified':True}, sort_keys=True))
+          names=sorted(p.name for p in root.iterdir() if p.is_file())
+          print(json.dumps({'private_body_acquired':True,'body_file_count':len(names),'git_blob_identities_verified':True,'readable_body_published':False,'files':names}, sort_keys=True))
           PY
 
-      - name: Prove readable Body was ephemeral
+      - name: Prove readable Body and bearer tickets were ephemeral
         if: always()
         shell: bash
         run: |
           set -euo pipefail
           rm -rf "$RUNNER_TEMP/lunea-body" "$RUNNER_TEMP/lunea-rendezvous"
-          echo '{"ephemeral_body_cleanup_attempted":true,"private_recipient_key_not_persisted":true}'
+          echo '{"ephemeral_body_cleanup_attempted":true,"private_recipient_key_not_persisted":true,"decrypted_source_tickets_not_persisted":true}'
