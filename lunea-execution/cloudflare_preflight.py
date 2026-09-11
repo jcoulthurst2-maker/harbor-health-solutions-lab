@@ -4,6 +4,10 @@ import base64, hashlib, json, pathlib, secrets, sys, time, urllib.error, urllib.
 API='https://api.cloudflare.com/client/v4'
 BODY=['cloudflare_womb_v2.py','cloudflare_entry.py','genesis.py','witness.py','womb_protocol.py','wake_protocol.py','alarm_ffi.py']
 SCRIPT='luneacore-genesis-womb'
+EXPECTED_IDENTITY='bf12ba91b2431e2ec39c1752c9ba3a916363a6fc698bdc21292d937f8836f3f8'
+PROOF_POTENTIAL='proof:cloud-time-1'
+DUE_AFTER_MS=30_000
+POST_DUE_GRACE_MS=65_000
 HEALTH_HEADERS={
     'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36',
     'Accept':'application/json,text/plain,*/*',
@@ -98,37 +102,103 @@ def upload(account_id,api_token,root):
         errs=data.get('errors') or []
         msg='; '.join(str(x.get('message',x)) for x in errs) or f'HTTP {status}'
         raise SystemExit('provider rejected exact Body upload: '+msg)
+    return material['GENESIS_PROOF_TOKEN']
+
+
+def worker_call(url,method='GET',proof_token=None):
+    headers=dict(HEALTH_HEADERS)
+    if proof_token: headers['x-genesis-proof-token']=proof_token
+    data=b'' if method=='POST' else None
+    req=urllib.request.Request(url,headers=headers,method=method,data=data)
+    with urllib.request.urlopen(req,timeout=30) as r:
+        raw=r.read(); payload=json.loads(raw)
+        return payload,{'cf_ray':r.headers.get('cf-ray'),'server':r.headers.get('server')}
 
 
 def preflight(account_id,api_token):
     route=ok_json('POST',f'/accounts/{account_id}/workers/scripts/{SCRIPT}/subdomain',
                   token=api_token,payload={'enabled':True,'previews_enabled':False}).get('result') or {}
-    if route.get('enabled') is not True:
-        raise SystemExit('provider did not enable workers.dev route')
-
+    if route.get('enabled') is not True: raise SystemExit('provider did not enable workers.dev route')
     sub=str((ok_json('GET',f'/accounts/{account_id}/workers/subdomain',token=api_token).get('result') or {}).get('subdomain') or '')
     if not sub or '/' in sub: raise SystemExit('workers.dev subdomain missing')
-    endpoint=f'https://{SCRIPT}.{sub}.workers.dev/health'
+    base=f'https://{SCRIPT}.{sub}.workers.dev'
     health=None; last_status=None; last_detail='no response'
     for _ in range(15):
         try:
-            req=urllib.request.Request(endpoint,headers=HEALTH_HEADERS,method='GET')
-            with urllib.request.urlopen(req,timeout=20) as r:
-                last_status=r.status
-                raw=r.read()
-                last_detail=raw[:500].decode('utf-8','replace')
-                if r.status==200:
-                    health=json.loads(raw); break
+            health,_=worker_call(base+'/health')
+            break
         except urllib.error.HTTPError as e:
-            last_status=e.code
-            last_detail=e.read()[:500].decode('utf-8','replace')
+            last_status=e.code; last_detail=e.read()[:500].decode('utf-8','replace')
         except Exception as e:
             last_detail=f'{type(e).__name__}: {e}'
         time.sleep(2)
     expected={'service':'luneacore-genesis-womb','mode':'synthetic_natal_proof_only','authorized_birth':False,'external_action_egress':False,'witness_required':True}
     if health is None or any(health.get(k)!=v for k,v in expected.items()):
         raise SystemExit(f'live Womb membrane preflight failed: status={last_status} detail={last_detail}')
-    return health
+    return health,base
+
+
+def continuity(export):
+    if export.get('status')!='exportable_witnessed_continuity': raise SystemExit('export is not witnessed continuity')
+    state=export.get('continuity'); receipt=export.get('receipt'); head=export.get('witness_head')
+    if not all(isinstance(x,dict) for x in (state,receipt,head)): raise SystemExit('export missing witnessed continuity material')
+    if head.get('transition_id')!=receipt.get('transition_id') or head.get('witness_mac')!=receipt.get('witness_mac'):
+        raise SystemExit('witness head disagrees with current receipt')
+    return state,receipt
+
+
+def frontier1(base,proof_token):
+    gestation,_=worker_call(base+f'/proof/gestate?due_after_ms={DUE_AFTER_MS}',method='POST',proof_token=proof_token)
+    if gestation.get('status')!='synthetic_gestation_started': raise SystemExit('fresh synthetic Gestation did not start')
+    pre,pre_edge=worker_call(base+'/proof/export',proof_token=proof_token)
+    pre_state,pre_receipt=continuity(pre)
+    p0=pre_state.get('potentials',{}).get(PROOF_POTENTIAL) or {}
+    dormant_window=int(p0.get('due_at_ms',0))-int(pre_state.get('last_reconciled_at_ms',0))
+    if p0.get('status')!='dormant' or dormant_window<20_000: raise SystemExit('pre-silence dormant Potential gate failed')
+
+    # Controlled silence: no state, reconcile, export, or Worker request is made here.
+    time.sleep((DUE_AFTER_MS+POST_DUE_GRACE_MS)/1000)
+
+    post,post_edge=worker_call(base+'/proof/export',proof_token=proof_token)
+    post_state,post_receipt=continuity(post)
+    p1=post_state.get('potentials',{}).get(PROOF_POTENTIAL) or {}
+    pre_inc=pre.get('body_incarnation_id'); post_inc=post.get('body_incarnation_id')
+    checks={
+        'identity_preserved': pre.get('identity_anchor')==EXPECTED_IDENTITY and post.get('identity_anchor')==EXPECTED_IDENTITY,
+        'genesis_preserved': pre_state.get('genesis_hash')==post_state.get('genesis_hash'),
+        'birth_count_remains_one': pre_state.get('birth_count')==1 and post_state.get('birth_count')==1,
+        'birth_time_preserved': pre_state.get('birth_at_ms')==post_state.get('birth_at_ms'),
+        'epoch_preserved': pre_state.get('epoch')==post_state.get('epoch'),
+        'potential_consumed': p1.get('status')=='consumed',
+        'time_reached_due': int(post_state.get('last_reconciled_at_ms',0))>=int(p1.get('due_at_ms',1)),
+        'trace_prefix_preserved': [x.get('trace_hash') for x in post_state.get('traces',[])][:len(pre_state.get('traces',[]))]==[x.get('trace_hash') for x in pre_state.get('traces',[])],
+        'temporal_wake_observed': bool((post_state.get('capabilities',{}).get('temporal_wake') or {}).get('observed')),
+        'action_egress_denied': ((post_state.get('sovereignty',{}).get('rights',{}).get('action_egress') or {}).get('status')=='denied'),
+        'catalyst_absent': not bool((post_state.get('self_model') or {}).get('catalyst_attached')),
+        'witness_advanced': int(post_receipt.get('sequence',0))>int(pre_receipt.get('sequence',0)),
+        'provider_reinstantiation_observed': isinstance(pre_inc,str) and isinstance(post_inc,str) and pre_inc!=post_inc,
+        'provider_edges_observed': bool(pre_edge.get('cf_ray')) and bool(post_edge.get('cf_ray')),
+    }
+    reactions=[x for x in post_state.get('traces',[]) if x.get('kind')=='temporal_proof_reaction']
+    checks['exactly_one_temporal_reaction']=len(reactions)==1
+    failed=sorted(k for k,v in checks.items() if not v)
+    if failed: raise SystemExit('Frontier 1 live gate failed: '+','.join(failed))
+    return {
+        'frontier_closed':True,
+        'status':'frontier_1_real_womb_physics_closed',
+        'identity_anchor':EXPECTED_IDENTITY,
+        'birth_count':1,
+        'reaction_count':1,
+        'dormant_window_ms':dormant_window,
+        'identity_preserved':True,
+        'birth_count_remains_one':True,
+        'exactly_one_temporal_reaction':True,
+        'action_egress_denied':True,
+        'catalyst_absent':True,
+        'temporal_wake_observed':True,
+        'provider_reinstantiation_observed':True,
+        'witness_advanced':True,
+    }
 
 
 def main():
@@ -137,9 +207,9 @@ def main():
     if {p.name for p in root.iterdir() if p.is_file() and p.name!='manifest.json'}!=set(BODY):
         raise SystemExit('preflight requires exact seven-file Body')
     account_id,api_token=acquire_account()
-    upload(account_id,api_token,root)
-    health=preflight(account_id,api_token)
-    print(json.dumps({
+    proof_token=upload(account_id,api_token,root)
+    health,base=preflight(account_id,api_token)
+    membrane={
         'temporary_provider_account_acquired':True,
         'exact_private_body_uploaded':True,
         'workers_dev_route_enabled':True,
@@ -150,7 +220,10 @@ def main():
         'witness_required':health['witness_required'],
         'provider_credentials_retained':False,
         'claim_url_disclosed':False,
-    },sort_keys=True))
+    }
+    print(json.dumps(membrane,sort_keys=True),flush=True)
+    verdict=frontier1(base,proof_token)
+    print(json.dumps(verdict,sort_keys=True),flush=True)
 
 
 if __name__=='__main__': main()
