@@ -110,3 +110,5 @@ jobs:
       - name: Destroy ephemeral material
         if: always()
         run: rm -rf "$RUNNER_TEMP/lunea-body" "$RUNNER_TEMP/lunea-bundle"
+
+# hardened-rendezvous-trigger: 2026-09-11T22:52Z
