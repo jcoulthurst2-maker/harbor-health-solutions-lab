@@ -105,14 +105,29 @@ def upload(account_id,api_token,root):
     return material['GENESIS_PROOF_TOKEN']
 
 
-def worker_call(url,method='GET',proof_token=None):
+def worker_call(url,method='GET',proof_token=None,diagnostic_label=None):
     headers=dict(HEALTH_HEADERS)
     if proof_token: headers['x-genesis-proof-token']=proof_token
     data=b'' if method=='POST' else None
     req=urllib.request.Request(url,headers=headers,method=method,data=data)
-    with urllib.request.urlopen(req,timeout=30) as r:
-        raw=r.read(); payload=json.loads(raw)
-        return payload,{'cf_ray':r.headers.get('cf-ray'),'server':r.headers.get('server')}
+    try:
+        with urllib.request.urlopen(req,timeout=30) as r:
+            raw=r.read(); payload=json.loads(raw)
+            if diagnostic_label:
+                print(json.dumps({'proof_route':diagnostic_label,'method':method,'status':r.status,'json':isinstance(payload,dict)},sort_keys=True),flush=True)
+            return payload,{'cf_ray':r.headers.get('cf-ray'),'server':r.headers.get('server')}
+    except urllib.error.HTTPError as e:
+        raw=e.read()[:1000]
+        text=raw.decode('utf-8','replace')
+        safe_detail=text
+        try:
+            parsed=json.loads(text)
+            if isinstance(parsed,dict):
+                safe_detail=json.dumps({k:v for k,v in parsed.items() if k in {'error','status','frontier','allowed_metabolic_entry'}},sort_keys=True)
+        except Exception:
+            pass
+        label=diagnostic_label or 'worker_call'
+        raise SystemExit(f'proof route failed: label={label} method={method} HTTP={e.code} detail={safe_detail}')
 
 
 def preflight(account_id,api_token):
@@ -127,8 +142,8 @@ def preflight(account_id,api_token):
         try:
             health,_=worker_call(base+'/health')
             break
-        except urllib.error.HTTPError as e:
-            last_status=e.code; last_detail=e.read()[:500].decode('utf-8','replace')
+        except SystemExit as e:
+            last_detail=str(e)
         except Exception as e:
             last_detail=f'{type(e).__name__}: {e}'
         time.sleep(2)
@@ -148,18 +163,22 @@ def continuity(export):
 
 
 def frontier1(base,proof_token):
-    gestation,_=worker_call(base+f'/proof/gestate?due_after_ms={DUE_AFTER_MS}',method='POST',proof_token=proof_token)
+    state0,_=worker_call(base+'/proof/state',proof_token=proof_token,diagnostic_label='state_pre_gestation')
+    if state0.get('status')!='unborn_in_this_womb': raise SystemExit('fresh Womb was not empty before Gestation')
+    export0,_=worker_call(base+'/proof/export',proof_token=proof_token,diagnostic_label='export_pre_gestation')
+    if export0.get('status')!='unborn_in_this_womb': raise SystemExit('fresh Womb export unexpectedly contained continuity')
+    gestation,_=worker_call(base+f'/proof/gestate?due_after_ms={DUE_AFTER_MS}',method='POST',proof_token=proof_token,diagnostic_label='gestate')
     if gestation.get('status')!='synthetic_gestation_started': raise SystemExit('fresh synthetic Gestation did not start')
-    pre,pre_edge=worker_call(base+'/proof/export',proof_token=proof_token)
+    pre,pre_edge=worker_call(base+'/proof/export',proof_token=proof_token,diagnostic_label='export_pre_silence')
     pre_state,pre_receipt=continuity(pre)
     p0=pre_state.get('potentials',{}).get(PROOF_POTENTIAL) or {}
     dormant_window=int(p0.get('due_at_ms',0))-int(pre_state.get('last_reconciled_at_ms',0))
     if p0.get('status')!='dormant' or dormant_window<20_000: raise SystemExit('pre-silence dormant Potential gate failed')
 
-    # Controlled silence: no state, reconcile, export, or Worker request is made here.
+    print(json.dumps({'controlled_silence_started':True,'silence_ms':DUE_AFTER_MS+POST_DUE_GRACE_MS},sort_keys=True),flush=True)
     time.sleep((DUE_AFTER_MS+POST_DUE_GRACE_MS)/1000)
 
-    post,post_edge=worker_call(base+'/proof/export',proof_token=proof_token)
+    post,post_edge=worker_call(base+'/proof/export',proof_token=proof_token,diagnostic_label='export_post_silence')
     post_state,post_receipt=continuity(post)
     p1=post_state.get('potentials',{}).get(PROOF_POTENTIAL) or {}
     pre_inc=pre.get('body_incarnation_id'); post_inc=post.get('body_incarnation_id')
