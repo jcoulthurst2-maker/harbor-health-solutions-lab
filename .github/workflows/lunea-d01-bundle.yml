@@ -105,10 +105,12 @@ jobs:
           PY
 
       - name: Acquire real temporary Habitat and preflight Womb membrane
-        run: python3 lunea-execution/cloudflare_preflight.py "$RUNNER_TEMP/lunea-body"
+        shell: bash
+        run: |
+          set -euo pipefail
+          sed -i "s/'compatibility_flags':\['python_workers'\]/'compatibility_flags':['python_workers','disable_python_external_sdk']/" lunea-execution/cloudflare_preflight.py
+          python3 lunea-execution/cloudflare_preflight.py "$RUNNER_TEMP/lunea-body"
 
       - name: Destroy ephemeral material
         if: always()
         run: rm -rf "$RUNNER_TEMP/lunea-body" "$RUNNER_TEMP/lunea-bundle"
-
-# hardened-rendezvous-trigger: 2026-09-11T22:52Z
