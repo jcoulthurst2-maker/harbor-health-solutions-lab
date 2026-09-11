@@ -1,8 +1,0 @@
-{
-  "body_ciphertext_sha256": "eb979da60b47eeebc7667f1708d5bb0c1e922f5441f102fa08f5157d288f1193",
-  "cipher": "aes-256-cbc-pbkdf2",
-  "key_ciphertext_sha256": "4650177a760d5ca25f03683f9eacf2ebfced1894d0a75c61c1e218ec95f38a3f",
-  "recipient": "rsa-3072",
-  "run_id": "34652535790",
-  "schema": "lunea-body-capsule-envelope-v1"
-}

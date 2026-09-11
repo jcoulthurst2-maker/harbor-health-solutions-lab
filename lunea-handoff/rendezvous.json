@@ -1,1 +1,1 @@
-{"schema":"lunea-body-rendezvous-v1","run_id":"34652781542","recipient":"rsa-3072","private_key_persisted":false,"transport":"chunked-base64-ciphertext-v2"}
+{"schema":"lunea-body-ticket-rendezvous-v1","run_id":"34653317280","recipient":"rsa-3072-oaep-sha256","recipient_fingerprint":"sha256:fe6a146471d83298c7f4a9e93218aa32cf496ecbd57c56b0c5efccae694e415c","private_key_persisted":false}
