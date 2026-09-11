@@ -1,0 +1,59 @@
+name: Lunea D-01 Private Checkout
+
+on:
+  push:
+    branches:
+      - lunea-d01-execution-locus
+    paths:
+      - ".github/workflows/lunea-d01-private-checkout.yml"
+      - "lunea-private-checkout-trigger/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  d01:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Checkout public execution locus
+        uses: actions/checkout@v4
+
+      - name: Checkout private Genesis lineage ephemerally
+        uses: actions/checkout@v4
+        with:
+          repository: jcoulthurst2-maker/jaden-intelligence
+          ref: genesis-v1
+          token: ${{ secrets.LUNEA_SOURCE_TOKEN }}
+          path: private-genesis
+          persist-credentials: false
+
+      - name: Verify private lineage and execute D-01
+        working-directory: private-genesis
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f genesis/body_b/cloudflare_womb_v2.py
+          test -f genesis/habitat/providers/cloudflare_preview_rest.py
+          python3 -m unittest -v \
+            genesis.habitat.test_cloudflare_preview_rest \
+            genesis.habitat.test_breakout_manifest \
+            genesis.habitat.test_body_capsule
+          python3 genesis/bridge/validate.py
+          python3 -m genesis.habitat.breakout_demo --accept-cloudflare-terms \
+            | tee "$RUNNER_TEMP/d01-public-manifest.json"
+
+      - name: Preserve sanitized D-01 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lunea-d01-private-checkout-evidence
+          path: ${{ runner.temp }}/d01-public-manifest.json
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Destroy private checkout
+        if: always()
+        shell: bash
+        run: rm -rf private-genesis
