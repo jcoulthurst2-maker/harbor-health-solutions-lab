@@ -27,27 +27,35 @@ jobs:
           mkdir -p lunea-bundle "$RUNNER_TEMP/lunea-bundle"
           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$RUNNER_TEMP/lunea-bundle/private.pem" >/dev/null 2>&1
           openssl pkey -in "$RUNNER_TEMP/lunea-bundle/private.pem" -pubout -out lunea-bundle/recipient-public.pem >/dev/null 2>&1
-          printf '{"schema":"lunea-one-bundle-v3","run_id":"%s"}\n' "$GITHUB_RUN_ID" > lunea-bundle/request.json
+          FP="$(openssl pkey -pubin -in lunea-bundle/recipient-public.pem -outform DER | sha256sum | awk '{print $1}')"
+          printf '{"schema":"lunea-one-bundle-v4","run_id":"%s","recipient_fingerprint":"sha256:%s"}\n' "$GITHUB_RUN_ID" "$FP" > lunea-bundle/request.json
           git config user.name lunea-bundle-bot
           git config user.email lunea-bundle@users.noreply.github.com
           git add lunea-bundle/recipient-public.pem lunea-bundle/request.json
-          git commit -m "genesis: publish one-time Body recipient ${GITHUB_RUN_ID}"
+          git commit -m "genesis: publish fingerprint-bound Body recipient ${GITHUB_RUN_ID}"
           git push origin HEAD:lunea-d01-execution-locus
 
       - name: Wait for encrypted Body bundle
         shell: bash
         run: |
           set -euo pipefail
+          EXPECTED_RUN="$GITHUB_RUN_ID"
+          EXPECTED_FP="$(python3 -c 'import json; print(json.load(open("lunea-bundle/request.json"))["recipient_fingerprint"])')"
           for attempt in $(seq 1 120); do
             git fetch origin lunea-d01-execution-locus --quiet
             git checkout -q origin/lunea-d01-execution-locus -- lunea-bundle 2>/dev/null || true
             if [[ -f lunea-bundle/envelope.json && -f lunea-bundle/body.tar.gz.enc.b64 && -f lunea-bundle/key.enc.b64 ]]; then
-              actual="$(python3 -c 'import json; print(json.load(open("lunea-bundle/envelope.json")).get("run_id",""))')"
-              [[ "$actual" == "$GITHUB_RUN_ID" ]] && exit 0
+              read -r actual_run actual_fp < <(python3 - <<'PY'
+import json
+m=json.load(open('lunea-bundle/envelope.json'))
+print(m.get('run_id',''), m.get('recipient_fingerprint',''))
+PY
+)
+              [[ "$actual_run" == "$EXPECTED_RUN" && "$actual_fp" == "$EXPECTED_FP" ]] && exit 0
             fi
             sleep 4
           done
-          echo 'Body bundle did not arrive before expiry' >&2
+          echo 'fingerprint-bound Body bundle did not arrive before expiry' >&2
           exit 1
 
       - name: Decrypt and verify exact private Body
