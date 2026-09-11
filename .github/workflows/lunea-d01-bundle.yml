@@ -45,12 +45,8 @@ jobs:
             git fetch origin lunea-d01-execution-locus --quiet
             git checkout -q origin/lunea-d01-execution-locus -- lunea-bundle 2>/dev/null || true
             if [[ -f lunea-bundle/envelope.json && -f lunea-bundle/body.tar.gz.enc.b64 && -f lunea-bundle/key.enc.b64 ]]; then
-              read -r actual_run actual_fp < <(python3 - <<'PY'
-import json
-m=json.load(open('lunea-bundle/envelope.json'))
-print(m.get('run_id',''), m.get('recipient_fingerprint',''))
-PY
-)
+              actual_run="$(python3 -c 'import json; print(json.load(open("lunea-bundle/envelope.json")).get("run_id",""))')"
+              actual_fp="$(python3 -c 'import json; print(json.load(open("lunea-bundle/envelope.json")).get("recipient_fingerprint",""))')"
               [[ "$actual_run" == "$EXPECTED_RUN" && "$actual_fp" == "$EXPECTED_FP" ]] && exit 0
             fi
             sleep 4
