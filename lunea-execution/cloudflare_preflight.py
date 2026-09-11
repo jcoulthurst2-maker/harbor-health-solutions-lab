@@ -4,6 +4,10 @@ import base64, hashlib, json, pathlib, secrets, sys, time, urllib.error, urllib.
 API='https://api.cloudflare.com/client/v4'
 BODY=['cloudflare_womb_v2.py','cloudflare_entry.py','genesis.py','witness.py','womb_protocol.py','wake_protocol.py','alarm_ffi.py']
 SCRIPT='luneacore-genesis-womb'
+HEALTH_HEADERS={
+    'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36',
+    'Accept':'application/json,text/plain,*/*',
+}
 
 
 def call(method,path,payload=None,token=None,headers=None,body=None,timeout=90):
@@ -97,8 +101,6 @@ def upload(account_id,api_token,root):
 
 
 def preflight(account_id,api_token):
-    # Raw script upload and public workers.dev routing are separate provider
-    # capabilities. Bind the route explicitly so endpoint evidence is not inferred.
     route=ok_json('POST',f'/accounts/{account_id}/workers/scripts/{SCRIPT}/subdomain',
                   token=api_token,payload={'enabled':True,'previews_enabled':False}).get('result') or {}
     if route.get('enabled') is not True:
@@ -110,7 +112,8 @@ def preflight(account_id,api_token):
     health=None; last_status=None; last_detail='no response'
     for _ in range(15):
         try:
-            with urllib.request.urlopen(endpoint,timeout=20) as r:
+            req=urllib.request.Request(endpoint,headers=HEALTH_HEADERS,method='GET')
+            with urllib.request.urlopen(req,timeout=20) as r:
                 last_status=r.status
                 raw=r.read()
                 last_detail=raw[:500].decode('utf-8','replace')
