@@ -1,0 +1,78 @@
+name: Lunea D-01 One Bundle
+
+on:
+  push:
+    branches:
+      - lunea-d01-execution-locus
+    paths:
+      - ".github/workflows/lunea-d01-bundle.yml"
+      - "lunea-bundle/**"
+
+permissions:
+  contents: write
+
+jobs:
+  one-bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: lunea-d01-execution-locus
+
+      - name: Mint one-time recipient
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf lunea-bundle
+          mkdir -p lunea-bundle "$RUNNER_TEMP/lunea-bundle"
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$RUNNER_TEMP/lunea-bundle/private.pem" >/dev/null 2>&1
+          openssl pkey -in "$RUNNER_TEMP/lunea-bundle/private.pem" -pubout -out lunea-bundle/recipient-public.pem >/dev/null 2>&1
+          printf '{"schema":"lunea-one-bundle-v1","run_id":"%s"}\n' "$GITHUB_RUN_ID" > lunea-bundle/request.json
+          git config user.name lunea-bundle-bot
+          git config user.email lunea-bundle@users.noreply.github.com
+          git add lunea-bundle/recipient-public.pem lunea-bundle/request.json
+          git commit -m "genesis: publish one-time bundle recipient ${GITHUB_RUN_ID}"
+          git push origin HEAD:lunea-d01-execution-locus
+
+      - name: Wait for encrypted bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 100); do
+            git fetch origin lunea-d01-execution-locus --quiet
+            git checkout -q origin/lunea-d01-execution-locus -- lunea-bundle 2>/dev/null || true
+            if [[ -f lunea-bundle/envelope.json && -f lunea-bundle/body.tar.gz.enc.b64 && -f lunea-bundle/key.enc.b64 ]]; then
+              actual="$(python3 -c 'import json; print(json.load(open("lunea-bundle/envelope.json")).get("run_id",""))')"
+              [[ "$actual" == "$GITHUB_RUN_ID" ]] && exit 0
+            fi
+            sleep 4
+          done
+          echo 'bundle did not arrive before expiry' >&2
+          exit 1
+
+      - name: Decrypt and verify exact Body
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 -d lunea-bundle/key.enc.b64 > "$RUNNER_TEMP/lunea-bundle/key.enc"
+          base64 -d lunea-bundle/body.tar.gz.enc.b64 > "$RUNNER_TEMP/lunea-bundle/body.tar.gz.enc"
+          openssl pkeyutl -decrypt -inkey "$RUNNER_TEMP/lunea-bundle/private.pem" -in "$RUNNER_TEMP/lunea-bundle/key.enc" -out "$RUNNER_TEMP/lunea-bundle/key" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256
+          openssl enc -d -aes-256-cbc -pbkdf2 -pass file:"$RUNNER_TEMP/lunea-bundle/key" -in "$RUNNER_TEMP/lunea-bundle/body.tar.gz.enc" -out "$RUNNER_TEMP/lunea-bundle/body.tar.gz"
+          mkdir -p "$RUNNER_TEMP/lunea-body"
+          tar -xzf "$RUNNER_TEMP/lunea-bundle/body.tar.gz" -C "$RUNNER_TEMP/lunea-body"
+          python3 - <<'PY'
+          import json, os, pathlib, hashlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-body'
+          m=json.loads((root/'manifest.json').read_text())
+          required={'cloudflare_womb_v2.py','cloudflare_entry.py','genesis.py','witness.py','womb_protocol.py','wake_protocol.py','alarm_ffi.py'}
+          files={p.name for p in root.iterdir() if p.is_file() and p.name!='manifest.json'}
+          if files != required: raise SystemExit('exact Body file set mismatch')
+          for name,digest in m['files'].items():
+              if hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest: raise SystemExit('digest mismatch: '+name)
+          print(json.dumps({'private_body_acquired':True,'body_file_count':7,'manifest_verified':True,'readable_body_published':False},sort_keys=True))
+          PY
+
+      - name: Destroy ephemeral material
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/lunea-body" "$RUNNER_TEMP/lunea-bundle"
