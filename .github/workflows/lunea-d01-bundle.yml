@@ -6,7 +6,6 @@ on:
       - lunea-d01-execution-locus
     paths:
       - ".github/workflows/lunea-d01-bundle.yml"
-      - "lunea-bundle/**"
 
 permissions:
   contents: write
@@ -28,14 +27,14 @@ jobs:
           mkdir -p lunea-bundle "$RUNNER_TEMP/lunea-bundle"
           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$RUNNER_TEMP/lunea-bundle/private.pem" >/dev/null 2>&1
           openssl pkey -in "$RUNNER_TEMP/lunea-bundle/private.pem" -pubout -out lunea-bundle/recipient-public.pem >/dev/null 2>&1
-          printf '{"schema":"lunea-one-bundle-v1","run_id":"%s"}\n' "$GITHUB_RUN_ID" > lunea-bundle/request.json
+          printf '{"schema":"lunea-one-bundle-v2","run_id":"%s"}\n' "$GITHUB_RUN_ID" > lunea-bundle/request.json
           git config user.name lunea-bundle-bot
           git config user.email lunea-bundle@users.noreply.github.com
           git add lunea-bundle/recipient-public.pem lunea-bundle/request.json
-          git commit -m "genesis: publish one-time bundle recipient ${GITHUB_RUN_ID}"
+          git commit -m "genesis: publish one-time Body recipient ${GITHUB_RUN_ID}"
           git push origin HEAD:lunea-d01-execution-locus
 
-      - name: Wait for encrypted bundle
+      - name: Wait for encrypted Body bundle
         shell: bash
         run: |
           set -euo pipefail
@@ -48,10 +47,10 @@ jobs:
             fi
             sleep 4
           done
-          echo 'bundle did not arrive before expiry' >&2
+          echo 'Body bundle did not arrive before expiry' >&2
           exit 1
 
-      - name: Decrypt and verify exact Body
+      - name: Decrypt and verify exact private Body
         shell: bash
         run: |
           set -euo pipefail
@@ -62,15 +61,29 @@ jobs:
           mkdir -p "$RUNNER_TEMP/lunea-body"
           tar -xzf "$RUNNER_TEMP/lunea-bundle/body.tar.gz" -C "$RUNNER_TEMP/lunea-body"
           python3 - <<'PY'
-          import json, os, pathlib, hashlib
+          import hashlib, json, os, pathlib
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-body'
           m=json.loads((root/'manifest.json').read_text())
-          required={'cloudflare_womb_v2.py','cloudflare_entry.py','genesis.py','witness.py','womb_protocol.py','wake_protocol.py','alarm_ffi.py'}
+          expected={
+            'cloudflare_womb_v2.py':'966048ac334c5898dfea6ddad38da820cccc2525',
+            'cloudflare_entry.py':'9eb1af9680ac18ee361c8e597fb1d0e50933cd81',
+            'genesis.py':'dba60d866b1712b531cac7d2deb069287ea4a562',
+            'witness.py':'f46b9ddc46d03060cd4d60535893e9a4bf5f2625',
+            'womb_protocol.py':'e1b8892c626e0777f3819ed15287fbb03bf1fcfe',
+            'wake_protocol.py':'513b16b0fcf8de14e756c26b08a4cbf396a8050e',
+            'alarm_ffi.py':'b71b169cc59b60660767cb2035321a4c52761fa3',
+          }
           files={p.name for p in root.iterdir() if p.is_file() and p.name!='manifest.json'}
-          if files != required: raise SystemExit('exact Body file set mismatch')
-          for name,digest in m['files'].items():
-              if hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest: raise SystemExit('digest mismatch: '+name)
-          print(json.dumps({'private_body_acquired':True,'body_file_count':7,'manifest_verified':True,'readable_body_published':False},sort_keys=True))
+          if files != set(expected): raise SystemExit('exact Body file set mismatch')
+          if set(m.get('files',{})) != set(expected): raise SystemExit('manifest file set mismatch')
+          for name,git_sha in expected.items():
+              b=(root/name).read_bytes()
+              sha256=hashlib.sha256(b).hexdigest()
+              blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              item=m['files'][name]
+              if item.get('sha256') != sha256: raise SystemExit('sha256 mismatch: '+name)
+              if item.get('git_blob_sha') != git_sha or blob != git_sha: raise SystemExit('Git blob mismatch: '+name)
+          print(json.dumps({'private_body_acquired':True,'body_file_count':7,'manifest_verified':True,'git_blob_identities_verified':True,'readable_body_published':False},sort_keys=True))
           PY
 
       - name: Destroy ephemeral material
