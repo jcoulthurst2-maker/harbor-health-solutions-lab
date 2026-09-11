@@ -1,4 +1,5 @@
 # D-01 provider probe revision: frontier-1-live-silence-wake
+# rendezvous nonce: 2026-09-11T23:reopen-v5
 name: Lunea D-01 One Bundle
 
 on:
