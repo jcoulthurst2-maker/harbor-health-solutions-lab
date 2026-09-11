@@ -1,0 +1,35 @@
+name: Lunea D-01 Execution Locus Probe
+
+on:
+  push:
+    branches:
+      - lunea-d01-execution-locus
+    paths:
+      - ".github/workflows/lunea-d01-locus.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  locus-probe:
+    name: Hosted Runner + Cloudflare Preview API Reachability
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Prove runner attached
+        run: |
+          set -euo pipefail
+          echo '{"runner_attached":true,"locus":"public-github-hosted"}'
+
+      - name: Probe Cloudflare temporary-preview challenge API
+        shell: bash
+        run: |
+          set -euo pipefail
+          RESPONSE="$(curl --fail-with-body --silent --show-error \
+            -X POST \
+            -H 'accept: application/json' \
+            -H 'content-type: application/json' \
+            --data '{}' \
+            https://api.cloudflare.com/client/v4/provisioning/previews/challenge)"
+          python3 -c 'import json,sys; p=json.loads(sys.stdin.read()); assert p.get("success") is True; r=p.get("result") or {}; assert r.get("challengeToken"); assert r.get("seed"); assert int(r.get("k") or 0)>0; assert int(r.get("g") or 0)>0; print(json.dumps({"cloudflare_preview_challenge_reachable":True,"challenge_shape_valid":True,"k":int(r["k"]),"g":int(r["g"])}, sort_keys=True))' <<< "$RESPONSE"
