@@ -35,25 +35,32 @@ jobs:
           git commit -m "genesis: publish one-file recipient ${GITHUB_RUN_ID}"
           git push origin HEAD:lunea-d01-execution-locus
 
-      - name: Wait for one encrypted Body file
+      - name: Wait for one encrypted Body file over public raw transport
         shell: bash
         run: |
           set -euo pipefail
           EXPECTED_RUN="$GITHUB_RUN_ID"
           EXPECTED_FP="$(python3 -c 'import json; print(json.load(open("lunea-onefile/request.json"))["recipient_fingerprint"])')"
+          BASE="https://raw.githubusercontent.com/jcoulthurst2-maker/harbor-health-solutions-lab/lunea-d01-execution-locus/lunea-onefile"
           for attempt in $(seq 1 90); do
-            git fetch origin lunea-d01-execution-locus --quiet
-            git checkout -q origin/lunea-d01-execution-locus -- lunea-onefile 2>/dev/null || true
-            if [[ -f lunea-onefile/file.enc.b64 && -f lunea-onefile/key.enc.b64 && -f lunea-onefile/ready.json ]]; then
+            mkdir -p lunea-onefile
+            curl -fsSL "$BASE/ready.json?run=$EXPECTED_RUN&n=$attempt" -o lunea-onefile/ready.json 2>/dev/null || true
+            curl -fsSL "$BASE/file.enc.b64?run=$EXPECTED_RUN&n=$attempt" -o lunea-onefile/file.enc.b64 2>/dev/null || true
+            curl -fsSL "$BASE/key.enc.b64?run=$EXPECTED_RUN&n=$attempt" -o lunea-onefile/key.enc.b64 2>/dev/null || true
+            if [[ -s lunea-onefile/file.enc.b64 && -s lunea-onefile/key.enc.b64 && -s lunea-onefile/ready.json ]]; then
               if python3 - "$EXPECTED_RUN" "$EXPECTED_FP" <<'PY'
           import base64, hashlib, json, pathlib, sys
           root=pathlib.Path('lunea-onefile'); run,fp=sys.argv[1:]
-          r=json.loads((root/'ready.json').read_text())
+          try:
+              r=json.loads((root/'ready.json').read_text())
+              c=base64.b64decode((root/'file.enc.b64').read_text(),validate=True)
+              k=base64.b64decode((root/'key.enc.b64').read_text(),validate=True)
+          except Exception:
+              raise SystemExit(1)
           if r.get('schema')!='lunea-onefile-ready-v1' or r.get('run_id')!=run or r.get('recipient_fingerprint')!=fp: raise SystemExit(1)
-          c=base64.b64decode((root/'file.enc.b64').read_text(),validate=True)
-          k=base64.b64decode((root/'key.enc.b64').read_text(),validate=True)
           if hashlib.sha256(c).hexdigest()!=r.get('file_ciphertext_sha256'): raise SystemExit(1)
           if hashlib.sha256(k).hexdigest()!=r.get('key_ciphertext_sha256'): raise SystemExit(1)
+          print('current-run one-file ciphertext verified')
           PY
               then exit 0; fi
             fi
