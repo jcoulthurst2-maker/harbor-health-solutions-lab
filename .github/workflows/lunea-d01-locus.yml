@@ -6,84 +6,99 @@ on:
       - lunea-d01-execution-locus
     paths:
       - ".github/workflows/lunea-d01-locus.yml"
+      - "lunea-handoff/**"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  locus-probe:
-    name: Hosted Runner + Cloudflare Preview API Reachability
+  one-time-body-rendezvous:
+    name: One-Time Encrypted Body Rendezvous
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
-      - name: Prove runner attached
-        run: |
-          set -euo pipefail
-          echo '{"runner_attached":true,"locus":"public-github-hosted"}'
+      - name: Checkout execution locus
+        uses: actions/checkout@v4
+        with:
+          ref: lunea-d01-execution-locus
 
-      - name: Acquire disposable Cloudflare preview account
+      - name: Generate ephemeral recipient keypair
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/lunea-rendezvous" lunea-handoff
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 \
+            -out "$RUNNER_TEMP/lunea-rendezvous/private.pem" >/dev/null 2>&1
+          openssl pkey -in "$RUNNER_TEMP/lunea-rendezvous/private.pem" -pubout \
+            -out lunea-handoff/recipient-public.pem >/dev/null 2>&1
+          chmod 600 "$RUNNER_TEMP/lunea-rendezvous/private.pem"
+          printf '{"schema":"lunea-body-rendezvous-v1","run_id":"%s","recipient":"rsa-3072","private_key_persisted":false}\n' \
+            "$GITHUB_RUN_ID" > lunea-handoff/rendezvous.json
+
+      - name: Publish public recipient only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "lunea-rendezvous-bot"
+          git config user.email "lunea-rendezvous@users.noreply.github.com"
+          git add lunea-handoff/recipient-public.pem lunea-handoff/rendezvous.json
+          if ! git diff --cached --quiet; then
+            git commit -m "genesis: publish one-time Body recipient for run ${GITHUB_RUN_ID}"
+            git push origin HEAD:lunea-d01-execution-locus
+          fi
+
+      - name: Wait for encrypted Body capsule bound to this run
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED_RUN="$GITHUB_RUN_ID"
+          for attempt in $(seq 1 72); do
+            git fetch origin lunea-d01-execution-locus --quiet
+            git checkout -q origin/lunea-d01-execution-locus -- lunea-handoff 2>/dev/null || true
+            if [[ -f lunea-handoff/capsule.tar.gz.enc && -f lunea-handoff/capsule.key.enc && -f lunea-handoff/capsule-envelope.json ]]; then
+              ACTUAL_RUN="$(python3 -c 'import json; print(json.load(open("lunea-handoff/capsule-envelope.json"))["run_id"])')"
+              [[ "$ACTUAL_RUN" == "$EXPECTED_RUN" ]] || { echo "capsule bound to wrong run" >&2; exit 1; }
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "encrypted capsule did not arrive before rendezvous expiry" >&2
+          exit 1
+
+      - name: Decrypt capsule only inside live runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          openssl pkeyutl -decrypt \
+            -inkey "$RUNNER_TEMP/lunea-rendezvous/private.pem" \
+            -in lunea-handoff/capsule.key.enc \
+            -out "$RUNNER_TEMP/lunea-rendezvous/capsule.key"
+          openssl enc -d -aes-256-cbc -pbkdf2 \
+            -pass file:"$RUNNER_TEMP/lunea-rendezvous/capsule.key" \
+            -in lunea-handoff/capsule.tar.gz.enc \
+            -out "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz"
+          mkdir -p "$RUNNER_TEMP/lunea-body"
+          tar -xzf "$RUNNER_TEMP/lunea-rendezvous/capsule.tar.gz" -C "$RUNNER_TEMP/lunea-body"
           python3 - <<'PY'
-          import base64, hashlib, json, urllib.request
-          from datetime import datetime, timezone
-
-          API='https://api.cloudflare.com/client/v4'
-          TERMS='https://www.cloudflare.com/terms/'
-          PRIVACY='https://www.cloudflare.com/privacypolicy/'
-          MAX=64_000_000
-
-          def post(path, payload):
-              data=json.dumps(payload, separators=(',',':')).encode()
-              req=urllib.request.Request(API+path, data=data, method='POST', headers={
-                  'accept':'application/json','content-type':'application/json'
-              })
-              with urllib.request.urlopen(req, timeout=90) as r:
-                  out=json.loads(r.read().decode())
-              if out.get('success') is not True:
-                  raise SystemExit('provider rejected '+path+': '+repr(out.get('errors')))
-              return out['result']
-
-          ch=post('/provisioning/previews/challenge', {})
-          token=str(ch.get('challengeToken') or '')
-          seed_s=str(ch.get('seed') or '')
-          k=int(ch.get('k') or 0); g=int(ch.get('g') or 0)
-          if not token or k<=0 or g<=0 or k*g>MAX:
-              raise SystemExit('challenge bounds invalid')
-          seed=base64.urlsafe_b64decode(seed_s + '='*((4-len(seed_s)%4)%4))
-          if len(seed)!=32:
-              raise SystemExit('challenge seed length invalid')
-          current=hashlib.sha256(seed).digest(); checkpoints=[current]
-          for _ in range(k):
-              for _ in range(g):
-                  current=hashlib.sha256(current).digest()
-              checkpoints.append(current)
-
-          acct=post('/provisioning/previews', {
-              'termsOfService': TERMS,
-              'privacyPolicy': PRIVACY,
-              'acceptTermsOfService':'yes',
-              'challengeToken': token,
-              'solution': {'checkpoints': base64.b64encode(b''.join(checkpoints)).decode('ascii')},
-          })
-          account=acct.get('account') or {}; claim=acct.get('claim') or {}
-          account_id=str(account.get('id') or '')
-          api_token=str(account.get('apiToken') or '')
-          claim_url=str(claim.get('url') or '')
-          if not account_id or not api_token or not claim_url.startswith('https://dash.cloudflare.com/claim-preview'):
-              raise SystemExit('temporary account material incomplete')
-
-          # Deliberately emit no bearer token, claim token, claim URL, or account id.
-          print(json.dumps({
-              'runner_attached': True,
-              'cloudflare_preview_challenge_reachable': True,
-              'proof_of_work_solved': True,
-              'temporary_account_acquired': True,
-              'terms_boundary_authorized': True,
-              'provider_credentials_retained': False,
-              'account_expires_at_present': bool(account.get('expiresAt')),
-              'claim_expires_at_present': bool(claim.get('expiresAt')),
-          }, sort_keys=True))
+          import hashlib, json, pathlib
+          root=pathlib.Path(__import__('os').environ['RUNNER_TEMP'])/'lunea-body'
+          manifest=json.loads((root/'manifest.json').read_text())
+          expected=set(manifest['files'])
+          actual={p.name for p in root.iterdir() if p.is_file() and p.name!='manifest.json'}
+          if actual != expected:
+              raise SystemExit(f'capsule file set mismatch: {sorted(actual)} != {sorted(expected)}')
+          for name,digest in manifest['files'].items():
+              got=hashlib.sha256((root/name).read_bytes()).hexdigest()
+              if got != digest:
+                  raise SystemExit(f'digest mismatch for {name}')
+          print(json.dumps({'capsule_decrypted':True,'body_file_count':len(actual),'manifest_verified':True}, sort_keys=True))
           PY
+
+      - name: Prove readable Body was ephemeral
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/lunea-body" "$RUNNER_TEMP/lunea-rendezvous"
+          echo '{"ephemeral_body_cleanup_attempted":true,"private_recipient_key_not_persisted":true}'
