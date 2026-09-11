@@ -1,0 +1,82 @@
+name: Lunea D-01 Source Bundle
+
+on:
+  push:
+    branches:
+      - lunea-d01-execution-locus
+    paths:
+      - ".github/workflows/lunea-d01-sourcebundle.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  source-bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: lunea-d01-execution-locus
+
+      - name: Mint one-time recipient
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf lunea-source-bundle
+          mkdir -p lunea-source-bundle "$RUNNER_TEMP/lunea-source-bundle"
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$RUNNER_TEMP/lunea-source-bundle/private.pem" >/dev/null 2>&1
+          openssl pkey -in "$RUNNER_TEMP/lunea-source-bundle/private.pem" -pubout -out lunea-source-bundle/recipient-public.pem >/dev/null 2>&1
+          printf '{"schema":"lunea-source-bundle-v1","run_id":"%s"}\n' "$GITHUB_RUN_ID" > lunea-source-bundle/request.json
+          git config user.name lunea-source-bundle-bot
+          git config user.email lunea-source-bundle@users.noreply.github.com
+          git add lunea-source-bundle/recipient-public.pem lunea-source-bundle/request.json
+          git commit -m "genesis: publish source-bundle recipient ${GITHUB_RUN_ID}"
+          git push origin HEAD:lunea-d01-execution-locus
+
+      - name: Wait for encrypted source bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 100); do
+            git fetch origin lunea-d01-execution-locus --quiet
+            git checkout -q origin/lunea-d01-execution-locus -- lunea-source-bundle 2>/dev/null || true
+            if [[ -f lunea-source-bundle/envelope.json && -f lunea-source-bundle/sources.json.enc.b64 ]]; then
+              actual="$(python3 -c 'import json; print(json.load(open("lunea-source-bundle/envelope.json")).get("run_id",""))')"
+              [[ "$actual" == "$GITHUB_RUN_ID" ]] && exit 0
+            fi
+            sleep 4
+          done
+          echo 'encrypted source bundle did not arrive before expiry' >&2
+          exit 1
+
+      - name: Decrypt bundle and acquire exact private Body
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 -d lunea-source-bundle/sources.json.enc.b64 > "$RUNNER_TEMP/lunea-source-bundle/sources.json.enc"
+          openssl pkeyutl -decrypt -inkey "$RUNNER_TEMP/lunea-source-bundle/private.pem" -in "$RUNNER_TEMP/lunea-source-bundle/sources.json.enc" -out "$RUNNER_TEMP/lunea-source-bundle/sources.json" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256
+          mkdir -p "$RUNNER_TEMP/lunea-body"
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, subprocess
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-body'
+          spec=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-source-bundle'/'sources.json').read_text())
+          required={'cloudflare_womb_v2.py','cloudflare_entry.py','genesis.py','witness.py','womb_protocol.py','wake_protocol.py','alarm_ffi.py'}
+          items=spec.get('files',[])
+          if spec.get('schema')!='lunea-private-source-capabilities-v1' or {x.get('name') for x in items}!=required or len(items)!=7:
+              raise SystemExit('source bundle is not the exact Frontier-1 Body')
+          for item in items:
+              name=item['name']; url=item['url']; expected=item['git_blob_sha']
+              if not url.startswith('https://raw.githubusercontent.com/jcoulthurst2-maker/jaden-intelligence/'):
+                  raise SystemExit('source capability target rejected')
+              out=root/name
+              subprocess.run(['curl','--fail','--silent','--show-error',url,'-o',str(out)],check=True)
+              b=out.read_bytes()
+              actual=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              if actual!=expected: raise SystemExit('Git blob identity mismatch: '+name)
+          print(json.dumps({'private_body_acquired':True,'body_file_count':7,'git_blob_identities_verified':True,'readable_body_published':False},sort_keys=True))
+          PY
+
+      - name: Destroy ephemeral material
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/lunea-body" "$RUNNER_TEMP/lunea-source-bundle"
