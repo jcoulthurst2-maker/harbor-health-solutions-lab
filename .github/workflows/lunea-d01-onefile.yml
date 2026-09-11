@@ -1,0 +1,85 @@
+name: Lunea D-01 One File Transport Probe
+
+on:
+  push:
+    branches:
+      - lunea-d01-execution-locus
+    paths:
+      - ".github/workflows/lunea-d01-onefile.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  one-file:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: lunea-d01-execution-locus
+
+      - name: Mint one-time recipient
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf lunea-onefile
+          mkdir -p lunea-onefile "$RUNNER_TEMP/lunea-onefile"
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$RUNNER_TEMP/lunea-onefile/private.pem" >/dev/null 2>&1
+          openssl pkey -in "$RUNNER_TEMP/lunea-onefile/private.pem" -pubout -out lunea-onefile/recipient-public.pem >/dev/null 2>&1
+          FP="$(openssl pkey -pubin -in lunea-onefile/recipient-public.pem -outform DER | sha256sum | awk '{print $1}')"
+          printf '{"schema":"lunea-onefile-v1","run_id":"%s","recipient_fingerprint":"sha256:%s"}\n' "$GITHUB_RUN_ID" "$FP" > lunea-onefile/request.json
+          git config user.name lunea-onefile-bot
+          git config user.email lunea-onefile@users.noreply.github.com
+          git add -A lunea-onefile
+          git commit -m "genesis: publish one-file recipient ${GITHUB_RUN_ID}"
+          git push origin HEAD:lunea-d01-execution-locus
+
+      - name: Wait for one encrypted Body file
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED_RUN="$GITHUB_RUN_ID"
+          EXPECTED_FP="$(python3 -c 'import json; print(json.load(open("lunea-onefile/request.json"))["recipient_fingerprint"])')"
+          for attempt in $(seq 1 90); do
+            git fetch origin lunea-d01-execution-locus --quiet
+            git checkout -q origin/lunea-d01-execution-locus -- lunea-onefile 2>/dev/null || true
+            if [[ -f lunea-onefile/file.enc.b64 && -f lunea-onefile/key.enc.b64 && -f lunea-onefile/ready.json ]]; then
+              if python3 - "$EXPECTED_RUN" "$EXPECTED_FP" <<'PY'
+          import base64, hashlib, json, pathlib, sys
+          root=pathlib.Path('lunea-onefile'); run,fp=sys.argv[1:]
+          r=json.loads((root/'ready.json').read_text())
+          if r.get('schema')!='lunea-onefile-ready-v1' or r.get('run_id')!=run or r.get('recipient_fingerprint')!=fp: raise SystemExit(1)
+          c=base64.b64decode((root/'file.enc.b64').read_text(),validate=True)
+          k=base64.b64decode((root/'key.enc.b64').read_text(),validate=True)
+          if hashlib.sha256(c).hexdigest()!=r.get('file_ciphertext_sha256'): raise SystemExit(1)
+          if hashlib.sha256(k).hexdigest()!=r.get('key_ciphertext_sha256'): raise SystemExit(1)
+          PY
+              then exit 0; fi
+            fi
+            sleep 4
+          done
+          echo 'one-file ciphertext did not arrive before expiry' >&2
+          exit 1
+
+      - name: Decrypt and verify exact cloudflare_womb_v2.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 -d lunea-onefile/key.enc.b64 > "$RUNNER_TEMP/lunea-onefile/key.enc"
+          base64 -d lunea-onefile/file.enc.b64 > "$RUNNER_TEMP/lunea-onefile/file.enc"
+          openssl pkeyutl -decrypt -inkey "$RUNNER_TEMP/lunea-onefile/private.pem" -in "$RUNNER_TEMP/lunea-onefile/key.enc" -out "$RUNNER_TEMP/lunea-onefile/key" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256
+          openssl enc -d -aes-256-cbc -pbkdf2 -pass file:"$RUNNER_TEMP/lunea-onefile/key" -in "$RUNNER_TEMP/lunea-onefile/file.enc" -out "$RUNNER_TEMP/lunea-onefile/cloudflare_womb_v2.py"
+          python3 - <<'PY'
+          import hashlib, os, pathlib, json
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-onefile/cloudflare_womb_v2.py'
+          b=p.read_bytes()
+          blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          expected='966048ac334c5898dfea6ddad38da820cccc2525'
+          if blob != expected: raise SystemExit('Git blob mismatch')
+          print(json.dumps({'one_private_file_transported':True,'git_blob_verified':True,'readable_source_published':False},sort_keys=True))
+          PY
+
+      - name: Destroy ephemeral material
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/lunea-onefile"
