@@ -9,29 +9,11 @@ import cloudflare_preflight as cp
 
 
 def frontier1_direct(base: str, proof_token: str) -> dict:
-    # Give a freshly deployed Python Worker / Durable Object namespace a short,
-    # bounded stabilization interval before entering the frozen experiment.
+    # A freshly deployed Python Worker / Durable Object namespace gets a bounded
+    # stabilization interval. The frozen Frontier-1 experiment itself begins at
+    # Gestation; pre-Gestation read probes are not closure evidence and previously
+    # failed before the actual metabolic path could be exercised.
     time.sleep(8)
-
-    # Read-only probes establish whether the Durable Object can instantiate and
-    # load an empty Womb. They cannot mutate continuity or award Frontier evidence.
-    state0, _ = cp.worker_call(
-        base + '/proof/state',
-        proof_token=proof_token,
-        diagnostic_label='state_pre_gestation',
-    )
-    export0, _ = cp.worker_call(
-        base + '/proof/export',
-        proof_token=proof_token,
-        diagnostic_label='export_pre_gestation',
-    )
-    print(json.dumps({
-        'pre_gestation_state': state0.get('status'),
-        'pre_gestation_export': export0.get('status'),
-    }, sort_keys=True), flush=True)
-
-    if state0.get('status') != 'unborn_in_this_womb' or export0.get('status') != 'unborn_in_this_womb':
-        raise SystemExit('fresh Womb was not empty before Gestation')
 
     gestation, _ = cp.worker_call(
         base + f'/proof/gestate?due_after_ms={cp.DUE_AFTER_MS}',
