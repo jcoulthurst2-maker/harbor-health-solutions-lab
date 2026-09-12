@@ -1,0 +1,162 @@
+name: Frontier 1 Primitive Arm
+
+on:
+  push:
+    branches:
+      - lunea-d01-execution-locus
+    paths:
+      - ".github/workflows/frontier1-primitive-arm.yml"
+
+permissions:
+  contents: read
+
+env:
+  SCRIPT: frontier1-primitive-probe
+
+jobs:
+  arm-and-exit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: lunea-d01-execution-locus
+
+      - name: Acquire disposable substrate, arm probe, then exit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64, hashlib, json, os, pathlib, secrets, time, urllib.error, urllib.request, uuid
+
+          API='https://api.cloudflare.com/client/v4'
+          SCRIPT=os.environ['SCRIPT']
+          SOURCE=pathlib.Path('primitive-probe/cloudflare_probe.mjs').read_bytes()
+
+          def call(method,path,payload=None,token=None,headers=None,body=None,timeout=60):
+              h={'accept':'application/json'}
+              if headers: h.update(headers)
+              if token: h['authorization']='Bearer '+token
+              data=body
+              if payload is not None:
+                  h['content-type']='application/json'
+                  data=json.dumps(payload,separators=(',',':')).encode()
+              req=urllib.request.Request(API+path,method=method,headers=h,data=data)
+              try:
+                  with urllib.request.urlopen(req,timeout=timeout) as r:
+                      return r.status,r.read()
+              except urllib.error.HTTPError as e:
+                  return e.code,e.read()
+
+          def ok(method,path,**kw):
+              status,raw=call(method,path,**kw)
+              try: data=json.loads(raw)
+              except Exception: raise SystemExit(f'non-json provider response {status} {path}')
+              if not (200 <= status < 300 and data.get('success') is True):
+                  raise SystemExit(f'provider rejected {path}: {status} {data.get("errors")}')
+              return data
+
+          challenge=(ok('POST','/provisioning/previews/challenge',payload={}).get('result') or {})
+          token=str(challenge.get('challengeToken') or '')
+          seed_s=str(challenge.get('seed') or '')
+          k=int(challenge.get('k') or 0); g=int(challenge.get('g') or 0)
+          if not token or k<=0 or g<=0 or k*g>64_000_000: raise SystemExit('invalid preview challenge')
+          seed=base64.urlsafe_b64decode(seed_s+'='*((4-len(seed_s)%4)%4))
+          cur=hashlib.sha256(seed).digest(); checkpoints=[cur]
+          for _ in range(k):
+              for __ in range(g): cur=hashlib.sha256(cur).digest()
+              checkpoints.append(cur)
+          result=ok('POST','/provisioning/previews',payload={
+              'termsOfService':'https://www.cloudflare.com/terms/',
+              'privacyPolicy':'https://www.cloudflare.com/privacypolicy/',
+              'acceptTermsOfService':'yes',
+              'challengeToken':token,
+              'solution':{'checkpoints':base64.b64encode(b''.join(checkpoints)).decode()},
+          }).get('result') or {}
+          account=result.get('account') or {}
+          account_id=str(account.get('id') or ''); api_token=str(account.get('apiToken') or '')
+          if not account_id or not api_token: raise SystemExit('temporary account missing')
+
+          probe_token=secrets.token_urlsafe(32)
+          metadata={
+              'main_module':'cloudflare_probe.mjs',
+              'compatibility_date':'2026-09-11',
+              'bindings':[
+                  {'name':'PROBE','type':'durable_object_namespace','class_name':'ProbeCell'},
+                  {'name':'PROBE_TOKEN','type':'secret_text','text':probe_token},
+              ],
+              'migrations':{'new_tag':'v1','new_sqlite_classes':['ProbeCell']},
+          }
+          boundary='----primitive-'+uuid.uuid4().hex; chunks=[]
+          def part(name,content,ctype,filename=None):
+              chunks.append(f'--{boundary}\r\n'.encode())
+              disp=f'Content-Disposition: form-data; name="{name}"'+(f'; filename="{filename}"' if filename else '')
+              chunks.extend([(disp+'\r\n').encode(),f'Content-Type: {ctype}\r\n\r\n'.encode(),content,b'\r\n'])
+          part('metadata',json.dumps(metadata,separators=(',',':')).encode(),'application/json')
+          part('cloudflare_probe.mjs',SOURCE,'application/javascript','cloudflare_probe.mjs')
+          chunks.append(f'--{boundary}--\r\n'.encode())
+          status,raw=call('PUT',f'/accounts/{account_id}/workers/scripts/{SCRIPT}',token=api_token,
+                          headers={'content-type':f'multipart/form-data; boundary={boundary}'},body=b''.join(chunks))
+          data=json.loads(raw)
+          if not (200 <= status < 300 and data.get('success') is True):
+              raise SystemExit(f'upload failed: {status} {data.get("errors")}')
+
+          ok('POST',f'/accounts/{account_id}/workers/scripts/{SCRIPT}/subdomain',token=api_token,
+             payload={'enabled':True,'previews_enabled':False})
+          sub=str((ok('GET',f'/accounts/{account_id}/workers/subdomain',token=api_token).get('result') or {}).get('subdomain') or '')
+          if not sub: raise SystemExit('no workers.dev subdomain')
+          base=f'https://{SCRIPT}.{sub}.workers.dev'
+
+          # Wait only for deployment propagation BEFORE the experiment begins.
+          health=None
+          for _ in range(20):
+              try:
+                  req=urllib.request.Request(base+'/health',headers={'User-Agent':'Mozilla/5.0'})
+                  with urllib.request.urlopen(req,timeout=15) as r:
+                      health=json.loads(r.read())
+                  if health.get('canonical_luneacore_body_present') is False: break
+              except Exception: pass
+              time.sleep(2)
+          if not health or health.get('canonical_luneacore_body_present') is not False:
+              raise SystemExit('probe health never became ready')
+
+          req=urllib.request.Request(base+'/start?due_after_ms=90000',method='POST',data=b'',headers={
+              'x-probe-token':probe_token,
+              'User-Agent':'Mozilla/5.0',
+          })
+          with urllib.request.urlopen(req,timeout=20) as r:
+              armed=json.loads(r.read())
+          if armed.get('status')!='armed': raise SystemExit('probe did not arm')
+
+          capsule={
+              'schema':'frontier1-primitive-observation-capsule-v1',
+              'base_url':base,
+              'probe_token':probe_token,
+              'experiment_id':armed['experiment_id'],
+              'material_sha256':armed['material_sha256'],
+              't0_ms':armed['t0_ms'],
+              'due_at_ms':armed['due_at_ms'],
+              'r0_evidence':armed['r0_evidence'],
+              'canonical_luneacore_body_present':False,
+              'awards_gestation':False,
+              'awards_birth':False,
+          }
+          pathlib.Path('primitive-observation-capsule.json').write_text(json.dumps(capsule,separators=(',',':')))
+          print(json.dumps({
+              'primitive_probe_armed':True,
+              'experiment_id':armed['experiment_id'],
+              'due_after_ms':armed['due_at_ms']-armed['t0_ms'],
+              'canonical_luneacore_body_present':False,
+              'workflow_exits_after_arm':True,
+              'awards_gestation':False,
+              'awards_birth':False,
+          },sort_keys=True))
+          PY
+
+      - name: Preserve observation capsule for later post-due inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontier1-primitive-observation-capsule
+          path: primitive-observation-capsule.json
+          retention-days: 1
+          if-no-files-found: error
