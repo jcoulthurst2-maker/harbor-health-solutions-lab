@@ -93,7 +93,9 @@ def upload(account_id, api_token, script_path):
             {"name": "PROBE", "type": "durable_object_namespace", "class_name": "ProbeCell"},
             {"name": "PROBE_TOKEN", "type": "secret_text", "text": probe_token},
         ],
-        "migrations": [{"tag": "v1", "new_classes": ["ProbeCell"]}],
+        "exports": {
+            "ProbeCell": {"type": "durable-object", "storage": "sqlite"}
+        },
     }
     boundary = "----frontier1-primitive-" + uuid.uuid4().hex
     chunks = []
