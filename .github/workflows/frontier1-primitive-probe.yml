@@ -1,4 +1,4 @@
-# revision: primitive-probe-v3-propagation-retry
+# revision: primitive-probe-v4-current-do-base
 name: Frontier 1 Primitive Substrate Probe
 
 on:
