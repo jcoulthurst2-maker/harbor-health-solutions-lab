@@ -1,4 +1,4 @@
-# D-01 provider probe revision: frontier-1-route-contract-v8
+# D-01 provider probe revision: frontier-1-route-contract-v9-clean-flight
 name: Lunea D-01 One Bundle
 
 on:
@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: lunea-d01-one-bundle
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   one-bundle:
