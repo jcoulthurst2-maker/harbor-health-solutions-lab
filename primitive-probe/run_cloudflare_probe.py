@@ -171,6 +171,9 @@ def main():
         try:
             health, _ = worker_json(base + "/health")
             break
+        except SystemExit as exc:
+            last = str(exc)
+            time.sleep(2)
         except Exception as exc:
             last = f"{type(exc).__name__}: {exc}"
             time.sleep(2)
