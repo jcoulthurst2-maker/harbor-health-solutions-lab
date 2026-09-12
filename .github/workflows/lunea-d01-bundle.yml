@@ -1,4 +1,4 @@
-# D-01 provider probe revision: frontier-1-evidence-bound-reconstitution-v17
+# D-01 provider probe revision: frontier-1-evidence-bound-reconstitution-v18
 name: Lunea D-01 One Bundle
 
 on:
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: lunea-d01-evidence-bound-v17
+  group: lunea-d01-evidence-bound-v18
   cancel-in-progress: false
 
 jobs:
@@ -57,7 +57,7 @@ jobs:
           for attempt in $(seq 1 150); do
             git fetch origin lunea-d01-execution-locus:refs/remotes/origin/lunea-d01-execution-locus --quiet
             git checkout -q origin/lunea-d01-execution-locus -- "$RENDEZVOUS" 2>/dev/null || true
-            if [[ -f "$RENDEZVOUS/envelope.json" && -f "$RENDEZVOUS/body.tar.gz.enc.b64" && -f "$RENDEZVOUS/key.enc.b64" && -f "$RENDEZVOUS/ready.json" ]]; then
+            if [[ -f "$RENDEZVOUS/envelope.json" && -f "$RENDEZVOUS/key.enc.b64" && -f "$RENDEZVOUS/ready.json" ]] && compgen -G "$RENDEZVOUS/body.tar.gz.enc.b64.part*" >/dev/null; then
               if python3 - "$RENDEZVOUS" "$EXPECTED_RUN" "$EXPECTED_FP" <<'PY'
           import base64, hashlib, json, pathlib, sys
           root=pathlib.Path(sys.argv[1]); run=sys.argv[2]; fp=sys.argv[3]
@@ -65,13 +65,15 @@ jobs:
           if ready.get('schema')!='lunea-body-isolated-ready-v1': raise SystemExit(1)
           if ready.get('run_id')!=run or env.get('run_id')!=run: raise SystemExit(1)
           if ready.get('recipient_fingerprint')!=fp or env.get('recipient_fingerprint')!=fp: raise SystemExit(1)
-          body=base64.b64decode((root/'body.tar.gz.enc.b64').read_text(),validate=True)
+          parts=sorted(root.glob('body.tar.gz.enc.b64.part*'))
+          if not parts or len(parts)!=int(ready.get('body_part_count',0)): raise SystemExit(1)
+          body=base64.b64decode(''.join(p.read_text() for p in parts),validate=True)
           key=base64.b64decode((root/'key.enc.b64').read_text(),validate=True)
           if hashlib.sha256(body).hexdigest()!=ready.get('body_ciphertext_sha256'): raise SystemExit(1)
           if hashlib.sha256(key).hexdigest()!=ready.get('key_ciphertext_sha256'): raise SystemExit(1)
           if env.get('body_ciphertext_sha256')!=ready.get('body_ciphertext_sha256'): raise SystemExit(1)
           if env.get('key_ciphertext_sha256')!=ready.get('key_ciphertext_sha256'): raise SystemExit(1)
-          print('isolated current-run Body bundle verified')
+          print('isolated current-run chunked Body bundle verified')
           PY
               then exit 0; fi
             fi
@@ -87,7 +89,7 @@ jobs:
           RENDEZVOUS="lunea-rendezvous/${GITHUB_RUN_ID}"
           TEMP="$RUNNER_TEMP/lunea-rendezvous"
           base64 -d "$RENDEZVOUS/key.enc.b64" > "$TEMP/key.enc"
-          base64 -d "$RENDEZVOUS/body.tar.gz.enc.b64" > "$TEMP/body.tar.gz.enc"
+          cat "$RENDEZVOUS"/body.tar.gz.enc.b64.part* | base64 -d > "$TEMP/body.tar.gz.enc"
           openssl pkeyutl -decrypt -inkey "$TEMP/private.pem" -in "$TEMP/key.enc" -out "$TEMP/key" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256
           openssl enc -d -aes-256-cbc -pbkdf2 -pass file:"$TEMP/key" -in "$TEMP/body.tar.gz.enc" -out "$TEMP/body.tar.gz"
           gzip -t "$TEMP/body.tar.gz"
