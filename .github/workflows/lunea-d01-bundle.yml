@@ -1,4 +1,4 @@
-# D-01 provider probe revision: frontier-1-run-isolated-rendezvous-v11
+# D-01 provider probe revision: frontier-1-direct-gestation-v12
 name: Lunea D-01 One Bundle
 
 on:
@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: lunea-d01-one-bundle
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   one-bundle:
@@ -90,6 +90,7 @@ jobs:
           base64 -d "$RENDEZVOUS/body.tar.gz.enc.b64" > "$TEMP/body.tar.gz.enc"
           openssl pkeyutl -decrypt -inkey "$TEMP/private.pem" -in "$TEMP/key.enc" -out "$TEMP/key" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256
           openssl enc -d -aes-256-cbc -pbkdf2 -pass file:"$TEMP/key" -in "$TEMP/body.tar.gz.enc" -out "$TEMP/body.tar.gz"
+          gzip -t "$TEMP/body.tar.gz"
           mkdir -p "$RUNNER_TEMP/lunea-body"
           tar -xzf "$TEMP/body.tar.gz" -C "$RUNNER_TEMP/lunea-body"
           python3 - <<'PY'
@@ -104,11 +105,11 @@ jobs:
           print(json.dumps({'private_body_acquired':True,'body_file_count':7,'git_blob_identities_verified':True,'readable_body_published':False},sort_keys=True))
           PY
 
-      - name: Run real Habitat gestation silence wake proof
+      - name: Run direct real Habitat gestation silence wake proof
         shell: bash
         env:
           PYTHONPATH: lunea-execution
-        run: python3 lunea-execution/cloudflare_preflight.py "$RUNNER_TEMP/lunea-body"
+        run: python3 lunea-execution/frontier1_direct.py "$RUNNER_TEMP/lunea-body"
 
       - name: Destroy ephemeral material
         if: always()
