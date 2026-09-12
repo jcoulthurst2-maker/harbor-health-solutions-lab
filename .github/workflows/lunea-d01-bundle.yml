@@ -1,4 +1,4 @@
-# D-01 provider probe revision: frontier-1-gestation-stage-diagnostics-v13
+# D-01 provider probe revision: frontier-1-explicit-rpc-v14
 name: Lunea D-01 One Bundle
 
 on:
@@ -96,7 +96,7 @@ jobs:
           python3 - <<'PY'
           import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-body'; m=json.loads((root/'manifest.json').read_text())
-          expected={'cloudflare_womb_v2.py':'966048ac334c5898dfea6ddad38da820cccc2525','cloudflare_entry.py':'c9b758870c7f2108b20aab3f49ea8b77c0423004','genesis.py':'dba60d866b1712b531cac7d2deb069287ea4a562','witness.py':'f46b9ddc46d03060cd4d60535893e9a4bf5f2625','womb_protocol.py':'e1b8892c626e0777f3819ed15287fbb03bf1fcfe','wake_protocol.py':'513b16b0fcf8de14e756c26b08a4cbf396a8050e','alarm_ffi.py':'b71b169cc59b60660767cb2035321a4c52761fa3'}
+          expected={'cloudflare_womb_v2.py':'d2790a3acf1c5314b9673b7c662ab4386db4072a','cloudflare_entry.py':'c9b758870c7f2108b20aab3f49ea8b77c0423004','genesis.py':'dba60d866b1712b531cac7d2deb069287ea4a562','witness.py':'f46b9ddc46d03060cd4d60535893e9a4bf5f2625','womb_protocol.py':'e1b8892c626e0777f3819ed15287fbb03bf1fcfe','wake_protocol.py':'513b16b0fcf8de14e756c26b08a4cbf396a8050e','alarm_ffi.py':'b71b169cc59b60660767cb2035321a4c52761fa3'}
           files={p.name for p in root.iterdir() if p.is_file() and p.name!='manifest.json'}
           if files!=set(expected) or set(m.get('files',{}))!=set(expected): raise SystemExit('exact Body file set mismatch')
           for name,sha in expected.items():
