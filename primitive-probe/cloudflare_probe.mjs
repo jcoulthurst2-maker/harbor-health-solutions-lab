@@ -108,7 +108,7 @@ export default {
       });
     }
 
-    const id = env.PROBE.getByName('frontier1-primitive-probe');
+    const id = env.PROBE.idFromName('frontier1-primitive-probe');
     return env.PROBE.get(id).fetch(request);
   }
 };
