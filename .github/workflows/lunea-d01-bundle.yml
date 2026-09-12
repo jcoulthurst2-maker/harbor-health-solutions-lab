@@ -1,4 +1,4 @@
-# D-01 provider probe revision: frontier-1-evidence-bound-reconstitution-v15
+# D-01 provider probe revision: frontier-1-evidence-bound-reconstitution-v16
 name: Lunea D-01 One Bundle
 
 on:
@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: lunea-d01-one-bundle
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   one-bundle:
@@ -96,7 +96,7 @@ jobs:
           python3 - <<'PY'
           import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-body'; m=json.loads((root/'manifest.json').read_text())
-          expected={'cloudflare_womb_v2.py':'d1f7ac2facdeb6eb2a30ed80e80785074886032a','cloudflare_entry.py':'c9b758870c7f2108b20aab3f49ea8b77c0423004','genesis.py':'dba60d866b1712b531cac7d2deb069287ea4a562','witness.py':'f46b9ddc46d03060cd4d60535893e9a4bf5f2625','womb_protocol.py':'e1b8892c626e0777f3819ed15287fbb03bf1fcfe','wake_protocol.py':'513b16b0fcf8de14e756c26b08a4cbf396a8050e','reconstitution.py':'1be9ed1f84be973e44631f263cb0c987859327a1','alarm_ffi.py':'b71b169cc59b60660767cb2035321a4c52761fa3'}
+          expected={'cloudflare_womb_v2.py':'09781b5ecabb25e3dde403f0898a0685130c4a7d','cloudflare_entry.py':'c9b758870c7f2108b20aab3f49ea8b77c0423004','genesis.py':'dba60d866b1712b531cac7d2deb069287ea4a562','witness.py':'f46b9ddc46d03060cd4d60535893e9a4bf5f2625','womb_protocol.py':'e1b8892c626e0777f3819ed15287fbb03bf1fcfe','wake_protocol.py':'513b16b0fcf8de14e756c26b08a4cbf396a8050e','reconstitution.py':'e84e99d2cce7a017d7879ae15c6f873a68d4817f','alarm_ffi.py':'b71b169cc59b60660767cb2035321a4c52761fa3'}
           files={p.name for p in root.iterdir() if p.is_file() and p.name!='manifest.json'}
           if files!=set(expected) or set(m.get('files',{}))!=set(expected): raise SystemExit('exact Body file set mismatch')
           for name,sha in expected.items():
