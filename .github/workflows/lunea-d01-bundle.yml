@@ -1,4 +1,4 @@
-# D-01 provider probe revision: frontier-1-explicit-rpc-v14
+# D-01 provider probe revision: frontier-1-evidence-bound-reconstitution-v15
 name: Lunea D-01 One Bundle
 
 on:
@@ -96,16 +96,16 @@ jobs:
           python3 - <<'PY'
           import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-body'; m=json.loads((root/'manifest.json').read_text())
-          expected={'cloudflare_womb_v2.py':'d2790a3acf1c5314b9673b7c662ab4386db4072a','cloudflare_entry.py':'c9b758870c7f2108b20aab3f49ea8b77c0423004','genesis.py':'dba60d866b1712b531cac7d2deb069287ea4a562','witness.py':'f46b9ddc46d03060cd4d60535893e9a4bf5f2625','womb_protocol.py':'e1b8892c626e0777f3819ed15287fbb03bf1fcfe','wake_protocol.py':'513b16b0fcf8de14e756c26b08a4cbf396a8050e','alarm_ffi.py':'b71b169cc59b60660767cb2035321a4c52761fa3'}
+          expected={'cloudflare_womb_v2.py':'d1f7ac2facdeb6eb2a30ed80e80785074886032a','cloudflare_entry.py':'c9b758870c7f2108b20aab3f49ea8b77c0423004','genesis.py':'dba60d866b1712b531cac7d2deb069287ea4a562','witness.py':'f46b9ddc46d03060cd4d60535893e9a4bf5f2625','womb_protocol.py':'e1b8892c626e0777f3819ed15287fbb03bf1fcfe','wake_protocol.py':'513b16b0fcf8de14e756c26b08a4cbf396a8050e','reconstitution.py':'1be9ed1f84be973e44631f263cb0c987859327a1','alarm_ffi.py':'b71b169cc59b60660767cb2035321a4c52761fa3'}
           files={p.name for p in root.iterdir() if p.is_file() and p.name!='manifest.json'}
           if files!=set(expected) or set(m.get('files',{}))!=set(expected): raise SystemExit('exact Body file set mismatch')
           for name,sha in expected.items():
               b=(root/name).read_bytes(); blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
               if blob!=sha or m['files'][name].get('git_blob_sha')!=sha or hashlib.sha256(b).hexdigest()!=m['files'][name].get('sha256'): raise SystemExit('Body identity mismatch: '+name)
-          print(json.dumps({'private_body_acquired':True,'body_file_count':7,'git_blob_identities_verified':True,'readable_body_published':False},sort_keys=True))
+          print(json.dumps({'private_body_acquired':True,'body_file_count':8,'git_blob_identities_verified':True,'readable_body_published':False},sort_keys=True))
           PY
 
-      - name: Run direct real Habitat gestation silence wake proof
+      - name: Run direct real Habitat evidence-bound Gestation proof
         shell: bash
         env:
           PYTHONPATH: lunea-execution
