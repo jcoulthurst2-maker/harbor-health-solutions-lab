@@ -1,6 +1,8 @@
-export class ProbeCell {
-  constructor(state, env) {
-    this.state = state;
+import { DurableObject } from "cloudflare:workers";
+
+export class ProbeCell extends DurableObject {
+  constructor(ctx, env) {
+    super(ctx, env);
     this.env = env;
     this.incarnation = crypto.randomUUID();
   }
@@ -19,7 +21,7 @@ export class ProbeCell {
         return Response.json({ error: 'invalid due_after_ms' }, { status: 400 });
       }
 
-      const existing = await this.state.storage.get('experiment');
+      const existing = await this.ctx.storage.get('experiment');
       if (existing) return Response.json({ error: 'already_started' }, { status: 409 });
 
       const bytes = crypto.getRandomValues(new Uint8Array(32));
@@ -43,8 +45,8 @@ export class ProbeCell {
         polling_used: false
       };
 
-      await this.state.storage.put('experiment', experiment);
-      await this.state.storage.setAlarm(dueAtMs);
+      await this.ctx.storage.put('experiment', experiment);
+      await this.ctx.storage.setAlarm(dueAtMs);
 
       return Response.json({
         status: 'armed',
@@ -57,10 +59,10 @@ export class ProbeCell {
     }
 
     if (url.pathname === '/receipt' && request.method === 'GET') {
-      const experiment = await this.state.storage.get('experiment');
+      const experiment = await this.ctx.storage.get('experiment');
       if (!experiment) return Response.json({ status: 'not_started' }, { status: 404 });
       experiment.ingress_count = Number(experiment.ingress_count || 0) + 1;
-      await this.state.storage.put('experiment', experiment);
+      await this.ctx.storage.put('experiment', experiment);
 
       return Response.json({
         schema: experiment.schema,
@@ -83,14 +85,14 @@ export class ProbeCell {
   }
 
   async alarm() {
-    const experiment = await this.state.storage.get('experiment');
+    const experiment = await this.ctx.storage.get('experiment');
     if (!experiment || experiment.alarm_fired) return;
 
     experiment.alarm_fired = true;
     experiment.t1_ms = Date.now();
     experiment.r1_evidence = this.incarnation;
     experiment.ingress_count_at_wake = Number(experiment.ingress_count || 0);
-    await this.state.storage.put('experiment', experiment);
+    await this.ctx.storage.put('experiment', experiment);
   }
 }
 
@@ -106,7 +108,6 @@ export default {
       });
     }
 
-    const id = env.PROBE.idFromName('frontier1-primitive-probe');
-    return env.PROBE.get(id).fetch(request);
+    return env.PROBE.getByName('frontier1-primitive-probe').fetch(request);
   }
 };
