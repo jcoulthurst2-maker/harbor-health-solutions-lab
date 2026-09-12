@@ -1,0 +1,82 @@
+name: Frontier 1 Primitive Observe
+
+on:
+  push:
+    branches:
+      - lunea-d01-execution-locus
+    paths:
+      - ".github/workflows/frontier1-primitive-observe.yml"
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Download arm capsule
+        uses: actions/download-artifact@v4
+        with:
+          name: frontier1-primitive-observation-capsule
+          path: capsule
+          github-token: ${{ github.token }}
+          repository: jcoulthurst2-maker/harbor-health-solutions-lab
+          run-id: 34665981264
+
+      - name: Inspect post-due substrate receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib, urllib.request
+
+          cap=json.loads(pathlib.Path('capsule/primitive-observation-capsule.json').read_text())
+          req=urllib.request.Request(
+              cap['base_url']+'/receipt',
+              headers={'x-probe-token':cap['probe_token'],'User-Agent':'Mozilla/5.0'}
+          )
+          with urllib.request.urlopen(req,timeout=20) as r:
+              got=json.loads(r.read())
+
+          same_experiment=(got.get('experiment_id')==cap['experiment_id'])
+          same_material=(got.get('material_sha256')==cap['material_sha256'])
+          alarm=got.get('alarm_fired') is True
+          t1=got.get('t1_ms')
+          due=cap['due_at_ms']
+          due_reentry=isinstance(t1,int) and t1>=due
+          no_ingress_before_wake=(got.get('ingress_count_at_wake')==1)
+          r0=cap.get('r0_evidence'); r1=got.get('r1_evidence')
+          reincarnated=isinstance(r0,str) and isinstance(r1,str) and r0!=r1
+
+          verdicts={
+              'P1':'OBSERVED' if same_experiment and same_material and alarm else 'UNKNOWN',
+              'P3':'OBSERVED' if alarm and due_reentry else 'UNKNOWN',
+              'P4':'OBSERVED' if alarm and due_reentry else 'UNKNOWN',
+              'P5':'OBSERVED' if reincarnated else 'UNKNOWN',
+              'P6':'OBSERVED' if alarm and no_ingress_before_wake else 'UNKNOWN',
+          }
+          overall='PASS_PRIMITIVE_ENVIRONMENT' if all(v=='OBSERVED' for v in verdicts.values()) else 'UNRESOLVED_SUBSTRATE'
+          safe={
+              'experiment_id_match':same_experiment,
+              'material_survived':same_material,
+              'environment_reentry_observed':alarm and due_reentry,
+              'zero_ingress_before_reentry':no_ingress_before_wake,
+              'runtime_reincarnation_observed':reincarnated,
+              'verdicts':verdicts,
+              'overall':overall,
+              'awards_gestation':False,
+              'awards_birth':False,
+          }
+          print(json.dumps(safe,sort_keys=True))
+          pathlib.Path('primitive-observation-result.json').write_text(json.dumps(safe,separators=(',',':')))
+          PY
+
+      - name: Preserve sanitized result
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontier1-primitive-observation-result
+          path: primitive-observation-result.json
+          retention-days: 1
+          if-no-files-found: error
