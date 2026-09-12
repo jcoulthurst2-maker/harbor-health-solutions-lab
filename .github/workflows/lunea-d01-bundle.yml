@@ -1,4 +1,4 @@
-# D-01 provider probe revision: frontier-1-deterministic-rendezvous-v10
+# D-01 provider probe revision: frontier-1-run-isolated-rendezvous-v11
 name: Lunea D-01 One Bundle
 
 on:
@@ -24,76 +24,74 @@ jobs:
         with:
           ref: lunea-d01-execution-locus
 
-      - name: Mint one-time recipient and clear stale response
+      - name: Mint isolated one-time recipient
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf lunea-bundle
-          mkdir -p lunea-bundle "$RUNNER_TEMP/lunea-bundle"
-          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$RUNNER_TEMP/lunea-bundle/private.pem" >/dev/null 2>&1
-          openssl pkey -in "$RUNNER_TEMP/lunea-bundle/private.pem" -pubout -out lunea-bundle/recipient-public.pem >/dev/null 2>&1
-          FP="$(openssl pkey -pubin -in lunea-bundle/recipient-public.pem -outform DER | sha256sum | awk '{print $1}')"
-          printf '{"schema":"lunea-chunked-v1","run_id":"%s","recipient_fingerprint":"sha256:%s"}\n' "$GITHUB_RUN_ID" "$FP" > lunea-bundle/request.json
+          RENDEZVOUS="lunea-rendezvous/${GITHUB_RUN_ID}"
+          TEMP="$RUNNER_TEMP/lunea-rendezvous"
+          mkdir -p "$RENDEZVOUS" "$TEMP"
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$TEMP/private.pem" >/dev/null 2>&1
+          openssl pkey -in "$TEMP/private.pem" -pubout -out "$RENDEZVOUS/recipient-public.pem" >/dev/null 2>&1
+          FP="$(openssl pkey -pubin -in "$RENDEZVOUS/recipient-public.pem" -outform DER | sha256sum | awk '{print $1}')"
+          printf '{"schema":"lunea-run-isolated-v1","run_id":"%s","recipient_fingerprint":"sha256:%s"}\n' "$GITHUB_RUN_ID" "$FP" > "$RENDEZVOUS/request.json"
           git config user.name lunea-bundle-bot
           git config user.email lunea-bundle@users.noreply.github.com
-          git add -A lunea-bundle
-          git commit -m "genesis: publish deterministic Body recipient ${GITHUB_RUN_ID}"
-          git push origin HEAD:lunea-d01-execution-locus
+          git add "$RENDEZVOUS"
+          git commit -m "genesis: publish isolated Body recipient ${GITHUB_RUN_ID}"
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:lunea-d01-execution-locus; then exit 0; fi
+            git fetch origin lunea-d01-execution-locus --quiet
+            git rebase origin/lunea-d01-execution-locus
+            sleep 1
+          done
+          exit 1
 
-      - name: Wait for complete chunked Body bundle
+      - name: Wait for isolated hash-bound Body bundle
         shell: bash
         run: |
           set -euo pipefail
+          RENDEZVOUS="lunea-rendezvous/${GITHUB_RUN_ID}"
           EXPECTED_RUN="$GITHUB_RUN_ID"
-          EXPECTED_FP="$(python3 -c 'import json; print(json.load(open("lunea-bundle/request.json"))["recipient_fingerprint"])')"
+          EXPECTED_FP="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["recipient_fingerprint"])' "$RENDEZVOUS/request.json")"
           for attempt in $(seq 1 150); do
             git fetch origin lunea-d01-execution-locus:refs/remotes/origin/lunea-d01-execution-locus --quiet
-            git checkout -q origin/lunea-d01-execution-locus -- lunea-bundle 2>/dev/null || true
-            if [[ -f lunea-bundle/ready.json && -f lunea-bundle/key.enc.b64 && -f lunea-bundle/envelope.json ]]; then
-              PARTS=$(python3 -c 'import json; print(json.load(open("lunea-bundle/ready.json")).get("body_part_count",0))' 2>/dev/null || echo 0)
-              if [[ "$PARTS" -gt 0 ]]; then
-                complete=true
-                : > "$RUNNER_TEMP/lunea-bundle/body.tar.gz.enc.b64"
-                for n in $(seq 1 "$PARTS"); do
-                  PAD=$(printf '%02d' "$n")
-                  P="lunea-bundle/body.part-${PAD}"
-                  [[ -s "$P" ]] || P="lunea-bundle/body.part-${n}"
-                  if [[ ! -s "$P" ]]; then complete=false; break; fi
-                  cat "$P" >> "$RUNNER_TEMP/lunea-bundle/body.tar.gz.enc.b64"
-                done
-                if [[ "$complete" == true ]] && python3 - "$EXPECTED_RUN" "$EXPECTED_FP" "$RUNNER_TEMP/lunea-bundle/body.tar.gz.enc.b64" <<'PY'
+            git checkout -q origin/lunea-d01-execution-locus -- "$RENDEZVOUS" 2>/dev/null || true
+            if [[ -f "$RENDEZVOUS/envelope.json" && -f "$RENDEZVOUS/body.tar.gz.enc.b64" && -f "$RENDEZVOUS/key.enc.b64" && -f "$RENDEZVOUS/ready.json" ]]; then
+              if python3 - "$RENDEZVOUS" "$EXPECTED_RUN" "$EXPECTED_FP" <<'PY'
           import base64, hashlib, json, pathlib, sys
-          run,fp,body_path=sys.argv[1:]
-          root=pathlib.Path('lunea-bundle')
+          root=pathlib.Path(sys.argv[1]); run=sys.argv[2]; fp=sys.argv[3]
           ready=json.loads((root/'ready.json').read_text()); env=json.loads((root/'envelope.json').read_text())
-          if ready.get('schema')!='lunea-body-chunked-ready-v1': raise SystemExit(1)
+          if ready.get('schema')!='lunea-body-isolated-ready-v1': raise SystemExit(1)
           if ready.get('run_id')!=run or env.get('run_id')!=run: raise SystemExit(1)
           if ready.get('recipient_fingerprint')!=fp or env.get('recipient_fingerprint')!=fp: raise SystemExit(1)
-          body=base64.b64decode(pathlib.Path(body_path).read_text(),validate=True)
+          body=base64.b64decode((root/'body.tar.gz.enc.b64').read_text(),validate=True)
           key=base64.b64decode((root/'key.enc.b64').read_text(),validate=True)
           if hashlib.sha256(body).hexdigest()!=ready.get('body_ciphertext_sha256'): raise SystemExit(1)
           if hashlib.sha256(key).hexdigest()!=ready.get('key_ciphertext_sha256'): raise SystemExit(1)
-          if env.get('body_ciphertext_sha256')!=ready.get('body_ciphertext_sha256') or env.get('key_ciphertext_sha256')!=ready.get('key_ciphertext_sha256'): raise SystemExit(1)
-          print('deterministic current-run Body bundle verified')
+          if env.get('body_ciphertext_sha256')!=ready.get('body_ciphertext_sha256'): raise SystemExit(1)
+          if env.get('key_ciphertext_sha256')!=ready.get('key_ciphertext_sha256'): raise SystemExit(1)
+          print('isolated current-run Body bundle verified')
           PY
-                then exit 0; fi
-              fi
+              then exit 0; fi
             fi
             sleep 4
           done
-          echo 'chunked Body bundle did not arrive before expiry' >&2
+          echo 'isolated Body bundle did not arrive before expiry' >&2
           exit 1
 
       - name: Decrypt and verify exact private Body
         shell: bash
         run: |
           set -euo pipefail
-          base64 -d lunea-bundle/key.enc.b64 > "$RUNNER_TEMP/lunea-bundle/key.enc"
-          base64 -d "$RUNNER_TEMP/lunea-bundle/body.tar.gz.enc.b64" > "$RUNNER_TEMP/lunea-bundle/body.tar.gz.enc"
-          openssl pkeyutl -decrypt -inkey "$RUNNER_TEMP/lunea-bundle/private.pem" -in "$RUNNER_TEMP/lunea-bundle/key.enc" -out "$RUNNER_TEMP/lunea-bundle/key" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256
-          openssl enc -d -aes-256-cbc -pbkdf2 -pass file:"$RUNNER_TEMP/lunea-bundle/key" -in "$RUNNER_TEMP/lunea-bundle/body.tar.gz.enc" -out "$RUNNER_TEMP/lunea-bundle/body.tar.gz"
+          RENDEZVOUS="lunea-rendezvous/${GITHUB_RUN_ID}"
+          TEMP="$RUNNER_TEMP/lunea-rendezvous"
+          base64 -d "$RENDEZVOUS/key.enc.b64" > "$TEMP/key.enc"
+          base64 -d "$RENDEZVOUS/body.tar.gz.enc.b64" > "$TEMP/body.tar.gz.enc"
+          openssl pkeyutl -decrypt -inkey "$TEMP/private.pem" -in "$TEMP/key.enc" -out "$TEMP/key" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256
+          openssl enc -d -aes-256-cbc -pbkdf2 -pass file:"$TEMP/key" -in "$TEMP/body.tar.gz.enc" -out "$TEMP/body.tar.gz"
           mkdir -p "$RUNNER_TEMP/lunea-body"
-          tar -xzf "$RUNNER_TEMP/lunea-bundle/body.tar.gz" -C "$RUNNER_TEMP/lunea-body"
+          tar -xzf "$TEMP/body.tar.gz" -C "$RUNNER_TEMP/lunea-body"
           python3 - <<'PY'
           import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'lunea-body'; m=json.loads((root/'manifest.json').read_text())
@@ -114,4 +112,4 @@ jobs:
 
       - name: Destroy ephemeral material
         if: always()
-        run: rm -rf "$RUNNER_TEMP/lunea-body" "$RUNNER_TEMP/lunea-bundle"
+        run: rm -rf "$RUNNER_TEMP/lunea-body" "$RUNNER_TEMP/lunea-rendezvous"
