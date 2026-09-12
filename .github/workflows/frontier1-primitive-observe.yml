@@ -35,7 +35,11 @@ jobs:
           cap=json.loads(pathlib.Path('capsule/primitive-observation-capsule.json').read_text())
           req=urllib.request.Request(
               cap['base_url']+'/receipt',
-              headers={'x-probe-token':cap['probe_token'],'User-Agent':'Mozilla/5.0'}
+              headers={
+                  'x-probe-token':cap['probe_token'],
+                  'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36',
+                  'Accept':'application/json,text/plain,*/*',
+              }
           )
           with urllib.request.urlopen(req,timeout=20) as r:
               got=json.loads(r.read())
