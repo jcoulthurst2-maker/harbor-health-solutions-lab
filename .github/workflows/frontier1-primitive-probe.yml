@@ -1,4 +1,4 @@
-# revision: primitive-probe-v2-declarative-export
+# revision: primitive-probe-v3-propagation-retry
 name: Frontier 1 Primitive Substrate Probe
 
 on:
