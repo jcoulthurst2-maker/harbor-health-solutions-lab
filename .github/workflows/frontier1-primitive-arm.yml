@@ -93,7 +93,7 @@ jobs:
               disp=f'Content-Disposition: form-data; name="{name}"'+(f'; filename="{filename}"' if filename else '')
               chunks.extend([(disp+'\r\n').encode(),f'Content-Type: {ctype}\r\n\r\n'.encode(),content,b'\r\n'])
           part('metadata',json.dumps(metadata,separators=(',',':')).encode(),'application/json')
-          part('cloudflare_probe.mjs',SOURCE,'application/javascript','cloudflare_probe.mjs')
+          part('cloudflare_probe.mjs',SOURCE,'application/javascript+module','cloudflare_probe.mjs')
           chunks.append(f'--{boundary}--\r\n'.encode())
           status,raw=call('PUT',f'/accounts/{account_id}/workers/scripts/{SCRIPT}',token=api_token,
                           headers={'content-type':f'multipart/form-data; boundary={boundary}'},body=b''.join(chunks))
