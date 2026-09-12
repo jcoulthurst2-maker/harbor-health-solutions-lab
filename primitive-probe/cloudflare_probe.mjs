@@ -1,18 +1,12 @@
-import { DurableObject } from "cloudflare:workers";
-
-export class ProbeCell extends DurableObject {
-  constructor(ctx, env) {
-    super(ctx, env);
+export class ProbeCell {
+  constructor(state, env) {
+    this.state = state;
     this.env = env;
     this.incarnation = crypto.randomUUID();
   }
 
   async fetch(request) {
     const url = new URL(request.url);
-    const token = request.headers.get('x-probe-token');
-    if (token !== this.env.PROBE_TOKEN) {
-      return Response.json({ error: 'denied' }, { status: 401 });
-    }
 
     if (url.pathname === '/start' && request.method === 'POST') {
       const now = Date.now();
@@ -21,7 +15,7 @@ export class ProbeCell extends DurableObject {
         return Response.json({ error: 'invalid due_after_ms' }, { status: 400 });
       }
 
-      const existing = await this.ctx.storage.get('experiment');
+      const existing = await this.state.storage.get('experiment');
       if (existing) return Response.json({ error: 'already_started' }, { status: 409 });
 
       const bytes = crypto.getRandomValues(new Uint8Array(32));
@@ -45,8 +39,8 @@ export class ProbeCell extends DurableObject {
         polling_used: false
       };
 
-      await this.ctx.storage.put('experiment', experiment);
-      await this.ctx.storage.setAlarm(dueAtMs);
+      await this.state.storage.put('experiment', experiment);
+      await this.state.storage.setAlarm(dueAtMs);
 
       return Response.json({
         status: 'armed',
@@ -59,10 +53,10 @@ export class ProbeCell extends DurableObject {
     }
 
     if (url.pathname === '/receipt' && request.method === 'GET') {
-      const experiment = await this.ctx.storage.get('experiment');
+      const experiment = await this.state.storage.get('experiment');
       if (!experiment) return Response.json({ status: 'not_started' }, { status: 404 });
       experiment.ingress_count = Number(experiment.ingress_count || 0) + 1;
-      await this.ctx.storage.put('experiment', experiment);
+      await this.state.storage.put('experiment', experiment);
 
       return Response.json({
         schema: experiment.schema,
@@ -85,14 +79,13 @@ export class ProbeCell extends DurableObject {
   }
 
   async alarm() {
-    const experiment = await this.ctx.storage.get('experiment');
+    const experiment = await this.state.storage.get('experiment');
     if (!experiment || experiment.alarm_fired) return;
-
     experiment.alarm_fired = true;
     experiment.t1_ms = Date.now();
     experiment.r1_evidence = this.incarnation;
     experiment.ingress_count_at_wake = Number(experiment.ingress_count || 0);
-    await this.ctx.storage.put('experiment', experiment);
+    await this.state.storage.put('experiment', experiment);
   }
 }
 
@@ -107,7 +100,7 @@ export default {
         awards_birth: false
       });
     }
-
-    return env.PROBE.getByName('frontier1-primitive-probe').fetch(request);
+    const id = env.PROBE.idFromName('frontier1-primitive-probe');
+    return env.PROBE.get(id).fetch(request);
   }
 };
