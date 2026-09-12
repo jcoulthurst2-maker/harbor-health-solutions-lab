@@ -2,6 +2,7 @@ export class ProbeCell {
   constructor(state, env) {
     this.state = state;
     this.env = env;
+    this.incarnation = crypto.randomUUID();
   }
 
   async fetch(request) {
@@ -13,7 +14,7 @@ export class ProbeCell {
 
     if (url.pathname === '/start' && request.method === 'POST') {
       const now = Date.now();
-      const dueAfterMs = Number(url.searchParams.get('due_after_ms') || '45000');
+      const dueAfterMs = Number(url.searchParams.get('due_after_ms') || '90000');
       if (!Number.isFinite(dueAfterMs) || dueAfterMs < 15000 || dueAfterMs > 180000) {
         return Response.json({ error: 'invalid due_after_ms' }, { status: 400 });
       }
@@ -25,7 +26,6 @@ export class ProbeCell {
       const material = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
       const digestBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(material));
       const digest = Array.from(new Uint8Array(digestBuffer), b => b.toString(16).padStart(2, '0')).join('');
-      const r0 = crypto.randomUUID();
       const dueAtMs = now + dueAfterMs;
 
       const experiment = {
@@ -35,7 +35,7 @@ export class ProbeCell {
         material_sha256: digest,
         t0_ms: now,
         due_at_ms: dueAtMs,
-        r0_evidence: r0,
+        r0_evidence: this.incarnation,
         alarm_fired: false,
         ingress_count: 1,
         ingress_count_at_wake: null,
@@ -52,7 +52,7 @@ export class ProbeCell {
         material_sha256: digest,
         t0_ms: now,
         due_at_ms: dueAtMs,
-        r0_evidence: r0
+        r0_evidence: this.incarnation
       });
     }
 
@@ -62,7 +62,7 @@ export class ProbeCell {
       experiment.ingress_count = Number(experiment.ingress_count || 0) + 1;
       await this.state.storage.put('experiment', experiment);
 
-      const safe = {
+      return Response.json({
         schema: experiment.schema,
         experiment_id: experiment.experiment_id,
         material_sha256: experiment.material_sha256,
@@ -76,8 +76,7 @@ export class ProbeCell {
         receipt_ingress_count: experiment.ingress_count,
         human_wake_used: experiment.human_wake_used,
         polling_used: experiment.polling_used
-      };
-      return Response.json(safe);
+      });
     }
 
     return Response.json({ error: 'not_found' }, { status: 404 });
@@ -87,10 +86,9 @@ export class ProbeCell {
     const experiment = await this.state.storage.get('experiment');
     if (!experiment || experiment.alarm_fired) return;
 
-    const now = Date.now();
     experiment.alarm_fired = true;
-    experiment.t1_ms = now;
-    experiment.r1_evidence = crypto.randomUUID();
+    experiment.t1_ms = Date.now();
+    experiment.r1_evidence = this.incarnation;
     experiment.ingress_count_at_wake = Number(experiment.ingress_count || 0);
     await this.state.storage.put('experiment', experiment);
   }
