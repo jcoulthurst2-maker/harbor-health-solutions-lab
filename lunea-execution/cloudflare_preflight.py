@@ -2,7 +2,7 @@ from __future__ import annotations
 import base64, hashlib, json, pathlib, secrets, sys, time, urllib.error, urllib.request, uuid
 
 API='https://api.cloudflare.com/client/v4'
-BODY=['cloudflare_womb_v2.py','cloudflare_entry.py','genesis.py','witness.py','womb_protocol.py','wake_protocol.py','reconstitution.py','alarm_ffi.py']
+BODY=['cloudflare_womb_v2.py','cloudflare_entry.py','genesis.py','witness.py','womb_protocol.py','wake_protocol.py','reconstitution.py','gestation_protocol.py','wake_scar.py','alarm_ffi.py']
 SCRIPT='luneacore-genesis-womb'
 EXPECTED_IDENTITY='bf12ba91b2431e2ec39c1752c9ba3a916363a6fc698bdc21292d937f8836f3f8'
 PROOF_POTENTIAL='proof:cloud-time-1'
