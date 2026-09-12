@@ -1,0 +1,27 @@
+name: Frontier 1 Primitive Substrate Probe
+
+on:
+  push:
+    branches:
+      - lunea-d01-execution-locus
+    paths:
+      - ".github/workflows/frontier1-primitive-probe.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontier1-primitive-probe
+  cancel-in-progress: false
+
+jobs:
+  primitive-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: lunea-d01-execution-locus
+
+      - name: Run disposable provider-neutral primitive experiment
+        run: python3 primitive-probe/run_cloudflare_probe.py
