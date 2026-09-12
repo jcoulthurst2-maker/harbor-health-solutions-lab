@@ -1,4 +1,4 @@
-# D-01 provider probe revision: frontier-1-evidence-bound-reconstitution-v16
+# D-01 provider probe revision: frontier-1-evidence-bound-reconstitution-v17
 name: Lunea D-01 One Bundle
 
 on:
@@ -12,8 +12,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: lunea-d01-one-bundle
-  cancel-in-progress: true
+  group: lunea-d01-evidence-bound-v17
+  cancel-in-progress: false
 
 jobs:
   one-bundle:
