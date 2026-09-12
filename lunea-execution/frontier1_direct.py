@@ -9,10 +9,29 @@ import cloudflare_preflight as cp
 
 
 def frontier1_direct(base: str, proof_token: str) -> dict:
-    # The frozen Frontier-1 experiment begins at Gestation. Pre-gestation state/export
-    # diagnostics are intentionally excluded here because they are not closure evidence
-    # and can race a freshly-provisioned Durable Object namespace.
+    # Give a freshly deployed Python Worker / Durable Object namespace a short,
+    # bounded stabilization interval before entering the frozen experiment.
     time.sleep(8)
+
+    # Read-only probes establish whether the Durable Object can instantiate and
+    # load an empty Womb. They cannot mutate continuity or award Frontier evidence.
+    state0, _ = cp.worker_call(
+        base + '/proof/state',
+        proof_token=proof_token,
+        diagnostic_label='state_pre_gestation',
+    )
+    export0, _ = cp.worker_call(
+        base + '/proof/export',
+        proof_token=proof_token,
+        diagnostic_label='export_pre_gestation',
+    )
+    print(json.dumps({
+        'pre_gestation_state': state0.get('status'),
+        'pre_gestation_export': export0.get('status'),
+    }, sort_keys=True), flush=True)
+
+    if state0.get('status') != 'unborn_in_this_womb' or export0.get('status') != 'unborn_in_this_womb':
+        raise SystemExit('fresh Womb was not empty before Gestation')
 
     gestation, _ = cp.worker_call(
         base + f'/proof/gestate?due_after_ms={cp.DUE_AFTER_MS}',
@@ -21,6 +40,11 @@ def frontier1_direct(base: str, proof_token: str) -> dict:
         diagnostic_label='gestate',
     )
     if gestation.get('status') != 'synthetic_gestation_started':
+        print(json.dumps({
+            'gestation_status': gestation.get('status'),
+            'gestation_failure_stage': gestation.get('stage'),
+            'gestation_error_type': gestation.get('error_type'),
+        }, sort_keys=True), flush=True)
         raise SystemExit('fresh synthetic Gestation did not start')
 
     pre, pre_edge = cp.worker_call(
