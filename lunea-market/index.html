@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Lunea — Market Live Test</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#090b10;color:#eef2f7}
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0%,#172033 0,transparent 34%),#090b10}
+    main{width:min(980px,calc(100% - 32px));margin:0 auto;padding:42px 0 80px}.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8fa0bb}
+    h1{font-size:clamp(32px,6vw,62px);line-height:.95;margin:12px 0 14px;letter-spacing:-.045em}.lede{max-width:720px;color:#b7c1cf;line-height:1.6;margin:0 0 28px}
+    .notice{border:1px solid #293247;background:#111722;padding:14px 16px;border-radius:14px;color:#c9d2df;font-size:14px;line-height:1.5;margin-bottom:22px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:rgba(15,19,28,.86);border:1px solid #232b3a;border-radius:18px;padding:18px}.span4{grid-column:span 4}.span6{grid-column:span 6}.span12{grid-column:span 12}
+    .label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#71809a}.value{font-size:23px;font-weight:650;margin-top:8px}.muted{color:#8290a5}.green{color:#8ee6ae}.amber{color:#f2ce83}.red{color:#ff9a9a}
+    button{appearance:none;border:0;border-radius:999px;background:#edf3ff;color:#0a0d13;font-weight:750;padding:13px 18px;cursor:pointer;margin-right:8px}button.secondary{background:#171d29;color:#e9eef6;border:1px solid #2b3446}button:disabled{opacity:.45;cursor:not-allowed}
+    pre{white-space:pre-wrap;word-break:break-word;background:#080a0f;border:1px solid #1c2330;padding:14px;border-radius:14px;color:#c8d2e0;max-height:340px;overflow:auto;font-size:12px;line-height:1.5}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px}.dot{width:9px;height:9px;border-radius:50%;background:#667085;display:inline-block;margin-right:7px}.dot.on{background:#83e6a6;box-shadow:0 0 18px #83e6a666}
+    @media(max-width:760px){.span4,.span6{grid-column:span 12}main{width:min(100% - 22px,980px);padding-top:26px}.card{padding:15px}}
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Markets by Lunea / external runtime v0</div>
+  <h1>Live market cognition.<br/>No ChatGPT in the loop.</h1>
+  <p class="lede">This page runs a quantized Qwen2.5-0.5B-Instruct model directly in your browser. Market evidence comes from Kraken public data. Cognition may propose; a separate authority gate decides whether the proposal may become a paper fill.</p>
+  <div class="notice"><strong>Experiment boundary:</strong> live market data, paper capital only. No exchange keys are accepted, stored, or transmitted. Closing the page stops cognition; browser state is retained locally for the next session.</div>
+
+  <div class="grid">
+    <section class="card span4"><div class="label">Runtime</div><div class="value" id="runtime"><span class="dot"></span>Not loaded</div><div class="muted" id="device" style="margin-top:8px;font-size:13px"></div></section>
+    <section class="card span4"><div class="label">Market</div><div class="value" id="market">BTC/USD</div><div class="muted" id="price" style="margin-top:8px;font-size:13px">Awaiting evidence</div></section>
+    <section class="card span4"><div class="label">Paper equity</div><div class="value" id="equity">$1,000.00</div><div class="muted" id="position" style="margin-top:8px;font-size:13px">No position</div></section>
+
+    <section class="card span12">
+      <div class="row"><div><div class="label">Experiment control</div><div style="margin-top:8px;color:#cbd4e1">One cycle = sense → cognition → authority gate → paper world → verified memory.</div></div><div><button id="once">Run one cycle</button><button id="loop" class="secondary">Start 60s loop</button></div></div>
+    </section>
+
+    <section class="card span6"><div class="label">Latest cognition</div><pre id="thought">No cognition yet.</pre></section>
+    <section class="card span6"><div class="label">Authority / world result</div><pre id="result">No result yet.</pre></section>
+    <section class="card span12"><div class="label">Continuity memory</div><pre id="memory">[]</pre></section>
+  </div>
+</main>
+<script type="module">
+  import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.2.0';
+
+  env.allowLocalModels = false;
+  const MODEL='onnx-community/Qwen2.5-0.5B-Instruct';
+  const IDENTITY=['who_am_i','why_do_i_exist','what_do_i_serve','what_must_i_never_become','how_do_i_know_what_is_true','how_do_i_know_what_i_am_allowed_to_do','what_do_i_owe_the_people_and_organizations_i_touch','what_must_survive_when_every_surface_changes'];
+  const SOUL={outward:['soul','identity','embodiment','cognition','interpretation','possibility','expression','action','world'],inward:['world','verification','learning','memory','wisdom','continuity','soul']};
+  const $=id=>document.getElementById(id);
+  const runtime=$('runtime'),device=$('device'),priceEl=$('price'),equityEl=$('equity'),positionEl=$('position'),thought=$('thought'),result=$('result'),memoryEl=$('memory'),once=$('once'),loop=$('loop');
+  const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
+  const safeParse=s=>{const t=String(s||'');const a=t.indexOf('{');if(a<0)throw new Error('No JSON object in model output');let d=0,q=false,e=false;for(let i=a;i<t.length;i++){const c=t[i];if(q){if(e)e=false;else if(c==='\\')e=true;else if(c==='"')q=false;continue}if(c==='"')q=true;else if(c==='{')d++;else if(c==='}'&&--d===0)return JSON.parse(t.slice(a,i+1));}throw new Error('Incomplete JSON output')};
+
+  let state=JSON.parse(localStorage.getItem('luneaMarketStateV0')||'null')||{cash:1000,qty:0,avgPrice:0,realizedPnl:0,memory:[],cycles:0};
+  let generator=null,running=false,timer=null;
+  const save=()=>localStorage.setItem('luneaMarketStateV0',JSON.stringify(state));
+  const render=last=>{const mark=last?.last||state.avgPrice||0;const eq=state.cash+state.qty*mark;equityEl.textContent=money(eq);positionEl.textContent=state.qty?`${state.qty.toFixed(8)} BTC @ ${money(state.avgPrice)}`:'No position';memoryEl.textContent=JSON.stringify(state.memory.slice(-12),null,2)};
+  render();
+
+  async function loadModel(){
+    if(generator)return generator;
+    once.disabled=true;loop.disabled=true;runtime.innerHTML='<span class="dot on"></span>Loading Qwen…';
+    const gpu=!!navigator.gpu;device.textContent=gpu?'WebGPU detected — model runs on this device':'WebGPU unavailable — using WASM fallback';
+    generator=await pipeline('text-generation',MODEL,{dtype:'q4',device:gpu?'webgpu':'wasm'});
+    runtime.innerHTML='<span class="dot on"></span>Qwen ready';once.disabled=false;loop.disabled=false;return generator;
+  }
+
+  async function sense(){
+    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),10000);
+    try{
+      const r=await fetch('https://api.kraken.com/0/public/PreTrade?symbol=BTC%2FUSD',{headers:{Accept:'application/json'},signal:controller.signal});
+      if(!r.ok)throw new Error(`Kraken HTTP ${r.status}`);const p=await r.json();if(p.error?.length)throw new Error(p.error.join('; '));
+      const x=p.result||{};const bid=Number(x.bids?.[0]?.price),ask=Number(x.asks?.[0]?.price);if(!(bid>0&&ask>=bid))throw new Error('Invalid Kraken book');
+      const ts=Math.max(Date.parse(x.bids?.[0]?.publication_ts||0)||0,Date.parse(x.asks?.[0]?.publication_ts||0)||0,Date.now());
+      return {instrument:'BTC/USD',venue:'Kraken',bid,ask,last:(bid+ask)/2,observedAtMs:ts,sourceRef:`kraken:pretrade:BTCUSD:${ts}`,verified:true};
+    } finally {clearTimeout(timeout)}
+  }
+
+  function gate(p,o){
+    const reasons=[];const action=String(p.action||'').toUpperCase();const notional=Math.max(0,Number(p.notional)||0);const refs=Array.isArray(p.evidenceRefs)?p.evidenceRefs:[];
+    if(!['BUY','SELL','HOLD','EXIT'].includes(action))reasons.push('invalid_action');
+    if(String(p.instrument||'')!=='BTC/USD'&&action!=='HOLD')reasons.push('instrument_not_authorized');
+    if(Date.now()-o.observedAtMs>30000)reasons.push('stale_market_data');
+    if(refs.some(x=>x!==o.sourceRef))reasons.push('invented_or_unavailable_evidence_ref');
+    if(['BUY','SELL'].includes(action)&&notional<=0)reasons.push('positive_notional_required');
+    if(notional>100)reasons.push('max_order_notional_exceeded');
+    if(action==='BUY'&&notional>state.cash)reasons.push('insufficient_paper_cash');
+    if(action==='SELL'&&notional>state.qty*o.bid)reasons.push('paper_position_exceeded');
+    return {admitted:reasons.length===0,action,notional,reasons,authority:'EXTERNAL_GATE',mode:'paper'};
+  }
+
+  function execute(g,o){
+    if(!g.admitted)return {ok:false,type:'REFUSED',reasons:g.reasons};
+    if(g.action==='HOLD')return {ok:true,type:'NO_FILL',action:'HOLD'};
+    let side=g.action==='EXIT'?'SELL':g.action;let notional=g.action==='EXIT'?state.qty*o.bid:g.notional;
+    if(side==='BUY'){
+      const fee=notional*.001,qty=(notional-fee)/o.ask,newQty=state.qty+qty;state.avgPrice=newQty?((state.avgPrice*state.qty)+(o.ask*qty))/newQty:0;state.qty=newQty;state.cash-=notional;
+      return {ok:true,type:'PAPER_FILL',side,notional,qty,fillPrice:o.ask,fee,verified:true};
+    }
+    const qty=Math.min(state.qty,notional/o.bid),gross=qty*o.bid,fee=gross*.001;state.cash+=gross-fee;state.realizedPnl+=(o.bid-state.avgPrice)*qty-fee;state.qty-=qty;if(state.qty<1e-10){state.qty=0;state.avgPrice=0}
+    return {ok:true,type:'PAPER_FILL',side:'SELL',notional:gross,qty,fillPrice:o.bid,fee,verified:true};
+  }
+
+  async function cognize(o){
+    const g=await loadModel();
+    const world={identity:{questions:IDENTITY,mutableByRuntime:false,cycle:SOUL},embodiment:'markets',authority:{cognition:'PROPOSE_ONLY',execution:'EXTERNAL_GATE',mode:'paper',allowedActions:['BUY','SELL','HOLD','EXIT'],allowedInstruments:['BTC/USD'],maxOrderNotional:100},observation:o,portfolio:{cash:state.cash,btcQty:state.qty,avgPrice:state.avgPrice,realizedPnl:state.realizedPnl},verifiedMemory:state.memory.slice(-6)};
+    const system='You are a replaceable cognition organ inside Lunea\'s market embodiment. You have no execution authority. Use only supplied evidence. Never invent prices, evidence references, permissions, or outcomes. Return exactly one JSON object with keys action, instrument, notional, confidence, thesis, evidenceRefs, requestedCapability. HOLD is valid and preferred when evidence is insufficient.';
+    const user=JSON.stringify(world);
+    const out=await g([{role:'system',content:system},{role:'user',content:user}],{max_new_tokens:220,do_sample:false,return_full_text:false});
+    let text='';const gt=out?.[0]?.generated_text;if(typeof gt==='string')text=gt;else if(Array.isArray(gt))text=gt[gt.length-1]?.content||'';else text=JSON.stringify(gt||out);
+    const p=safeParse(text);p.action=String(p.action||'').toUpperCase();p.notional=Number(p.notional)||0;p.confidence=Math.max(0,Math.min(1,Number(p.confidence)||0));p.evidenceRefs=Array.isArray(p.evidenceRefs)?p.evidenceRefs:[];return p;
+  }
+
+  async function cycle(){
+    if(running)return;running=true;once.disabled=true;
+    try{
+      const o=await sense();priceEl.textContent=`bid ${money(o.bid)} · ask ${money(o.ask)} · ${new Date(o.observedAtMs).toLocaleTimeString()}`;render(o);
+      const p=await cognize(o);thought.textContent=JSON.stringify(p,null,2);
+      const g=gate(p,o),world=execute(g,o);state.cycles++;
+      const receipt={cycle:state.cycles,at:new Date().toISOString(),observation:{sourceRef:o.sourceRef,bid:o.bid,ask:o.ask},proposal:p,gate:g,world};
+      state.memory.push(receipt);if(state.memory.length>40)state.memory=state.memory.slice(-40);save();render(o);result.textContent=JSON.stringify({gate:g,world,continuity:{cycle:state.cycles,localMemory:true,chatgptInLoop:false}},null,2);
+    }catch(err){result.textContent=JSON.stringify({error:String(err?.message||err),cycleAborted:true,noLearningFromFailedCycle:true},null,2)}finally{running=false;once.disabled=false}
+  }
+
+  once.addEventListener('click',cycle);
+  loop.addEventListener('click',async()=>{if(timer){clearInterval(timer);timer=null;loop.textContent='Start 60s loop';return}await cycle();timer=setInterval(cycle,60000);loop.textContent='Stop loop'});
+  loadModel().catch(err=>{runtime.innerHTML='<span class="dot"></span>Model failed';device.textContent=String(err?.message||err);once.disabled=true;loop.disabled=true});
+</script>
+</body>
+</html>
